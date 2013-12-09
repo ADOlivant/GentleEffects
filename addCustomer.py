@@ -162,9 +162,15 @@ class AddCustomer(QMainWindow):
 		self.reset_button.clicked.connect(self.reset_data)
 		self.save_button.clicked.connect(self.save_data)
 
+	def validate_data(self):
+		pass
+		#Check Required Fields
+		#if self.fName_lineedit.
+
 
 	def save_data(self):
 		self.customerAddSignal.emit()
+		self.save_button.setEnabled(False)
 
 	def reset_data(self):
 		self.fName_lineedit.clear()

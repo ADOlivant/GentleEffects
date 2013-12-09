@@ -8,6 +8,8 @@ import re
 class AddCustomer(QMainWindow):
 	"""Adding Customer data to SQL Database with PyQt4"""
 
+	customerAddSignal = pyqtSignal()
+
 	def __init__(self):
 		super().__init__()
 
@@ -18,10 +20,10 @@ class AddCustomer(QMainWindow):
 		self.db.open()
 
 		self.title_label = QLabel("""<html>
-                                          <body>
-                                               <p><span style=" font-size:16pt; font-weight:1000;">New Customer</span></p>
-                                          </body>
-                                     </html>""")
+					  <body>
+					       <p><span style=" font-size:16pt; font-weight:1000;">New Customer</span></p>
+					  </body>
+				     </html>""")
 
 		self.fName_label = QLabel("First Name(s)")
 		self.lName_label = QLabel("Last Name(s)")
@@ -73,11 +75,11 @@ class AddCustomer(QMainWindow):
 		self.error_label = QLabel("Errors to Appear Here")
 
 		self.dateofbirth_layout = QHBoxLayout()
-		self.dateofbirth_layout.addWidget(self.year_lineedit)
+		self.dateofbirth_layout.addWidget(self.day_lineedit)
 		self.dateofbirth_layout.addWidget(self.slash_label)
 		self.dateofbirth_layout.addWidget(self.month_lineedit)
 		self.dateofbirth_layout.addWidget(self.slash2_label)
-		self.dateofbirth_layout.addWidget(self.day_lineedit)
+		self.dateofbirth_layout.addWidget(self.year_lineedit)
 		self.dateofbirth_widget = QWidget()
 		self.dateofbirth_widget.setLayout(self.dateofbirth_layout)
 
@@ -158,6 +160,11 @@ class AddCustomer(QMainWindow):
 
 		#connections
 		self.reset_button.clicked.connect(self.reset_data)
+		self.save_button.clicked.connect(self.save_data)
+
+
+	def save_data(self):
+		self.customerAddSignal.emit()
 
 	def reset_data(self):
 		self.fName_lineedit.clear()
@@ -173,6 +180,29 @@ class AddCustomer(QMainWindow):
 		self.mobile_lineedit.clear()
 		self.home_lineedit.clear()
 		self.email_lineedit.clear()
+		if self.mobile_radio.isChecked():
+			self.preferred_groupbox.setChecked(False)
+
+	def customer_detials(self):
+		self.dateofbirth = str("{0}/{1}/{2}".format(self.year_lineedit.text(),
+							    self.month_lineedit.text(),
+							    self.day_lineedit.text()))
+		if self.mobile_radio_isChecked():
+			self.preferred = "Mobile"
+		if self.home_radio_isChecked():
+			self.preferred = "Home"
+		details = {'FirstName':self.fName_lineedit.text(),
+			   'LastName':self.lName_lineedit.text(),
+			   'DateOfBirth':self.dateofbirth,
+			   'House':self.number_lineedit.text(),
+			   'Road':self.road_lineedit.text(),
+			   'City':self.city_lineedit.text(),
+			   'County':self.county_lineedit.text(),
+			   'PostCode':self.postcode_lineedit.text(),
+			   'MobileNum':self.mobile_lineedit.text(),
+			   'HomeNum':self.home_lineedit.text(),
+			   'Preferred':self.preferred,
+			   'Email':self.email_lineedit.text()}
 
 if __name__ == "__main__":
     application = QApplication(sys.argv)

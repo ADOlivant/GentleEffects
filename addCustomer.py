@@ -8,8 +8,6 @@ import re
 class AddCustomer(QMainWindow):
 	"""Adding Customer data to SQL Database with PyQt4"""
 
-	customerAddSignal = pyqtSignal()
-
 	def __init__(self):
 		super().__init__()
 
@@ -18,6 +16,10 @@ class AddCustomer(QMainWindow):
 		self.db = QSqlDatabase.addDatabase("QSQLITE")
 		self.db.setDatabaseName("GentleEffects.db")
 		self.db.open()
+
+		self.pragma_on = QSqlQuery()
+		self.pragma_on.prepare("""PRAGMA foreign_keys = ON""")
+		self.pragma_on.exec_()
 
 		self.title_label = QLabel("""<html>
 					  <body>
@@ -169,8 +171,28 @@ class AddCustomer(QMainWindow):
 
 
 	def save_data(self):
-		self.customerAddSignal.emit()
+		details = self.customer_details()
+		self.query = QSqlQuery()
+		self.query.prepare("""INSERT INTO Customer(FirstName,LastName,DateOfBirth,
+                                                           House,Road,City,County,PostCode,
+                                                           MobileNum,HomeNum,Preferred,Email)
+                                      VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""")
+		self.query.addBindValue(details['FirstName'])
+		self.query.addBindValue(details['LastName'])
+		self.query.addBindValue(details['DateOfBirth'])
+		self.query.addBindValue(details['House'])
+		self.query.addBindValue(details['Road'])
+		self.query.addBindValue(details['City'])
+		self.query.addBindValue(details['County'])
+		self.query.addBindValue(details['PostCode'])
+		self.query.addBindValue(details['MobileNum'])
+		self.query.addBindValue(details['HomeNum'])
+		self.query.addBindValue(details['Preferred'])
+		self.query.addBindValue(details['Email'])
+		self.query.exec_()
 		self.save_button.setEnabled(False)
+		self.error_label.setText("Customer Added Succesfully")
+		self.error_label.show()
 
 	def reset_data(self):
 		self.fName_lineedit.clear()
@@ -189,13 +211,13 @@ class AddCustomer(QMainWindow):
 		if self.mobile_radio.isChecked():
 			self.preferred_groupbox.setChecked(False)
 
-	def customer_detials(self):
+	def customer_details(self):
 		self.dateofbirth = str("{0}/{1}/{2}".format(self.year_lineedit.text(),
 							    self.month_lineedit.text(),
 							    self.day_lineedit.text()))
-		if self.mobile_radio_isChecked():
+		if self.mobile_radio.isChecked():
 			self.preferred = "Mobile"
-		if self.home_radio_isChecked():
+		if self.home_radio.isChecked():
 			self.preferred = "Home"
 		details = {'FirstName':self.fName_lineedit.text(),
 			   'LastName':self.lName_lineedit.text(),

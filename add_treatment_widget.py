@@ -5,19 +5,19 @@ from PyQt4.QtSql import *
 import sys
 import re
 
-class AddTreatment(QMainWindow):
+class AddTreatment(QWidget):
 	"""Adding Treatment to Existing database"""
 
 	def __init__(self):
 		super().__init__()
 
-		self.db = QSqlDatabase.addDatabase("QSQLITE")
-		self.db.setDatabaseName("GentleEffects.db")
-		self.db.open()
+		#self.db = QSqlDatabase.addDatabase("QSQLITE")
+		#self.db.setDatabaseName("GentleEffects.db")
+		#self.db.open()
 
-		self.pragma_on = QSqlQuery()
-		self.pragma_on.prepare("""PRAGMA foreign_keys = ON""")
-		self.pragma_on.exec_()
+		#self.pragma_on = QSqlQuery()
+		#self.pragma_on.prepare("""PRAGMA foreign_keys = ON""")
+		#self.pragma_on.exec_()
 
 		self.setWindowTitle("Add Treatment | Gentle Effects CMS")
 
@@ -79,10 +79,9 @@ class AddTreatment(QMainWindow):
 		self.main_layout.addWidget(self.data_widget)
 		self.main_layout.addWidget(self.button_widget)
 
-		self.main_widget = QWidget()
-		self.main_widget.setLayout(self.main_layout)
+		self.setLayout(self.main_layout)
 
-		self.setCentralWidget(self.main_widget)
+		#self.setCentralWidget(self.main_widget)
 
 		#Connections
 		self.save_pushbutton.clicked.connect(self.save_treatment)

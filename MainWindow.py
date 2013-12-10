@@ -6,6 +6,9 @@ import sys
 import os
 import re
 
+from add_treatment_widget import *
+from add_customer_widget import *
+
 class MainWindow(QMainWindow):
     """The Main Window used with the System"""
 
@@ -57,6 +60,8 @@ class MainWindow(QMainWindow):
         self.database = QAction("Set Database File Path",self)
         self.add_user = QAction("Add System User",self)
         self.edit_user = QAction("Edit User",self)
+        #Extra
+        self.reset_central_widget = QAction("Reset Screen",self)
 
         #Create Menubar
         self.menu_bar = QMenuBar()
@@ -66,11 +71,48 @@ class MainWindow(QMainWindow):
         self.product_menu = self.menu_bar.addMenu("Products")
         self.order_menu = self.menu_bar.addMenu("Orders")
         self.admin_menu = self.menu_bar.addMenu("Administration")
+        self.menu_bar.addAction(self.reset_central_widget)
         #Add Actions to the Menu Bar
         self.customer_menu.addAction(self.new_customer)
+        self.customer_menu.addAction(self.edit_customer)
+        self.customer_menu.addAction(self.edit_medical)
+        self.customer_menu.addAction(self.add_allergy)
+        self.customer_menu.addAction(self.edit_allergy)
+        self.customer_menu.addAction(self.delete)
+        self.treatment_menu.addAction(self.add_treatmnet)
+        self.treatment_menu.addAction(self.edit_treatment)
+        self.appointment_menu.addAction(self.new_appointment)
+        self.appointment_menu.addAction(self.edit_appointment)
+        self.appointment_menu.addAction(self.cancel_appointmnet)
+        self.product_menu.addAction(self.new_product)
+        self.product_menu.addAction(self.ammend_product)
+        self.product_menu.addAction(self.delete_product)
+        self.order_menu.addAction(self.new_order)
+        self.order_menu.addAction(self.amend_order)
+        self.order_menu.addAction(self.cancel_order)
+        self.admin_menu.addAction(self.create_reports)
+        self.admin_menu.addAction(self.backup)
+        self.admin_menu.addAction(self.database)
+        self.admin_menu.addAction(self.add_user)
+        self.admin_menu.addAction(self.edit_user)
 
         self.setMenuBar(self.menu_bar)
 
+        #connections
+        self.new_customer.triggered.connect(self.add_new_customer)
+        self.add_treatmnet.triggered.connect(self.add_new_treatment)
+        self.reset_central_widget.triggered.connect(self.reset)
+        
+    def add_new_customer(self):
+        CustomerWidget = AddCustomer()
+        self.setCentralWidget(CustomerWidget)
+
+    def add_new_treatment(self): 
+        TreatmentWidget = AddTreatment()
+        self.setCentralWidget(TreatmentWidget)
+
+    def reset(self):
+        self.setCentralWidget(None)
 
 if __name__ == "__main__":
     application = QApplication(sys.argv)
@@ -78,7 +120,3 @@ if __name__ == "__main__":
     window.show()
     window.raise_()
     application.exec_()
-
-    
-    
-    

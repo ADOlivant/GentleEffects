@@ -209,6 +209,7 @@ class AddCustomer(QMainWindow):
 			   'HomeNum':self.home_lineedit.text(),
 			   'Preferred':self.preferred,
 			   'Email':self.email_lineedit.text()}
+		return details
 
 if __name__ == "__main__":
     application = QApplication(sys.argv)

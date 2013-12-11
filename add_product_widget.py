@@ -1,0 +1,49 @@
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
+from PyQt4.QtSql import *
+
+import sys
+import re
+
+class AddProduct(QWidget):
+	"""Adding Product data to SQL Database with PyQt4"""
+
+	def __init__(self):
+		super().__init__()
+
+		self.title_label = QLabel("""<html>
+					  <body>
+					       <p><span style=" font-size:16pt; font-weight:1000;">New Product</span></p>
+					  </body>
+				     </html>""")
+
+		self.name_label = QLabel("Product Name:")
+		self.price_label = QLabel("Product Price:")
+		self.code_label = QLabel("Product Code:")
+		self.supplier_label = QLabel("Supplier:")
+
+		self.name_lineedit = QLineEdit()
+		self.price_dblspinbox = QDoubleSpinBox()
+		self.price_dblspinbox.setPrefix("£")
+		self.price_dblspinbox.setSingleStep(0.5)
+		self.price_dblspinbox.setMaximum(500.00)
+		self.code_lineedit = QLineEdit()
+		self.supplier_lineeidt = QLineEdit()
+
+		self.data_layout = QGridLayout()
+		self.data_layout.addWidget(self.name_label,0,0)
+		self.data_layout.addWidget(self.price_label,1,0)
+		self.data_layout.addWidget(self.code_label,2,0)
+		self.data_layout.addWidget(self.supplier_label,3,0)
+		self.data_layout.addWidget(self.name_lineedit,0,1)
+		self.data_layout.addWidget(self.price_dblspinbox,1,1)
+		self.data_layout.addWidget(self.code_lineedit,2,1)
+		self.data_layout.addWidget(self.supplier_lineeidt,3,1)
+		self.data_widget = QWidget()
+		self.data_widget.setLayout(self.data_layout)
+
+		self.layout = QVBoxLayout()
+		self.layout.addWidget(self.title_label)
+		self.layout.addWidget(self.data_widget)
+
+		self.setLayout(self.layout)

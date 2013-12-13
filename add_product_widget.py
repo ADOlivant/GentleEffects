@@ -42,8 +42,18 @@ class AddProduct(QWidget):
 		self.data_widget = QWidget()
 		self.data_widget.setLayout(self.data_layout)
 
+		self.save_pushbutton = QPushButton("Add Product")
+		self.rest_pushbutton = QPushButton("Reset")
+
+		self.button_layout = QHBoxLayout()
+		self.button_layout.addWidget(self.save_pushbutton)
+		self.button_layout.addWidget(self.rest_pushbutton)
+		self.button_widget = QWidget()
+		self.button_widget.setLayout(self.button_layout)
+
 		self.layout = QVBoxLayout()
 		self.layout.addWidget(self.title_label)
 		self.layout.addWidget(self.data_widget)
+		self.layout.addWidget(self.button_widget)
 
 		self.setLayout(self.layout)

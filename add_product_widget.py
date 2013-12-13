@@ -57,3 +57,25 @@ class AddProduct(QWidget):
 		self.layout.addWidget(self.button_widget)
 
 		self.setLayout(self.layout)
+
+		#connections
+		self.save_pushbutton.clicked.connect(self.save_product)
+
+	def save_product(self):
+		details = self.product_details()
+		self.query = QSqlQuery()
+		self.query.prepare("""INSERT INTO Product(Name,Price,Code,SupplierID)
+				      VALUES (?,?,?,?)""")
+		self.query.addBindValue(details['Name'])
+		self.query.addBindValue(details['Price'])
+		self.query.addBindValue(details['Code'])
+		self.query.addBindValue(details['SupplierID'])
+		self.query.exec_()
+		self.save_pushbutton.setEnabled(False)
+
+	def product_details(self):
+		details = {'Name':self.name_lineedit.text(),
+			   'Price':self.price_dblspinbox.value(),
+			   'Code':self.code_lineedit.text(),
+			   'SupplierID':self.supplier_lineeidt.text()}
+		return details

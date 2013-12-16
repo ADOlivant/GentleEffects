@@ -2,7 +2,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtSql import *
 
-from logo import *
+from MainWindow import *
 
 import sys
 import os
@@ -64,14 +64,16 @@ class PasswordWindow(QMainWindow):
 		username_error = True
 
 		if self.username_lineedit.text() == self.user_name:
-			print("Username Checked")
+			#print("Username Checked")
 			username_error = False
 		if self.password_lineedit.text() == self.password:
-			print("Password Checked")
+			#print("Password Checked")
 			password_error = False
 
 		if not username_error and not password_error:
-			self.setCentralWidget(None)
+			window1 = MainWindow()
+			window1.show()
+			window1.raise_()
 		else:
 			self.error = QErrorMessage()
 			self.error.showMessage("Error P001 - Incorrect Username and/or Password","Password Error")

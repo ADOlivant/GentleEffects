@@ -60,6 +60,7 @@ class AddProduct(QWidget):
 
 		#connections
 		self.save_pushbutton.clicked.connect(self.save_product)
+		self.rest_pushbutton.clicked.connect(self.reset_product)
 
 	def save_product(self):
 		details = self.product_details()
@@ -72,6 +73,9 @@ class AddProduct(QWidget):
 		self.query.addBindValue(details['SupplierID'])
 		self.query.exec_()
 		self.save_pushbutton.setEnabled(False)
+
+	def reset_product(self):
+		self.name_lineedit.clear()
 
 	def product_details(self):
 		details = {'Name':self.name_lineedit.text(),

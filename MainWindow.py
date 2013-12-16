@@ -47,6 +47,10 @@ class MainWindow(QMainWindow):
         self.new_appointment = QAction("Create Appointment",self)
         self.edit_appointment = QAction("Amend Appointment",self)
         self.cancel_appointmnet = QAction("Cancel Appointment",self)
+        #Supplier Managment
+        self.new_supplier = QAction("Add New Supplier",self)
+        self.amend_supplier = QAction("Amend Supplier",self)
+        self.delete_supplier = QAction("Remove Supplier",self)
         #Product Management
         self.new_product = QAction("Add New Product",self)
         self.ammend_product = QAction("Ammend Product Details",self)
@@ -69,6 +73,7 @@ class MainWindow(QMainWindow):
         self.customer_menu = self.menu_bar.addMenu("Customers")
         self.treatment_menu = self.menu_bar.addMenu("Treatments")
         self.appointment_menu = self.menu_bar.addMenu("Appointments")
+        self.supplier_menu = self.menu_bar.addMenu("Suppliers")
         self.product_menu = self.menu_bar.addMenu("Products")
         self.order_menu = self.menu_bar.addMenu("Orders")
         self.admin_menu = self.menu_bar.addMenu("Administration")
@@ -85,6 +90,9 @@ class MainWindow(QMainWindow):
         self.appointment_menu.addAction(self.new_appointment)
         self.appointment_menu.addAction(self.edit_appointment)
         self.appointment_menu.addAction(self.cancel_appointmnet)
+        self.supplier_menu.addAction(self.new_supplier)
+        self.supplier_menu.addAction(self.amend_supplier)
+        self.supplier_menu.addAction(self.delete_supplier)
         self.product_menu.addAction(self.new_product)
         self.product_menu.addAction(self.ammend_product)
         self.product_menu.addAction(self.delete_product)

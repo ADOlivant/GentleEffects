@@ -28,7 +28,10 @@ class AddProduct(QWidget):
 		self.price_dblspinbox.setSingleStep(0.5)
 		self.price_dblspinbox.setMaximum(500.00)
 		self.code_lineedit = QLineEdit()
-		self.supplier_lineeidt = QLineEdit()
+		self.create_table_model()
+		self.supplier_combobox = QComboBox()
+		self.supplier_combobox.setModel(self.model)
+		self.supplier_combobox.setModelColumn(1)
 
 		self.data_layout = QGridLayout()
 		self.data_layout.addWidget(self.name_label,0,0)
@@ -38,7 +41,7 @@ class AddProduct(QWidget):
 		self.data_layout.addWidget(self.name_lineedit,0,1)
 		self.data_layout.addWidget(self.price_dblspinbox,1,1)
 		self.data_layout.addWidget(self.code_lineedit,2,1)
-		self.data_layout.addWidget(self.supplier_lineeidt,3,1)
+		self.data_layout.addWidget(self.supplier_combobox,3,1)
 		self.data_widget = QWidget()
 		self.data_widget.setLayout(self.data_layout)
 
@@ -81,5 +84,10 @@ class AddProduct(QWidget):
 		details = {'Name':self.name_lineedit.text(),
 			   'Price':self.price_dblspinbox.value(),
 			   'Code':self.code_lineedit.text(),
-			   'SupplierID':self.supplier_lineeidt.text()}
+			   'SupplierID':self.supplier_combobox.currentIndex()}
 		return details
+
+	def create_table_model(self):
+		self.model = QSqlRelationalTableModel()
+		self.model.setTable("Supplier")
+		self.model.select()

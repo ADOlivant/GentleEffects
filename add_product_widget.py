@@ -84,7 +84,7 @@ class AddProduct(QWidget):
 		details = {'Name':self.name_lineedit.text(),
 			   'Price':self.price_dblspinbox.value(),
 			   'Code':self.code_lineedit.text(),
-			   'SupplierID':self.supplier_combobox.currentIndex()}
+			   'SupplierID':self.model.index(self.supplier_combobox.currentIndex(),0).data()}
 		return details
 
 	def create_table_model(self):

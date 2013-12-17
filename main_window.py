@@ -19,9 +19,15 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Gentle Effects Customer Management System")
 
+        self.status_bar = QStatusBar()
+        self.status_label = QLabel("Connected to Database")
+        self.status_bar.addWidget(self.status_label,)
+
+
         self.db = QSqlDatabase.addDatabase("QSQLITE")
         self.db.setDatabaseName("GentleEffects.db")
         self.db.open()
+        self.setStatusBar(self.status_bar)
 
         self.pragma_on = QSqlQuery()
         self.pragma_on.prepare("""PRAGMA foreign_keys = ON""")

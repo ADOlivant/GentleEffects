@@ -122,21 +122,17 @@ class AddSupplier(QWidget):
 		self.error_label.show()
 
 	def reset_data(self):
-		self.fName_lineedit.clear()
-		self.lName_lineedit.clear()
-		self.year_lineedit.setText("YYYY")
-		self.month_lineedit.setText("MM")
-		self.day_lineedit.setText("DD")
+		self.name_lineedit.clear()
 		self.number_lineedit.clear()
 		self.road_lineedit.clear()
 		self.city_lineedit.clear()
 		self.county_lineedit.clear()
 		self.postcode_lineedit.clear()
-		self.mobile_lineedit.clear()
-		self.home_lineedit.clear()
+		self.contact_lineedit.clear()
 		self.email_lineedit.clear()
-		if self.mobile_radio.isChecked():
-			self.preferred_groupbox.setChecked(False)
+		self.website_lineedit.clear()
+		self.save_button.setEnabled(True)
+		self.error_label.hide()
 
 	def product_details(self):
 		details = {'Name':self.name_lineedit.text(),

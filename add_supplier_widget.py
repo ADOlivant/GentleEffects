@@ -101,27 +101,24 @@ class AddSupplier(QWidget):
 
 
 	def save_data(self):
-                details = self.customer_details()
+		details = self.product_details()
 		self.query = QSqlQuery()
-		self.query.prepare("""INSERT INTO Customer(FirstName,LastName,DateOfBirth,
-                                                           House,Road,City,County,PostCode,
-                                                           MobileNum,HomeNum,Preferred,Email)
-                                      VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""")
-		self.query.addBindValue(details['FirstName'])
-		self.query.addBindValue(details['LastName'])
-		self.query.addBindValue(details['DateOfBirth'])
+		self.query.prepare("""INSERT INTO Supplier(Name,House,Road,City,
+                                                           County,PostCode,ContactNum,
+                                                           Email,Website)
+				      VALUES (?,?,?,?,?,?,?,?,?)""")
+		self.query.addBindValue(details['Name'])
 		self.query.addBindValue(details['House'])
 		self.query.addBindValue(details['Road'])
 		self.query.addBindValue(details['City'])
 		self.query.addBindValue(details['County'])
 		self.query.addBindValue(details['PostCode'])
-		self.query.addBindValue(details['MobileNum'])
-		self.query.addBindValue(details['HomeNum'])
-		self.query.addBindValue(details['Preferred'])
+		self.query.addBindValue(details['ContactNum'])
 		self.query.addBindValue(details['Email'])
+		self.query.addBindValue(details['Website'])
 		self.query.exec_()
 		self.save_button.setEnabled(False)
-		self.error_label.setText("Customer Added Succesfully")
+		self.error_label.setText("Supplier Added Succesfully")
 		self.error_label.show()
 
 	def reset_data(self):
@@ -141,26 +138,16 @@ class AddSupplier(QWidget):
 		if self.mobile_radio.isChecked():
 			self.preferred_groupbox.setChecked(False)
 
-	def customer_details(self):
-		self.dateofbirth = str("{0}/{1}/{2}".format(self.year_lineedit.text(),
-							    self.month_lineedit.text(),
-							    self.day_lineedit.text()))
-		if self.mobile_radio.isChecked():
-			self.preferred = "Mobile"
-		if self.home_radio.isChecked():
-			self.preferred = "Home"
-		details = {'FirstName':self.fName_lineedit.text(),
-			   'LastName':self.lName_lineedit.text(),
-			   'DateOfBirth':self.dateofbirth,
+	def product_details(self):
+		details = {'Name':self.name_lineedit.text(),
 			   'House':self.number_lineedit.text(),
 			   'Road':self.road_lineedit.text(),
 			   'City':self.city_lineedit.text(),
 			   'County':self.county_lineedit.text(),
 			   'PostCode':self.postcode_lineedit.text(),
-			   'MobileNum':self.mobile_lineedit.text(),
-			   'HomeNum':self.home_lineedit.text(),
-			   'Preferred':self.preferred,
-			   'Email':self.email_lineedit.text()}
+			   'ContactNum':self.contact_lineedit.text(),
+			   'Email':self.email_lineedit.text(),
+                           'Website':self.website_lineedit.text()}
 		return details
 
 if __name__ == "__main__":

@@ -11,16 +11,6 @@ class AddCustomer(QWidget):
 	def __init__(self):
 		super().__init__()
 
-		self.setWindowTitle("Add Customer Details | Gentle Effects CMS")
-
-		#self.db = QSqlDatabase.addDatabase("QSQLITE")
-		#self.db.setDatabaseName("GentleEffects.db")
-		#self.db.open()
-
-		#self.pragma_on = QSqlQuery()
-		#self.pragma_on.prepare("""PRAGMA foreign_keys = ON""")
-		#self.pragma_on.exec_()
-
 		self.title_label = QLabel("""<html>
 					  <body>
 					       <p><span style=" font-size:16pt; font-weight:1000;">New Customer</span></p>
@@ -157,8 +147,6 @@ class AddCustomer(QWidget):
 		self.setLayout(self.main_layout)
 
 		self.error_label.hide()
-
-		#self.setCentralWidget(self.main_widget)
 
 		#connections
 		self.reset_button.clicked.connect(self.reset_data)

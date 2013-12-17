@@ -20,13 +20,14 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Gentle Effects Customer Management System")
 
         self.status_bar = QStatusBar()
-        self.status_label = QLabel("Connected to Database")
-        self.status_bar.addWidget(self.status_label,)
-
+        self.status_label = QLabel()
+        self.status_bar.addWidget(self.status_label)
 
         self.db = QSqlDatabase.addDatabase("QSQLITE")
         self.db.setDatabaseName("GentleEffects.db")
         self.db.open()
+
+        self.status_label.setText("Connected to {0}".format(self.db.databaseName()))
         self.setStatusBar(self.status_bar)
 
         self.pragma_on = QSqlQuery()

@@ -6,7 +6,7 @@ import sys
 import re
 
 class SearchCustomer(QWidget):
-	"""Adding Customer data to SQL Database with PyQt4"""
+	"""Searching Customer data from SQL Database with PyQt4"""
 
 	def __init__(self):
 		super().__init__()
@@ -79,6 +79,7 @@ class SearchCustomer(QWidget):
 		self.radio_button_box.setLayout(self.grid_layout)
 
 		self.layout = QVBoxLayout()
+		self.layout.addWidget(self.title_label)
 		self.layout.addWidget(self.radio_button_box)
 
 		self.setLayout(self.layout)

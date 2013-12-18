@@ -84,3 +84,24 @@ class SearchCustomer(QWidget):
 		self.setLayout(self.layout)
 
 		#connections
+		self.radio_button_group.buttonClicked.connect(self.change_search_type)
+
+	def change_search_type(self):
+                if self.radio_button_group.checkedId() == 0:
+                        self.customer_id_ledit.setEnabled(True)
+                        self.customer_fName_ledit.setEnabled(False)
+                        self.customer_lName_ledit.setEnabled(False)
+                        self.customer_number_ledit.setEnabled(False)
+                        self.customer_postcode_ledit.setEnabled(False)
+                elif self.radio_button_group.checkedId() == 1:
+                        self.customer_id_ledit.setEnabled(False)
+                        self.customer_fName_ledit.setEnabled(True)
+                        self.customer_lName_ledit.setEnabled(True)
+                        self.customer_number_ledit.setEnabled(False)
+                        self.customer_postcode_ledit.setEnabled(False)
+                elif self.radio_button_group.checkedId() == 2:
+                        self.customer_id_ledit.setEnabled(False)
+                        self.customer_fName_ledit.setEnabled(False)
+                        self.customer_lName_ledit.setEnabled(False)
+                        self.customer_number_ledit.setEnabled(True)
+                        self.customer_postcode_ledit.setEnabled(True)

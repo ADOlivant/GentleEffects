@@ -11,6 +11,7 @@ from add_customer_widget import *
 from add_product_widget import *
 from add_supplier_widget import *
 from search_customer_widget import *
+#from welcome_widget import *
 
 class MainWindow(QMainWindow):
     """The Main Window used with the System"""
@@ -121,11 +122,13 @@ class MainWindow(QMainWindow):
 
         self.setMenuBar(self.menu_bar)
 
+        #self.reset_screen()
+
         #connections
         self.new_customer.triggered.connect(self.add_new_customer)
         self.add_treatmnet.triggered.connect(self.add_new_treatment)
         self.new_appointment.triggered.connect(self.search_customer)
-        self.reset_central_widget.triggered.connect(self.reset)
+        self.reset_central_widget.triggered.connect(self.reset_screen)
         self.new_product.triggered.connect(self.add_new_product)
         self.new_supplier.triggered.connect(self.add_new_supplier)
         
@@ -149,8 +152,9 @@ class MainWindow(QMainWindow):
         ProductWidget = AddProduct()
         self.setCentralWidget(ProductWidget)
 
-    def reset(self):
-        self.setCentralWidget(None)
+    def reset_screen(self):
+        welcome = WelcomeWidget()
+        self.setCentralWidget(welcome)
 
 if __name__ == "__main__":
     application = QApplication(sys.argv)

@@ -11,7 +11,7 @@ from add_customer_widget import *
 from add_product_widget import *
 from add_supplier_widget import *
 from search_customer_widget import *
-#from welcome_widget import *
+from welcome_widget import *
 
 class MainWindow(QMainWindow):
     """The Main Window used with the System"""
@@ -122,7 +122,7 @@ class MainWindow(QMainWindow):
 
         self.setMenuBar(self.menu_bar)
 
-        #self.reset_screen()
+        self.reset_screen()
 
         #connections
         self.new_customer.triggered.connect(self.add_new_customer)

@@ -61,4 +61,26 @@ class AddCustomer(QWidget):
                 self.customer_name_layout.addWidget(self.customer_lName_ledit,1,0)
                 self.customer_name_layout.addWidget(self.customer_lName_ledit,1,1)
 
-		#connections
+                self.customer_postcode_layout = QGridLayout()
+                self.customer_postcode_layout.addWidget(self.customer_number_label,0,0)
+                self.customer_postcode_layout.addWidget(self.customer_number_ledit,0,1)
+                self.customer_postcode_layout.addWidget(self.customer_postcode_label,1,0)
+                self.customer_postcode_layout.addWidget(self.customer_postcode_ledit,1,1)
+
+                self.grid_layout = QGridLayout()
+                self.gird_layout.addWidget(self.id_radio,0,0)
+                self.grid_layout.addWidget(self.name_radio,1,0)
+                self.grid_layout.addWidget(self.postcode_radio,2,0)
+                self.grid_layout.addLayout(self.customer_id_layout,0,1)
+                self.grid_layout.addLayout(self.customer_name_layout,1,1)
+                self.grid_layout.addLayout(self.customer_postcode_layout,2,1)
+                self.grid_layout.addWidget(self.find_customer_button,3,1)
+
+                self.radio_button_box.setLayout(self.grid_layout)
+
+                self.layout = QVBoxLayout()
+                self.layout.addWidget(self.radio_button_box)
+
+                self.setLayout(self.layout)
+
+                #connections

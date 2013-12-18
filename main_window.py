@@ -10,6 +10,7 @@ from add_treatment_widget import *
 from add_customer_widget import *
 from add_product_widget import *
 from add_supplier_widget import *
+from search_customer_widget import *
 
 class MainWindow(QMainWindow):
     """The Main Window used with the System"""
@@ -123,6 +124,7 @@ class MainWindow(QMainWindow):
         #connections
         self.new_customer.triggered.connect(self.add_new_customer)
         self.add_treatmnet.triggered.connect(self.add_new_treatment)
+        self.new_appointment.triggered.connect(self.search_customer)
         self.reset_central_widget.triggered.connect(self.reset)
         self.new_product.triggered.connect(self.add_new_product)
         self.new_supplier.triggered.connect(self.add_new_supplier)
@@ -134,6 +136,10 @@ class MainWindow(QMainWindow):
     def add_new_treatment(self): 
         TreatmentWidget = AddTreatment()
         self.setCentralWidget(TreatmentWidget)
+
+    def search_customer(self):
+        search_customer_widget = SearchCustomer()
+        self.setCentralWidget(search_customer_widget)
 
     def add_new_supplier(self):
         SupplierWidget = AddSupplier()

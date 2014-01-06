@@ -13,9 +13,9 @@ class AddCustomer(QWidget):
 
 		self.title_label = QLabel("""<html>
 					  <body>
-					       <p><span style=" font-size:16pt; font-weight:1000;">New Customer</span></p>
+						   <p><span style=" font-size:16pt; font-weight:1000;">New Customer</span></p>
 					  </body>
-				     </html>""")
+					 </html>""")
 
 		self.fName_label = QLabel("First Name(s)")
 		self.lName_label = QLabel("Last Name(s)")
@@ -150,21 +150,28 @@ class AddCustomer(QWidget):
 
 		#connections
 		self.reset_button.clicked.connect(self.reset_data)
-		self.save_button.clicked.connect(self.save_data)
+		self.save_button.clicked.connect(self.validate_data)
 
 	def validate_data(self):
-		pass
-		#Check Required Fields
-		#if self.fName_lineedit.
+		self.error_text = ""
+		if len(self.fName_lineedit.text()) == 0:
+			self.error_text += "\n Please ensure that the First Name field is not empty."
+		if len(self.lName_lineedit.text()) == 0:
+			self.error_text += "\n Please ensure that the Last Name field is not empty."
+		self.error_label.setText(self.error_text)
+		if self.error_text == "":
+			self.save_data()
+		else:
+			self.error_label.show()
 
 
 	def save_data(self):
 		details = self.customer_details()
 		self.query = QSqlQuery()
 		self.query.prepare("""INSERT INTO Customer(FirstName,LastName,DateOfBirth,
-                                                           House,Road,City,County,PostCode,
-                                                           MobileNum,HomeNum,Preferred,Email)
-                                      VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""")
+														   House,Road,City,County,PostCode,
+														   MobileNum,HomeNum,Preferred,Email)
+									  VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""")
 		self.query.addBindValue(details['FirstName'])
 		self.query.addBindValue(details['LastName'])
 		self.query.addBindValue(details['DateOfBirth'])
@@ -201,8 +208,8 @@ class AddCustomer(QWidget):
 
 	def customer_details(self):
 		self.dateofbirth = str("{0}/{1}/{2}".format(self.year_lineedit.text(),
-							    self.month_lineedit.text(),
-							    self.day_lineedit.text()))
+								self.month_lineedit.text(),
+								self.day_lineedit.text()))
 		if self.mobile_radio.isChecked():
 			self.preferred = "Mobile"
 		if self.home_radio.isChecked():
@@ -222,8 +229,8 @@ class AddCustomer(QWidget):
 		return details
 
 if __name__ == "__main__":
-    application = QApplication(sys.argv)
-    window = AddCustomer()
-    window.show()
-    window.raise_()
-    application.exec_()
+	application = QApplication(sys.argv)
+	window = AddCustomer()
+	window.show()
+	window.raise_()
+	application.exec_()

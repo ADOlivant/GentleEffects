@@ -131,6 +131,7 @@ class MainWindow(QMainWindow):
         self.reset_central_widget.triggered.connect(self.reset_screen)
         self.new_product.triggered.connect(self.add_new_product)
         self.new_supplier.triggered.connect(self.add_new_supplier)
+        self.new_order.triggered.connect(self.search_customer)
         
     def add_new_customer(self):
         CustomerWidget = AddCustomer()

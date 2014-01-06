@@ -11,6 +11,7 @@ from add_customer_widget import *
 from add_product_widget import *
 from add_supplier_widget import *
 from search_customer_widget import *
+from create_appointment import *
 from welcome_widget import *
 
 class MainWindow(QMainWindow):
@@ -132,6 +133,7 @@ class MainWindow(QMainWindow):
         self.new_product.triggered.connect(self.add_new_product)
         self.new_supplier.triggered.connect(self.add_new_supplier)
         self.new_order.triggered.connect(self.search_customer)
+        self.add_user.triggered.connect(self.test_area)
         
     def add_new_customer(self):
         CustomerWidget = AddCustomer()
@@ -156,6 +158,10 @@ class MainWindow(QMainWindow):
     def reset_screen(self):
         welcome = WelcomeWidget()
         self.setCentralWidget(welcome)
+
+    def test_area(self):
+        calendar = CreateAppointment()
+        self.setCentralWidget(calendar)
 
 if __name__ == "__main__":
     application = QApplication(sys.argv)

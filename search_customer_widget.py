@@ -10,6 +10,9 @@ from search_customer_table_models import *
 class SearchCustomer(QWidget):
         """Searching Customer data from SQL Database with PyQt4"""
 
+        #Customer Found Signal to fire when Customer Selected
+        customerSelectedSignal = pyqtSignal()
+
         def __init__(self):
                 super().__init__()
 
@@ -154,4 +157,5 @@ class SearchCustomer(QWidget):
                 self.customer_id = self.customer_view.model().data(index[0])
                 self.customer_view.setDisabled(True)
                 self.select_customer_button.setDisabled(True)
-                print(self.customer_id)
+                return self.customer_id
+                

@@ -5,20 +5,33 @@ from PyQt4.QtSql import *
 import sys
 import webbrowser
 
+from search_customer_widget import *
+
 class CreateAppointment(QWidget):
     """This is what will be used to create an appointment"""
 
     def __init__(self):
         super().__init__()
 
+        self.stacked_layout = QStackedLayout()
+        self.setLayout(self.stacked_layout)
+        self.find_customer_layout()
+
+    def find_customer_layout(self):
+        self.search_customer_layout = SearchCustomer()
+        self.stacked_layout.addWidget(self.search_customer_layout)
+        #connections (signal)
+        self.search_customer_layout.customerSelectedSignal.connect(self.create_appointment_layout)
+
+    def create_appointment_layout(self):
+        
         self.title_label = QLabel("""<html>
 					  <body>
 					       <p><span style=" font-size:16pt; font-weight:1000;">Create Treatment</span></p>
 					  </body>
 				     </html>""")
 
-        self.customerID = 3
-        self.get_customer_details(self.customerID)
+        self.get_customer_details(self.customer_id)
         
         self.customer_details_label = QLabel("""<html>
 					  <body>
@@ -37,7 +50,21 @@ class CreateAppointment(QWidget):
         self.email_layout.addWidget(self.email_button)
         self.customer_email_widget = QWidget()
         self.customer_email_widget.setLayout(self.email_layout)
+        self.customer_different_button = QPushButton("Change Customer")
 
+        self.treatment_details_label = QLabel("""<html>
+					  <body>
+					       <p><span style=" font-size:12pt; font-weight:750;">Treatment Details</span></p>
+					  </body>
+				     </html>""")
+        self.treatment_label = QLabel("Treatment: ")
+        self.create_treatment_model()
+        self.treatment_combobox = QComboBox()
+        self.treatment_combobox.setModel(self.model)
+        self.treatment_combobox.setModelColumn(1)
+        self.select_treatment_button = QPushButton("Select")
+
+         
         self.date_selector = QCalendarWidget()
         self.date_selector.setEnabled(False)
 
@@ -45,12 +72,7 @@ class CreateAppointment(QWidget):
         self.time_selector.setDisplayFormat("HH:mm")
         self.time_selector.setEnabled(False)
 
-        self.treatment_label = QLabel("Treatment: ")
-        self.create_treatment_model()
-        self.treatment_combobox = QComboBox()
-        self.treatment_combobox.setModel(self.model)
-        self.treatment_combobox.setModelColumn(1)
-        self.select_treatment_button = QPushButton("Select")
+        
         
 
         self.duration_label = QLabel("Duration of Treatment: ")
@@ -67,17 +89,26 @@ class CreateAppointment(QWidget):
         self.layout.addWidget(self.customer_address_label)
         self.layout.addWidget(self.customer_mobile_label)
         self.layout.addWidget(self.customer_email_widget)
-        self.layout.addWidget(self.date_selector)
-        self.layout.addWidget(self.time_selector)
+        self.layout.addWidget(self.customer_different_button)
+
+        self.layout.addWidget(self.treatment_details_label)
         self.layout.addWidget(self.treatment_label)
         self.layout.addWidget(self.treatment_combobox)
         self.layout.addWidget(self.select_treatment_button)
+
+        self.layout.addWidget(self.date_selector)
+        self.layout.addWidget(self.time_selector)
+
         self.layout.addWidget(self.duration_label)
         self.layout.addWidget(self.duration_time)
 
-        self.setLayout(self.layout)
+        self.widget = QWidget()
+        self.widget.setLayout(self.layout)
+        self.stacked_layout.addWidget(self.widget)
+        self.stacked_layout.setCurrentIndex(3)
 
         #connections
+        self.customer_different_button.clicked.connect(self.search_customer)
         self.select_treatment_button.clicked.connect(self.enable_creation)
         self.email_button.clicked.connect(self.email_customer)
 

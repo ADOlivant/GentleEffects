@@ -10,7 +10,7 @@ class CreateAppointment(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.customerID = int(1)
+        self.customerID = 2
         self.get_customer_details(self.customerID)
         
         self.title_label = QLabel("""<html>
@@ -38,7 +38,7 @@ class CreateAppointment(QWidget):
         self.duration_time = QLabel()
 
         self.duration = self.model.index(self.treatment_combobox.currentIndex(),3).data()
-        self.duration_time.setText(self.duration)
+        self.duration_time.setText(self.customer_name)
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.title_label)
@@ -73,9 +73,11 @@ class CreateAppointment(QWidget):
                               WHERE CustomerID = ?""")
         self.query.addBindValue(CustomerID)
         self.query.exec_()
-        #Attribute Error - QSqlQuery object has no attribute select - check PyQt Docs.
-        #self.customer_details = self.query.fetchAll()
-        #print(self.customer_details)
-        #return self.customer_details 
+        while self.query.next():
+            self.first_name = self.query.value(0)
+            self.last_name = self.query.value(1)
+            self.customer_name = "{0}, {1}".format(self.last_name,self.first_name)
+            print(self.first_name, self.last_name)
+        return self.customer_name
         
         

@@ -10,6 +10,9 @@ class CreateAppointment(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.customerID = int(1)
+        self.get_customer_details(self.customerID)
+        
         self.title_label = QLabel("""<html>
 					  <body>
 					       <p><span style=" font-size:16pt; font-weight:1000;">Create Treatment</span></p>
@@ -47,3 +50,17 @@ class CreateAppointment(QWidget):
         self.model = QSqlRelationalTableModel()
         self.model.setTable("Treatment")
         self.model.select()
+
+    def get_customer_details(self,CustomerID):
+        self.query = QSqlQuery()
+        self.query.prepare("""SELECT FirstName, LastName
+                              FROM Customer
+                              WHERE CustomerID = ?""")
+        self.query.addBindValue(CustomerID)
+        self.query.exec_()
+        #Attribute Error - QSqlQuery object has no attribute select - check PyQt Docs.
+        self.customer_details = self.query.select()
+        print(self.customer_details)
+        return self.customer_details 
+        
+        

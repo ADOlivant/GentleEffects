@@ -3,6 +3,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtSql import *
 
 import sys
+import webbrowser
 
 class CreateAppointment(QWidget):
     """This is what will be used to create an appointment"""
@@ -10,14 +11,32 @@ class CreateAppointment(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.customerID = 2
-        self.get_customer_details(self.customerID)
-        
         self.title_label = QLabel("""<html>
 					  <body>
 					       <p><span style=" font-size:16pt; font-weight:1000;">Create Treatment</span></p>
 					  </body>
 				     </html>""")
+
+        self.customerID = 3
+        self.get_customer_details(self.customerID)
+        
+        self.customer_details_label = QLabel("""<html>
+					  <body>
+					       <p><span style=" font-size:12pt; font-weight:750;">Customer Details</span></p>
+					  </body>
+				     </html>""")
+        self.customer_id_label = QLabel("ID: {0}".format(self.customer_id))
+        self.customer_name_label = QLabel("Name: {0}".format(self.customer_name))
+        self.customer_dob_label = QLabel("Date of Birth: {0}".format(self.date_of_birth))
+        self.customer_address_label = QLabel("Address: {0}".format(self.customer_address))
+        self.customer_mobile_label = QLabel("Contact Numbers: {0}, {1} - Preferred: {2}".format(self.mobile,self.home,self.preferred))
+        self.email_label = QLabel("Email: ")
+        self.email_button = QPushButton("Email Customer")
+        self.email_layout = QHBoxLayout()
+        self.email_layout.addWidget(self.email_label)
+        self.email_layout.addWidget(self.email_button)
+        self.customer_email_widget = QWidget()
+        self.customer_email_widget.setLayout(self.email_layout)
 
         self.date_selector = QCalendarWidget()
         self.date_selector.setEnabled(False)
@@ -42,6 +61,12 @@ class CreateAppointment(QWidget):
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.title_label)
+        self.layout.addWidget(self.customer_details_label)
+        self.layout.addWidget(self.customer_id_label)
+        self.layout.addWidget(self.customer_name_label)
+        self.layout.addWidget(self.customer_address_label)
+        self.layout.addWidget(self.customer_mobile_label)
+        self.layout.addWidget(self.customer_email_widget)
         self.layout.addWidget(self.date_selector)
         self.layout.addWidget(self.time_selector)
         self.layout.addWidget(self.treatment_label)
@@ -54,6 +79,7 @@ class CreateAppointment(QWidget):
 
         #connections
         self.select_treatment_button.clicked.connect(self.enable_creation)
+        self.email_button.clicked.connect(self.email_customer)
 
     def enable_creation(self):
         self.select_treatment_button.setEnabled(False)
@@ -68,16 +94,37 @@ class CreateAppointment(QWidget):
 
     def get_customer_details(self,CustomerID):
         self.query = QSqlQuery()
-        self.query.prepare("""SELECT FirstName, LastName
+        self.query.prepare("""SELECT *
                               FROM Customer
                               WHERE CustomerID = ?""")
         self.query.addBindValue(CustomerID)
         self.query.exec_()
         while self.query.next():
-            self.first_name = self.query.value(0)
-            self.last_name = self.query.value(1)
+            self.customer_id = self.query.value(0)
+
+            self.first_name = self.query.value(1)
+            self.last_name = self.query.value(2)
             self.customer_name = "{0}, {1}".format(self.last_name,self.first_name)
-            print(self.first_name, self.last_name)
-        return self.customer_name
+
+            self.date_of_birth = self.query.value(3)
+
+            self.house = self.query.value(4)
+            self.road = self.query.value(5)
+            self.city = self.query.value(6)
+            self.county = self.query.value(7)
+            self.postcode = self.query.value(8)
+            self.customer_address = "{0} {1}, {2}, {3}, {4}".format(self.house,
+                                                           self.road,
+                                                           self.city,
+                                                           self.county,
+                                                           self.postcode)
+
+            self.mobile = self.query.value(9)
+            self.home = self.query.value(10)
+            self.preferred = self.query.value(11)
+
+            self.email = self.query.value(12)
         
+    def email_customer(self):
+        webbrowser.open("mailto:{0}".format(self.email))
         

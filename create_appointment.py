@@ -74,7 +74,7 @@ class CreateAppointment(QWidget):
         self.query.addBindValue(CustomerID)
         self.query.exec_()
         #Attribute Error - QSqlQuery object has no attribute select - check PyQt Docs.
-        #self.customer_details = self.query.select()
+        #self.customer_details = self.query.fetchAll()
         #print(self.customer_details)
         #return self.customer_details 
         

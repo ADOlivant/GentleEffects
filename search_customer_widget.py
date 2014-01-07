@@ -157,5 +157,6 @@ class SearchCustomer(QWidget):
                 self.customer_id = self.customer_view.model().data(index[0])
                 self.customer_view.setDisabled(True)
                 self.select_customer_button.setDisabled(True)
+                self.customerSelectedSignal.emit()
                 return self.customer_id
                 

@@ -13,15 +13,16 @@ class CreateAppointment(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.stacked_layout = QStackedLayout()
-        self.setLayout(self.stacked_layout)
+        self.stacked_appointment_layout = QStackedLayout()
+        self.setLayout(self.stacked_appointment_layout)
         self.find_customer_layout()
+        self.create_appointment_layout()
 
     def find_customer_layout(self):
         self.search_customer_layout = SearchCustomer()
-        self.stacked_layout.addWidget(self.search_customer_layout)
+        self.stacked_appointment_layout.addWidget(self.search_customer_layout)
         #connections (signal)
-        self.search_customer_layout.customerSelectedSignal.connect(self.create_appointment_layout)
+        self.search_customer_layout.customerSelectedSignal.connect(self.create_appointment)
 
     def create_appointment_layout(self):
         
@@ -31,7 +32,7 @@ class CreateAppointment(QWidget):
 					  </body>
 				     </html>""")
 
-        self.get_customer_details(self.customer_id)
+        self.get_customer_details(2)
         
         self.customer_details_label = QLabel("""<html>
 					  <body>
@@ -63,17 +64,13 @@ class CreateAppointment(QWidget):
         self.treatment_combobox.setModel(self.model)
         self.treatment_combobox.setModelColumn(1)
         self.select_treatment_button = QPushButton("Select")
-
-         
+        
         self.date_selector = QCalendarWidget()
         self.date_selector.setEnabled(False)
 
         self.time_selector = QTimeEdit()
         self.time_selector.setDisplayFormat("HH:mm")
         self.time_selector.setEnabled(False)
-
-        
-        
 
         self.duration_label = QLabel("Duration of Treatment: ")
         self.duration_time = QLabel()
@@ -104,8 +101,10 @@ class CreateAppointment(QWidget):
 
         self.widget = QWidget()
         self.widget.setLayout(self.layout)
-        self.stacked_layout.addWidget(self.widget)
-        self.stacked_layout.setCurrentIndex(3)
+        self.stacked_appointment_layout.addWidget(self.widget)
+        
+    def create_appointment(self):
+        self.stacked_appointment_layout.setCurrentIndex(1)
 
         #connections
         self.customer_different_button.clicked.connect(self.search_customer)

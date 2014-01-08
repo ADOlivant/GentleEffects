@@ -115,7 +115,7 @@ class SearchCustomer(QWidget):
                 self.select_customer_widget = QWidget()
                 self.select_customer_widget.setLayout(self.customer_view_layout)
                 self.stacked_layout.addWidget(self.select_customer_widget)
-
+                
                 #connections
                 self.select_customer_button.clicked.connect(self.selected_customer_details)
 
@@ -155,8 +155,8 @@ class SearchCustomer(QWidget):
         def selected_customer_details(self):
                 index = self.customer_view.selectedIndexes()
                 self.customer_id = self.customer_view.model().data(index[0])
-                self.customer_view.setDisabled(True)
-                self.select_customer_button.setDisabled(True)
+                #self.customer_view.setDisabled(True)
+                #self.select_customer_button.setDisabled(True)
+                self.stacked_layout.setCurrentIndex(0)
                 self.customerSelectedSignal.emit()
                 return self.customer_id
-                

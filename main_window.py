@@ -128,11 +128,11 @@ class MainWindow(QMainWindow):
         #connections
         self.new_customer.triggered.connect(self.add_new_customer)
         self.add_treatmnet.triggered.connect(self.add_new_treatment)
-        self.new_appointment.triggered.connect(self.search_customer)
+        self.new_appointment.triggered.connect(self.create_appointment)
         self.reset_central_widget.triggered.connect(self.reset_screen)
         self.new_product.triggered.connect(self.add_new_product)
         self.new_supplier.triggered.connect(self.add_new_supplier)
-        self.new_order.triggered.connect(self.search_customer)
+        #self.new_order.triggered.connect(self.search_customer)
         self.add_user.triggered.connect(self.test_area)
         
     def add_new_customer(self):
@@ -143,9 +143,9 @@ class MainWindow(QMainWindow):
         TreatmentWidget = AddTreatment()
         self.setCentralWidget(TreatmentWidget)
 
-    def search_customer(self):
-        search_customer_widget = SearchCustomer()
-        self.setCentralWidget(search_customer_widget)
+    def create_appointment(self):
+        create_appointment = CreateAppointment()
+        self.setCentralWidget(create_appointment)
 
     def add_new_supplier(self):
         SupplierWidget = AddSupplier()

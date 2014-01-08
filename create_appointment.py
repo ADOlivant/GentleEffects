@@ -21,20 +21,22 @@ class CreateAppointment(QWidget):
         self.search_customer_layout = SearchCustomer()
         self.stacked_appointment_layout.addWidget(self.search_customer_layout)
         self.stacked_appointment_layout.setCurrentIndex(0)
-        #self.search_customer_layout.stacked_layout.setCurrentIndex(0)
+        
         #connections (signal)
         self.search_customer_layout.customerSelectedSignal.connect(self.create_appointment)
 
     def create_appointment_layout(self):
         
+        #TITLE FOR LAYOUT
         self.title_label = QLabel("""<html>
 					  <body>
-					       <p><span style=" font-size:16pt; font-weight:1000;">Create Treatment</span></p>
+					       <p><span style=" font-size:16pt; font-weight:1000; color:Green">New Appointment</span></p>
 					  </body>
 				     </html>""")
 
         self.get_customer_details(self.search_customer_layout.customer_id)
         
+        #CUSTOMER DETAILS LAYOUT
         self.customer_details_label = QLabel("""<html>
 					  <body>
 					       <p><span style=" font-size:12pt; font-weight:750;">Customer Details</span></p>
@@ -44,16 +46,24 @@ class CreateAppointment(QWidget):
         self.customer_name_label = QLabel("Name: {0}".format(self.customer_name))
         self.customer_dob_label = QLabel("Date of Birth: {0}".format(self.date_of_birth))
         self.customer_address_label = QLabel("Address: {0}".format(self.customer_address))
-        self.customer_mobile_label = QLabel("Contact Numbers: {0}, {1} - Preferred: {2}".format(self.mobile,self.home,self.preferred))
-        self.email_label = QLabel("Email: ")
-        self.email_button = QPushButton("Email Customer")
-        self.email_layout = QHBoxLayout()
-        self.email_layout.addWidget(self.email_label)
-        self.email_layout.addWidget(self.email_button)
-        self.customer_email_widget = QWidget()
-        self.customer_email_widget.setLayout(self.email_layout)
-        self.customer_different_button = QPushButton("Change Customer")
+        self.customer_contact_label = QLabel("Contact Numbers: {0}, {1} - Preferred: {2}".format(self.mobile,self.home,self.preferred))
+        self.customer_email_label = QLabel("Email: {0}".format(self.email))
+        self.customer_email_button = QPushButton("Email Customer")
 
+        self.customer_details_layout = QGridLayout()
+        self.customer_details_layout.addWidget(self.customer_details_label,0,0,1,2)
+        self.customer_details_layout.addWidget(self.customer_name_label,1,0)
+        self.customer_details_layout.addWidget(self.customer_id_label,1,1)
+        self.customer_details_layout.addWidget(self.customer_dob_label,2,0,1,2)
+        self.customer_details_layout.addWidget(self.customer_address_label,3,0,1,2)
+        self.customer_details_layout.addWidget(self.customer_contact_label,4,0,1,2)
+        self.customer_details_layout.addWidget(self.customer_email_label,5,0)
+        self.customer_details_layout.addWidget(self.customer_email_button,5,1)
+
+        self.customer_details_widget = QWidget()
+        self.customer_details_widget.setLayout(self.customer_details_layout)
+        
+        
         self.treatment_details_label = QLabel("""<html>
 					  <body>
 					       <p><span style=" font-size:12pt; font-weight:750;">Treatment Details</span></p>
@@ -80,14 +90,10 @@ class CreateAppointment(QWidget):
         self.duration_time.setText(self.customer_name)
 
         self.layout = QVBoxLayout()
+
         self.layout.addWidget(self.title_label)
-        self.layout.addWidget(self.customer_details_label)
-        self.layout.addWidget(self.customer_id_label)
-        self.layout.addWidget(self.customer_name_label)
-        self.layout.addWidget(self.customer_address_label)
-        self.layout.addWidget(self.customer_mobile_label)
-        self.layout.addWidget(self.customer_email_widget)
-        self.layout.addWidget(self.customer_different_button)
+
+        self.layout.addWidget(self.customer_details_widget)
 
         self.layout.addWidget(self.treatment_details_label)
         self.layout.addWidget(self.treatment_label)
@@ -106,8 +112,7 @@ class CreateAppointment(QWidget):
 
         #connections
         self.select_treatment_button.clicked.connect(self.enable_creation)
-        self.customer_different_button.clicked.connect(self.find_customer_layout)
-        self.email_button.clicked.connect(self.email_customer)
+        self.customer_email_button.clicked.connect(self.email_customer)
         
     def create_appointment(self):
         self.create_appointment_layout()

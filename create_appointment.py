@@ -16,11 +16,12 @@ class CreateAppointment(QWidget):
         self.stacked_appointment_layout = QStackedLayout()
         self.setLayout(self.stacked_appointment_layout)
         self.find_customer_layout()
-        self.create_appointment_layout()
 
     def find_customer_layout(self):
         self.search_customer_layout = SearchCustomer()
         self.stacked_appointment_layout.addWidget(self.search_customer_layout)
+        self.stacked_appointment_layout.setCurrentIndex(0)
+        self.search_customer_layout.stacked_layout.setCurrentIndex(0)
         #connections (signal)
         self.search_customer_layout.customerSelectedSignal.connect(self.create_appointment)
 
@@ -102,14 +103,15 @@ class CreateAppointment(QWidget):
         self.widget = QWidget()
         self.widget.setLayout(self.layout)
         self.stacked_appointment_layout.addWidget(self.widget)
-        
-    def create_appointment(self):
-        self.stacked_appointment_layout.setCurrentIndex(1)
 
         #connections
-        self.customer_different_button.clicked.connect(self.search_customer)
         self.select_treatment_button.clicked.connect(self.enable_creation)
+        self.customer_different_button.clicked.connect(self.find_customer_layout)
         self.email_button.clicked.connect(self.email_customer)
+        
+    def create_appointment(self):
+        self.create_appointment_layout()
+        self.stacked_appointment_layout.setCurrentIndex(1)
 
     def enable_creation(self):
         self.select_treatment_button.setEnabled(False)

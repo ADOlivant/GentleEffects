@@ -21,7 +21,7 @@ class CreateAppointment(QWidget):
         self.search_customer_layout = SearchCustomer()
         self.stacked_appointment_layout.addWidget(self.search_customer_layout)
         self.stacked_appointment_layout.setCurrentIndex(0)
-        self.search_customer_layout.stacked_layout.setCurrentIndex(0)
+        #self.search_customer_layout.stacked_layout.setCurrentIndex(0)
         #connections (signal)
         self.search_customer_layout.customerSelectedSignal.connect(self.create_appointment)
 
@@ -33,7 +33,7 @@ class CreateAppointment(QWidget):
 					  </body>
 				     </html>""")
 
-        self.get_customer_details(2)
+        self.get_customer_details(self.search_customer_layout.customer_id)
         
         self.customer_details_label = QLabel("""<html>
 					  <body>

@@ -64,6 +64,7 @@ class CreateAppointment(QWidget):
         self.customer_details_widget.setLayout(self.customer_details_layout)
         
         
+        #TREATMENT DETAILS LAYOUT
         self.treatment_details_label = QLabel("""<html>
 					  <body>
 					       <p><span style=" font-size:12pt; font-weight:750;">Treatment Details</span></p>
@@ -75,6 +76,33 @@ class CreateAppointment(QWidget):
         self.treatment_combobox.setModel(self.model)
         self.treatment_combobox.setModelColumn(1)
         self.select_treatment_button = QPushButton("Select")
+        self.select_another_button = QPushButton("Select Another")
+        self.select_another_button.hide()
+
+        self.treatment_cost_label = QLabel("Cost: ")
+        self.treatment_cost_details = QLabel()
+        self.treatment_duration_label = QLabel("Duration: ")
+        self.treatment_duration_details = QLabel()
+        self.treatment_cost_label.hide()
+        self.treatment_cost_details.hide()
+        self.treatment_duration_label.hide()
+        self.treatment_duration_details.hide()
+
+        self.treatment_details_layout = QGridLayout()
+        self.treatment_details_layout.addWidget(self.treatment_details_label,0,0,1,2)
+        self.treatment_details_layout.addWidget(self.treatment_label,1,0)
+        self.treatment_details_layout.addWidget(self.treatment_combobox,1,1)
+        self.treatment_details_layout.addWidget(self.select_treatment_button,2,0,1,2)
+        self.treatment_details_layout.addWidget(self.select_another_button,3,0,1,2)
+        self.treatment_details_layout.addWidget(self.treatment_cost_label,4,0)
+        self.treatment_details_layout.addWidget(self.treatment_cost_details,4,1)
+        self.treatment_details_layout.addWidget(self.treatment_duration_label,5,0)
+        self.treatment_details_layout.addWidget(self.treatment_duration_details,5,1)
+
+        self.treatment_details_widget = QWidget()
+        self.treatment_details_widget.setLayout(self.treatment_details_layout)
+        
+        
         
         self.date_selector = QCalendarWidget()
         self.date_selector.setEnabled(False)
@@ -89,16 +117,13 @@ class CreateAppointment(QWidget):
         self.duration = self.model.index(self.treatment_combobox.currentIndex(),3).data()
         self.duration_time.setText(self.customer_name)
 
-        self.layout = QVBoxLayout()
+        self.layout = QGridLayout()
 
-        self.layout.addWidget(self.title_label)
+        self.layout.addWidget(self.title_label,0,0,1,2)
 
-        self.layout.addWidget(self.customer_details_widget)
+        self.layout.addWidget(self.customer_details_widget,1,0)
 
-        self.layout.addWidget(self.treatment_details_label)
-        self.layout.addWidget(self.treatment_label)
-        self.layout.addWidget(self.treatment_combobox)
-        self.layout.addWidget(self.select_treatment_button)
+        self.layout.addWidget(self.treatment_details_widget,1,1)
 
         self.layout.addWidget(self.date_selector)
         self.layout.addWidget(self.time_selector)
@@ -119,8 +144,16 @@ class CreateAppointment(QWidget):
         self.stacked_appointment_layout.setCurrentIndex(1)
 
     def enable_creation(self):
-        self.select_treatment_button.setEnabled(False)
+        self.select_treatment_button.hide()
+        self.select_another_button.show()
         self.treatment_combobox.setEnabled(False)
+        self.treatment_duration_label.show()
+        self.treatment_duration_details.setText(self.model.index(self.treatment_combobox.currentIndex(),3).data())
+        self.treatment_duration_details.show()
+        self.treatment_cost_label.show()
+        self.treatment_cost_text = "£ {0}".format(self.model.index(self.treatment_combobox.currentIndex(),2).data())
+        self.treatment_cost_details.setText(self.treatment_cost_text)
+        self.treatment_cost_details.show()
         self.date_selector.setEnabled(True)
         self.time_selector.setEnabled(True)
 

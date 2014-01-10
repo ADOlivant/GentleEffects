@@ -153,8 +153,8 @@ class SearchCustomer(QWidget):
                 self.stacked_layout.setCurrentIndex(1)
 
         def selected_customer_details(self):
-                index = self.customer_view.selectedIndexes()
-                self.customer_id = self.customer_view.model().data(index[0])
+                self.index = self.customer_view.selectedIndexes()
+                self.customer_id = self.customer_view.model().data(self.index[0])
                 #self.customer_view.setDisabled(True)
                 #self.select_customer_button.setDisabled(True)
                 self.stacked_layout.setCurrentIndex(0)

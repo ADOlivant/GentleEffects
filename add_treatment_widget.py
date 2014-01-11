@@ -85,11 +85,9 @@ class AddTreatment(QWidget):
 		self.save_pushbutton.setEnabled(True)
 
 	def treatment_details(self):
-		self.duration = str("{0}:{1}".format(self.hour_lineedit.text(),
-						 self.minuite_lineedit.text()))
 		details = {'Name':self.name_lineedit.text(),
 		   'Cost':self.cost_dblspinbox.value(),
-		   'Duration':self.duration}
+		   'Duration':self.time_lineedit.time()}
 		return details
 
 if __name__ == "__main__":

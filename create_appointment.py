@@ -223,5 +223,23 @@ class CreateAppointment(QWidget):
         webbrowser.open("mailto:{0}".format(self.email))
 
     def book_appointment(self):
-        pass
+        details = self.appointment_details()
+        self.save_to_database = QSqlQuery()
+        self.save_to_database.prepare("""INSERT INTO Appointment(AppointmentTime,AppointmentDate,CustomerID,TreatmentID)
+                                         VALUES (?,?,?,?)""")
+        self.save_to_database.addBindValue(details['Time'])
+        self.save_to_database.addBindValue(details['Date'])
+        self.save_to_database.addBindValue(details['CustomerID'])
+        self.save_to_database.addBindValue(details['TreatmentID'])
+        self.save_to_database.exec_()
+
+        self.hide()
+                            
+
+    def appointment_details(self):
+        details = {'CustomerID':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0]),
+                   'TreatmentID':self.model.index(self.treatment_combobox.currentIndex(),0).data(),
+                   'Date':self.date_selector.selectedDate().toString(Qt.ISODate),
+                   'Time':self.time_selector.time().toString(Qt.ISODate)}
+        return details
         

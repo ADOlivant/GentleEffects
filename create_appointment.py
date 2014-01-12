@@ -42,7 +42,7 @@ class CreateAppointment(QWidget):
         self.error_message = QLabel()
         self.error_message.hide()
 
-        self.get_customer_details(self.search_customer_layout.customer_id)
+        self.get_customer_details()
         
         #CUSTOMER DETAILS LAYOUT
         self.customer_details_label = QLabel("""<html>
@@ -227,7 +227,7 @@ class CreateAppointment(QWidget):
         self.model.setTable("Treatment")
         self.model.select()
 
-    def get_customer_details(self,CustomerID):
+    def get_customer_details(self):
         self.customer_id = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0])
 
         self.first_name = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[1])
@@ -316,12 +316,25 @@ class CreateAppointment(QWidget):
         self.booked_customer_name = ("{0} {1}".format(self.first_name,self.last_name))
         self.booked_customer_name_detail.setText(self.booked_customer_name)
         self.booked_customer_address_label = QLabel("Customer Address: ")
+        self.booked_customer_address_detail = QLabel()
+        self.booked_customer_address = "{0}, {1} \n {2} \n {3} \n {4}".format(self.house,
+                                                       self.road,
+                                                       self.city,
+                                                       self.county,
+                                                       self.postcode)
+        self.booked_customer_address_detail.setText(self.booked_customer_address)
 
         self.booked_appointment_name_label = QLabel("Treatment: ")
+        self.booked_appointment_name_detail = QLabel()
+        self.booked_appointment_name_detail.setText(self.model.index(self.treatment_combobox.currentIndex(),1).data())
         self.booked_appointment_cost_label = QLabel("Treatment Cost: ")
+        self.booked_appointment_cost_detail = QLabel()
+        self.booked_appointment_cost_detail.setText(self.treatment_cost_text)
 
         self.booked_appointment_date_label = QLabel("Treatment Date: ")
+        self.booked_appointment_date_detail = QLabel(self.date_selector.selectedDate().toString(Qt.TextDate))
         self.booked_appointment_time_label = QLabel("Treatment Time: ")
+        self.booked_appointment_time_detail = QLabel(self.time_selector.time().toString(Qt.TextDate))
 
         self.booked_layout = QGridLayout()
         self.booked_layout.addWidget(self.booked_appointment_layout,0,0,1,2)
@@ -329,10 +342,15 @@ class CreateAppointment(QWidget):
         self.booked_layout.addWidget(self.booked_customer_name_label,2,0)
         self.booked_layout.addWidget(self.booked_customer_name_detail,2,1)
         self.booked_layout.addWidget(self.booked_customer_address_label,3,0)
+        self.booked_layout.addWidget(self.booked_customer_address_detail,3,1)
         self.booked_layout.addWidget(self.booked_appointment_name_label,4,0)
+        self.booked_layout.addWidget(self.booked_appointment_name_detail,4,1)
         self.booked_layout.addWidget(self.booked_appointment_cost_label,5,0)
+        self.booked_layout.addWidget(self.booked_appointment_cost_detail,5,1)
         self.booked_layout.addWidget(self.booked_appointment_date_label,6,0)
+        self.booked_layout.addWidget(self.booked_appointment_date_detail,6,1)
         self.booked_layout.addWidget(self.booked_appointment_time_label,7,0)
+        self.booked_layout.addWidget(self.booked_appointment_time_detail,7,1)
         self.booked_widget = QWidget()
         self.booked_widget.setLayout(self.booked_layout)
 

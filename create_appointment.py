@@ -39,6 +39,9 @@ class CreateAppointment(QWidget):
         self.book_appointment_button = QPushButton("Book Appointment")
         self.book_appointment_button.hide()
 
+        self.error_message = QLabel()
+        self.error_message.hide()
+
         self.get_customer_details(self.search_customer_layout.customer_id)
         
         #CUSTOMER DETAILS LAYOUT
@@ -137,10 +140,11 @@ class CreateAppointment(QWidget):
         #OVERALL LAYOUT
         self.layout = QGridLayout()
         self.layout.addWidget(self.title_label,0,0,1,2)
-        self.layout.addWidget(self.customer_details_widget,1,0)
-        self.layout.addWidget(self.treatment_details_widget,1,1)
-        self.layout.addWidget(self.treatment_booking_widget,2,0,1,2)
-        self.layout.addWidget(self.book_appointment_button,3,0,1,2)
+        self.layout.addWidget(self.error_message,1,0,1,2)
+        self.layout.addWidget(self.customer_details_widget,2,0)
+        self.layout.addWidget(self.treatment_details_widget,2,1)
+        self.layout.addWidget(self.treatment_booking_widget,3,0,1,2)
+        self.layout.addWidget(self.book_appointment_button,4,0,1,2)
         
         self.widget = QWidget()
         self.widget.setLayout(self.layout)
@@ -149,9 +153,43 @@ class CreateAppointment(QWidget):
         #connections
         self.select_treatment_button.clicked.connect(self.enable_creation)
         self.customer_email_button.clicked.connect(self.email_customer)
-        self.book_appointment_button.clicked.connect(self.book_appointment)
+        self.book_appointment_button.clicked.connect(self.validate_treatment_datetime)
         self.select_another_button.clicked.connect(self.disable_datetime)
         
+    def validate_treatment_datetime(self):
+        self.data_valid = None
+        self.details = self.appointment_details()
+        self.validate_treatment_datetime = QSqlQuery()
+        self.validate_treatment_datetime.prepare("""SELECT TreatmentID
+                                           FROM Appointment
+                                           WHERE AppointmentTime = (?) AND AppointmentDate = (?)""")
+        self.validate_treatment_datetime.addBindValue(self.details['Time'])
+        self.validate_treatment_datetime.addBindValue(self.details['Date'])
+        self.validate_treatment_datetime.exec_()
+        self.validate_list = []
+        while self.validate_treatment_datetime.next():
+            self.validate_list.append(self.validate_treatment_datetime.value(0))
+        if len(self.validate_list) == 0:
+            pass 
+        else:
+            self.data_valid = False
+        if self.data_valid == False:
+            self.error_message.setText("Appointment time has previously been taken.")
+            self.error_message.show()
+        else:
+            self.book_appointment()
+
+    def get_treatment_duration_SQL(self,treatmentID):
+        self.get_treatment_duration_SQL = QSqlQuery()
+        self.get_treatment_duration_SQL.prepare("""SELECT Duration
+                                           FROM Treatment
+                                           WHERE TreatmentID = (?)""")
+        self.get_treatment_duration_SQL.addBindValue(treatmentID)
+        self.get_treatment_duration_SQL.exec_()
+        while self.get_treatment_duration_SQL.next():
+            self.treatment_duration = self.get_treatment_duration_SQL.value(0)
+        return self.treatment_duration
+
     def create_appointment(self):
         self.create_appointment_layout()
         self.stacked_appointment_layout.setCurrentIndex(1)
@@ -221,6 +259,9 @@ class CreateAppointment(QWidget):
     def book_appointment(self):
         self.booked_appointment()
         self.save_appointment()
+        if self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[12]) != "":
+            self.app_id = self.get_appointment_id()
+            self.email_booking()
 
     def save_appointment(self):
         self.details = self.appointment_details()
@@ -244,9 +285,10 @@ class CreateAppointment(QWidget):
         self.get_appointment_id.addBindValue(self.details['CustomerID'])
         self.get_appointment_id.addBindValue(self.details['TreatmentID'])
         self.get_appointment_id.exec_()
+        
         while self.get_appointment_id.next():
-            app_id = self.get_appointment_id.value(0)
-        return app_id
+            app = self.get_appointment_id.value(0)
+        return app
 
     def appointment_details(self):
         details = {'CustomerID':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0]),
@@ -263,7 +305,7 @@ class CreateAppointment(QWidget):
 				                   </html>""")
 
         if self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[12]) != "":
-            self.email_text = "and email sent to the client"
+            self.email_text = " and email sent to the client"
         else:
             self.email_text = ""
             
@@ -296,10 +338,6 @@ class CreateAppointment(QWidget):
 
         self.stacked_appointment_layout.addWidget(self.booked_widget)
         self.stacked_appointment_layout.setCurrentIndex(2)
-
-        if self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[12]) != "":
-            self.app_id = self.get_appointment_id()
-            self.email_booking()
 
     def email_booking(self):
         self.to = "{0}, ".format(self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[12]))

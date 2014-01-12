@@ -38,7 +38,7 @@ class CreateOrder(QWidget):
         self.create_order_button = QPushButton("Create Order")
         self.create_order_button.hide()
 
-        self.order_error_message = QLabel
+        self.order_error_message = QLabel()
         self.order_error_message.hide()
 
         self.customer_data = self.get_customer_details()
@@ -49,12 +49,18 @@ class CreateOrder(QWidget):
 					       <p><span style=" font-size:12pt; font-weight:750;">Customer Details</span></p>
 					  </body>
 				     </html>""")
-        self.customer_id_label = QLabel("ID: {0}".format(self.customer_data['CustomerID'])
-        self.customer_name_label = QLabel("Name: {0}, {1}".format(self.customer_data['LastName'],self.customer_data['FirstName'])
-        self.customer_dob_label = QLabel("Date of Birth: {0}".format(self.date_of_birth))
-        self.customer_address_label = QLabel("Address: {0}".format(self.customer_address))
-        self.customer_contact_label = QLabel("Contact Numbers: {0}, {1} - Preferred: {2}".format(self.mobile,self.home,self.preferred))
-        self.customer_email_label = QLabel("Email: {0}".format(self.email))
+        self.customer_id_label = QLabel("ID: {0}".format(self.customer_data['CustomerID']))
+        self.customer_name_label = QLabel("Name: {0}, {1}".format(self.customer_data['LastName'],self.customer_data['FirstName']))
+        self.customer_dob_label = QLabel("Date of Birth: {0}".format(self.customer_data['DateOfBirth']))
+        self.customer_address_label = QLabel("Address: {0} {1}, \n                {2}, \n                {3}, \n                {4}".format(self.customer_data['House'],
+                                                                                            self.customer_data['Road'],
+                                                                                            self.customer_data['City'],
+                                                                                            self.customer_data['County'],
+                                                                                            self.customer_data['Postcode']))
+        self.customer_contact_label = QLabel("Contact Numbers: {0}, {1} - Preferred: {2}".format(self.customer_data['Mobile'],
+                                                                                                 self.customer_data['Home'],
+                                                                                                 self.customer_data['Prefered']))
+        self.customer_email_label = QLabel("Email: {0}".format(self.customer_data['Email']))
         self.customer_email_button = QPushButton("Email Customer")
 
         self.customer_details_layout = QGridLayout()
@@ -70,7 +76,18 @@ class CreateOrder(QWidget):
         self.customer_details_widget = QWidget()
         self.customer_details_widget.setLayout(self.customer_details_layout)
 
-    def get_customer_details():
+        #OVERALL LAYOUT
+        self.layout = QGridLayout()
+        self.layout.addWidget(self.order_title_label,0,0,1,2)
+        self.layout.addWidget(self.order_error_message,1,0,1,2)
+        self.layout.addWidget(self.customer_details_widget,2,0)
+
+        self.widget = QWidget()
+        self.widget.setLayout(self.layout)
+        self.stacked_order_layout.addWidget(self.widget)
+        self.stacked_order_layout.setCurrentIndex(1)
+        
+    def get_customer_details(self):
         details = {'CustomerID':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0]),
                    'FirstName':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[1]),
                    'LastName':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[2]),

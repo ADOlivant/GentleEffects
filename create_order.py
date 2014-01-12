@@ -77,6 +77,7 @@ class CreateOrder(QWidget):
 					       <p><span style=" font-size:12pt; font-weight:750;">Customer Details</span></p>
 					  </body>
 				     </html>""")
+        
         self.customer_id_label = QLabel("ID: {0}".format(self.customer_data['CustomerID']))
         self.customer_name_label = QLabel("Name: {0}, {1}".format(self.customer_data['LastName'],self.customer_data['FirstName']))
         self.customer_dob_label = QLabel("Date of Birth: {0}".format(self.customer_data['DateOfBirth']))
@@ -123,9 +124,6 @@ class CreateOrder(QWidget):
         
     def select_product_layout(self):
         #TITLE FOR LAYOUT
-        self.current_index = 1
-        self.current_index+= 1
-
         self.order_title_label = QLabel("""<html>
 					  <body>
 					       <p><span style=" font-size:16pt; font-weight:1000; color:Green">Select Product</span></p>
@@ -137,17 +135,7 @@ class CreateOrder(QWidget):
 
         self.selected_products_list = []
 
-        self.search_button = QPushButton("Search")
-
-        self.search_values = (self.search_lineedit.text(),)
-
-        self.model = self.create_product_model(self.search_values)
-
-        self.product_view = QTableView()
-        self.product_view.setSelectionBehavior(1)
-        self.product_view.setModel(self.model)
-        self.product_view.hideColumn(0)
-        self.product_view.hideColumn(4)
+        self.model = self.create_product_model(("",))
 
         self.product_view = QTableView()
         self.product_view.setSelectionBehavior(1)
@@ -158,7 +146,6 @@ class CreateOrder(QWidget):
         self.product_layout = QVBoxLayout()
         self.product_layout.addWidget(self.order_title_label)
         self.product_layout.addWidget(self.search_lineedit)
-        self.product_layout.addWidget(self.search_button)
         self.product_layout.addWidget(self.product_view)
         self.product_layout.addWidget(self.select_product_button)
 
@@ -166,7 +153,10 @@ class CreateOrder(QWidget):
         self.product_widget.setLayout(self.product_layout)
 
         self.stacked_order_layout.addWidget(self.product_widget)
-        self.stacked_order_layout.setCurrentIndex(self.current_index)
+
+        self.occurance = 2 
+        self.stacked_order_layout.setCurrentIndex(self.occurance)
+        self.occurance = +1
 
         #connections
         self.search_lineedit.textEdited.connect(self.refresh)
@@ -191,17 +181,21 @@ class CreateOrder(QWidget):
     def select_product(self):
         self.product_view.showColumn(0)
         self.selected_record = self.product_view.selectedIndexes()
-        product_details = {'ProductID': self.product_view.model().data(self.selected_record[0]),
-                           'Name':self.product_view.model().data(self.selected_record[1]),
-                           'Cost':self.product_view.model().data(self.selected_record[2])}
+        product_details = {#'ProductID': self.product_view.model().data(self.selected_record[0]),
+                           #'Name':self.product_view.model().data(self.selected_record[1]),
+                           #'Cost':self.product_view.model().data(self.selected_record[2])
+            }
         self.selected_products_list.append(product_details)
         self.productSelectedSignal.emit()
+        #self.product_view.setSelectionMode(0)
+        self.product_view.setModel(None)
+        self.n_model = self.create_product_model(("",))
+        self.product_view.setModel(self.n_model)
         print(self.selected_products_list)
 
     def product_selected(self):
+        
         self.stacked_order_layout.setCurrentIndex(1)
-        self.model.clear()
-        self.model = self.create_product_model(self.search_values)
         
     def get_customer_details(self):
         details = {'CustomerID':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0]),

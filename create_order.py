@@ -3,6 +3,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtSql import *
 
 import sys
+from datetime import date
 
 from search_customer_widget import *
 
@@ -17,6 +18,9 @@ class CreateOrder(QWidget):
         self.stacked_order_layout = QStackedLayout()
         self.setLayout(self.stacked_order_layout)
 
+        self.today = date.today()
+        self.date = self.today.strftime("%Y-%m-%d")
+        
         self.find_customer_layout()
 
         #connections - signal
@@ -31,7 +35,26 @@ class CreateOrder(QWidget):
         self.search_customer_layout.customerSelectedSignal.connect(self.create_order)
 
     def create_order(self):
+        self.save_to_db()
         self.create_order_layout()
+
+    def order_details(self):
+        details = {'DateOfOrder':self.date,
+                   'CustomerID':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0]),
+                   'Ordered':"False",
+                   'Delivered':"False"}
+        return details
+
+    def save_to_db(self):
+        details = self.order_details()
+        self.save_to_db = QSqlQuery()
+        self.save_to_db.prepare("""INSERT INTO Orders(DateOfOrder,CustomerID,OrderedFromSupplier,Delivered)
+                                   VALUES (?,?,?,?)""")
+        self.save_to_db.addBindValue(details['DateOfOrder'])
+        self.save_to_db.addBindValue(details['CustomerID'])
+        self.save_to_db.addBindValue(details['Ordered'])
+        self.save_to_db.addBindValue(details['Delivered'])
+        self.save_to_db.exec_()          
 
     def create_order_layout(self):
         #TITLE FOR LAYOUT
@@ -100,6 +123,9 @@ class CreateOrder(QWidget):
         
     def select_product_layout(self):
         #TITLE FOR LAYOUT
+        self.current_index = 1
+        self.current_index+= 1
+
         self.order_title_label = QLabel("""<html>
 					  <body>
 					       <p><span style=" font-size:16pt; font-weight:1000; color:Green">Select Product</span></p>
@@ -140,7 +166,7 @@ class CreateOrder(QWidget):
         self.product_widget.setLayout(self.product_layout)
 
         self.stacked_order_layout.addWidget(self.product_widget)
-        self.stacked_order_layout.setCurrentIndex(2)
+        self.stacked_order_layout.setCurrentIndex(self.current_index)
 
         #connections
         self.search_lineedit.textEdited.connect(self.refresh)
@@ -173,8 +199,9 @@ class CreateOrder(QWidget):
         print(self.selected_products_list)
 
     def product_selected(self):
-        self.stacked_order_layout.setCurrentIndex(3)
-        
+        self.stacked_order_layout.setCurrentIndex(1)
+        self.model.clear()
+        self.model = self.create_product_model(self.search_values)
         
     def get_customer_details(self):
         details = {'CustomerID':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0]),

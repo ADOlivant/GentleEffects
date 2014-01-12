@@ -9,6 +9,8 @@ from search_customer_widget import *
 class CreateOrder(QWidget):
     """This is a widget which enable the end user to create an order."""
 
+    productSelectedSignal = pyqtSignal()
+    
     def __init__(self):
         super().__init__()
 
@@ -16,6 +18,9 @@ class CreateOrder(QWidget):
         self.setLayout(self.stacked_order_layout)
 
         self.find_customer_layout()
+
+        #connections - signal
+        self.productSelectedSignal.connect(self.product_selected)
 
     def find_customer_layout(self):
         self.search_customer_layout = SearchCustomer()
@@ -103,7 +108,8 @@ class CreateOrder(QWidget):
         self.select_product_button = QPushButton("Select Current Product")
 
         self.search_lineedit = QLineEdit()
-        #self.search_lineedit.setText(" ")
+
+        self.selected_products_list = []
 
         self.search_button = QPushButton("Search")
 
@@ -138,6 +144,7 @@ class CreateOrder(QWidget):
 
         #connections
         self.search_lineedit.textEdited.connect(self.refresh)
+        self.select_product_button.clicked.connect(self.select_product)
 
     def create_product_model(self,values):
         model = QSqlQueryModel()
@@ -154,6 +161,20 @@ class CreateOrder(QWidget):
         self.product_view.setModel(self.new_model)
         self.product_view.hideColumn(0)
         self.product_view.hideColumn(4)
+
+    def select_product(self):
+        self.product_view.showColumn(0)
+        self.selected_record = self.product_view.selectedIndexes()
+        product_details = {'ProductID': self.product_view.model().data(self.selected_record[0]),
+                           'Name':self.product_view.model().data(self.selected_record[1]),
+                           'Cost':self.product_view.model().data(self.selected_record[2])}
+        self.selected_products_list.append(product_details)
+        self.productSelectedSignal.emit()
+        print(self.selected_products_list)
+
+    def product_selected(self):
+        self.stacked_order_layout.setCurrentIndex(3)
+        
         
     def get_customer_details(self):
         details = {'CustomerID':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0]),

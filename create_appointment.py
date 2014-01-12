@@ -6,10 +6,7 @@ import sys
 import webbrowser
 
 #Confirmation Email Imports
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-
+from send_email import *
 
 from search_customer_widget import *
 
@@ -248,9 +245,7 @@ class CreateAppointment(QWidget):
         self.get_appointment_id.addBindValue(self.details['TreatmentID'])
         self.get_appointment_id.exec_()
         while self.get_appointment_id.next():
-            self.appointment_id = self.get_appointment_id.value(0)
-
-        app_id = self.appointment_id
+            app_id = self.get_appointment_id.value(0)
         return app_id
 
     def appointment_details(self):
@@ -307,30 +302,17 @@ class CreateAppointment(QWidget):
             self.email_booking()
 
     def email_booking(self):
-        server = smtplib.SMTP('smtp-mail.outlook.com', 587)
-        server.starttls()
-        server.login("gentle.effects@outlook.com", "Thomas84")
-
-        fromaddr = "gentle.effects@outlook.com"
-        toaddr = "{0}, ".format(self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[12]))
-        bccaddr = "{0}, ".format("gentle.effects@outlook.com")
-        msg = MIMEMultipart()
-        msg['From'] = fromaddr
-        msg['To'] = toaddr
-        msg['Bcc'] = bccaddr
-        msg['Subject'] = "You booking for {0}".format(self.model.index(self.treatment_combobox.currentIndex(),1).data())
-
-        body = "Hi {2}, \n \n Your {3} appointment with Gentle Effects is booked for {4} at {5}. I look forward to seeing you then. \n \n Please have these handy when calling - Personal ID: {0}, Appointment ID: {1} \n  \n Kind Regards, \n Paula Lawrence \n Aestetic Nurse Practioner \n \n".format(self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0]),
+        self.to = "{0}, ".format(self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[12]))
+        self.subject = "You booking for {0}".format(self.model.index(self.treatment_combobox.currentIndex(),1).data())
+        self.body = "Hi {2}, \n \n Your {3} appointment with Gentle Effects is booked for {4} at {5}. I look forward to seeing you then. \n \n Please have these handy when calling - Personal ID: {0}, Appointment ID: {1} \n  \n Kind Regards, \n Paula Lawrence \n Aestetic Nurse Practioner \n \n".format(self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0]),
                                                                                                                                                                                                                                                                                                      self.app_id,
                                                                                                                                                                                                                                                                                                      self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[1]),
                                                                                                                                                                                                                                                                                                      self.model.index(self.treatment_combobox.currentIndex(),1).data(),
                                                                                                                                                                                                                                                                                                      self.date_selector.selectedDate().toString(Qt.TextDate),
                                                                                                                                                                                                                                                                                                      self.time_selector.time().toString(Qt.TextDate))
+        send_email(self.to,self.subject,self.body)
 
-        msg.attach(MIMEText(body, 'plain'))
-        
-        server.sendmail(fromaddr, toaddr, msg.as_string())
-        #server.sendmail(fromaddr, bccaddr, msg.as_string())
+
 
 
 

@@ -26,7 +26,64 @@ class CreateOrder(QWidget):
         self.search_customer_layout.customerSelectedSignal.connect(self.create_order)
 
     def create_order(self):
-        pass
+        self.create_order_layout()
 
     def create_order_layout(self):
-        pass 
+        #TITLE FOR LAYOUT
+        self.order_title_label = QLabel("""<html>
+					  <body>
+					       <p><span style=" font-size:16pt; font-weight:1000; color:Green">New Order</span></p>
+					  </body>
+				     </html>""")
+        self.create_order_button = QPushButton("Create Order")
+        self.create_order_button.hide()
+
+        self.order_error_message = QLabel
+        self.order_error_message.hide()
+
+        self.customer_data = self.get_customer_details()
+
+        #CUSTOMER DETAILS LAYOUT
+        self.customer_details_label = QLabel("""<html>
+					  <body>
+					       <p><span style=" font-size:12pt; font-weight:750;">Customer Details</span></p>
+					  </body>
+				     </html>""")
+        self.customer_id_label = QLabel("ID: {0}".format(self.customer_data['CustomerID'])
+        self.customer_name_label = QLabel("Name: {0}, {1}".format(self.customer_data['LastName'],self.customer_data['FirstName'])
+        self.customer_dob_label = QLabel("Date of Birth: {0}".format(self.date_of_birth))
+        self.customer_address_label = QLabel("Address: {0}".format(self.customer_address))
+        self.customer_contact_label = QLabel("Contact Numbers: {0}, {1} - Preferred: {2}".format(self.mobile,self.home,self.preferred))
+        self.customer_email_label = QLabel("Email: {0}".format(self.email))
+        self.customer_email_button = QPushButton("Email Customer")
+
+        self.customer_details_layout = QGridLayout()
+        self.customer_details_layout.addWidget(self.customer_details_label,0,0,1,2)
+        self.customer_details_layout.addWidget(self.customer_name_label,1,0)
+        self.customer_details_layout.addWidget(self.customer_id_label,1,1)
+        self.customer_details_layout.addWidget(self.customer_dob_label,2,0,1,2)
+        self.customer_details_layout.addWidget(self.customer_address_label,3,0,1,2)
+        self.customer_details_layout.addWidget(self.customer_contact_label,4,0,1,2)
+        self.customer_details_layout.addWidget(self.customer_email_label,5,0)
+        self.customer_details_layout.addWidget(self.customer_email_button,5,1)
+
+        self.customer_details_widget = QWidget()
+        self.customer_details_widget.setLayout(self.customer_details_layout)
+
+    def get_customer_details():
+        details = {'CustomerID':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0]),
+                   'FirstName':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[1]),
+                   'LastName':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[2]),
+                   'DateOfBirth':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[3]),
+                   'House':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[4]),
+                   'Road':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[5]),
+                   'City':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[6]),
+                   'County':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[7]),
+                   'Postcode':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[8]),
+                   'Mobile':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[9]),
+                   'Home':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[10]),
+                   'Prefered':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[11]),
+                   'Email':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[12])}
+        return details 
+        
+ 

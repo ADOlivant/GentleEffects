@@ -5,6 +5,12 @@ from PyQt4.QtSql import *
 import sys
 import webbrowser
 
+#Confirmation Email Imports
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+
 from search_customer_widget import *
 
 class CreateAppointment(QWidget):
@@ -187,54 +193,65 @@ class CreateAppointment(QWidget):
         self.model.select()
 
     def get_customer_details(self,CustomerID):
-        self.query = QSqlQuery()
-        self.query.prepare("""SELECT *
-                              FROM Customer
-                              WHERE CustomerID = ?""")
-        self.query.addBindValue(CustomerID)
-        self.query.exec_()
-        while self.query.next():
-            self.customer_id = self.query.value(0)
+        self.customer_id = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0])
 
-            self.first_name = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[1])
-            self.last_name = self.query.value(2)
-            self.customer_name = "{0}, {1}".format(self.last_name,self.first_name)
+        self.first_name = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[1])
+        self.last_name = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[2])
+        self.customer_name = "{0}, {1}".format(self.last_name,self.first_name)
 
-            self.date_of_birth = self.query.value(3)
+        self.date_of_birth = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[3])
 
-            self.house = self.query.value(4)
-            self.road = self.query.value(5)
-            self.city = self.query.value(6)
-            self.county = self.query.value(7)
-            self.postcode = self.query.value(8)
-            self.customer_address = "{0} {1}, {2}, {3}, {4}".format(self.house,
-                                                           self.road,
-                                                           self.city,
-                                                           self.county,
-                                                           self.postcode)
+        self.house = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[4])
+        self.road = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[5])
+        self.city = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[6])
+        self.county = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[7])
+        self.postcode = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[8])
+        self.customer_address = "{0} {1}, {2}, {3}, {4}".format(self.house,
+                                                       self.road,
+                                                       self.city,
+                                                       self.county,
+                                                       self.postcode)
 
-            self.mobile = self.query.value(9)
-            self.home = self.query.value(10)
-            self.preferred = self.query.value(11)
+        self.mobile = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[9])
+        self.home = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[10])
+        self.preferred = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[11])
 
-            self.email = self.query.value(12)
+        self.email = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[12])
         
     def email_customer(self):
         webbrowser.open("mailto:{0}".format(self.email))
 
     def book_appointment(self):
-        details = self.appointment_details()
+        self.booked_appointment()
+        self.save_appointment()
+
+    def save_appointment(self):
+        self.details = self.appointment_details()
         self.save_to_database = QSqlQuery()
         self.save_to_database.prepare("""INSERT INTO Appointment(AppointmentTime,AppointmentDate,CustomerID,TreatmentID)
                                          VALUES (?,?,?,?)""")
-        self.save_to_database.addBindValue(details['Time'])
-        self.save_to_database.addBindValue(details['Date'])
-        self.save_to_database.addBindValue(details['CustomerID'])
-        self.save_to_database.addBindValue(details['TreatmentID'])
-        self.save_to_database.exec_()
+        self.save_to_database.addBindValue(self.details['Time'])
+        self.save_to_database.addBindValue(self.details['Date'])
+        self.save_to_database.addBindValue(self.details['CustomerID'])
+        self.save_to_database.addBindValue(self.details['TreatmentID'])
+        self.save_to_database.exec_()     
 
-        self.hide()
-                            
+    def get_appointment_id(self):
+        self.details = self.appointment_details()
+        self.get_appointment_id = QSqlQuery()
+        self.get_appointment_id.prepare("""SELECT AppointmentID
+                                           FROM Appointment
+                                           WHERE AppointmentTime = (?) AND AppointmentDate = (?) AND CustomerID = (?) AND TreatmentID = (?)""")
+        self.get_appointment_id.addBindValue(self.details['Time'])
+        self.get_appointment_id.addBindValue(self.details['Date'])
+        self.get_appointment_id.addBindValue(self.details['CustomerID'])
+        self.get_appointment_id.addBindValue(self.details['TreatmentID'])
+        self.get_appointment_id.exec_()
+        while self.get_appointment_id.next():
+            self.appointment_id = self.get_appointment_id.value(0)
+
+        app_id = self.appointment_id
+        return app_id
 
     def appointment_details(self):
         details = {'CustomerID':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0]),
@@ -242,4 +259,79 @@ class CreateAppointment(QWidget):
                    'Date':self.date_selector.selectedDate().toString(Qt.ISODate),
                    'Time':self.time_selector.time().toString(Qt.ISODate)}
         return details
+
+    def booked_appointment(self):
+        self.booked_appointment_layout = QLabel("""<html>
+					                 <body>
+					                       <p><span style=" font-size:16pt; font-weight:1000; color:Green">Appointment Booked</span></p>
+					                 </body>
+				                   </html>""")
+
+        if self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[12]) != "":
+            self.email_text = "and email sent to the client"
+        else:
+            self.email_text = ""
+            
+        self.booked_confirmation_label = QLabel("This appointment has been booked{0}.".format(self.email_text))
+
+        self.booked_customer_name_label = QLabel("Customer Name: ")
+        self.booked_customer_name_detail = QLabel()
+        self.booked_customer_name = ("{0} {1}".format(self.first_name,self.last_name))
+        self.booked_customer_name_detail.setText(self.booked_customer_name)
+        self.booked_customer_address_label = QLabel("Customer Address: ")
+
+        self.booked_appointment_name_label = QLabel("Treatment: ")
+        self.booked_appointment_cost_label = QLabel("Treatment Cost: ")
+
+        self.booked_appointment_date_label = QLabel("Treatment Date: ")
+        self.booked_appointment_time_label = QLabel("Treatment Time: ")
+
+        self.booked_layout = QGridLayout()
+        self.booked_layout.addWidget(self.booked_appointment_layout,0,0,1,2)
+        self.booked_layout.addWidget(self.booked_confirmation_label,1,0,1,2)
+        self.booked_layout.addWidget(self.booked_customer_name_label,2,0)
+        self.booked_layout.addWidget(self.booked_customer_name_detail,2,1)
+        self.booked_layout.addWidget(self.booked_customer_address_label,3,0)
+        self.booked_layout.addWidget(self.booked_appointment_name_label,4,0)
+        self.booked_layout.addWidget(self.booked_appointment_cost_label,5,0)
+        self.booked_layout.addWidget(self.booked_appointment_date_label,6,0)
+        self.booked_layout.addWidget(self.booked_appointment_time_label,7,0)
+        self.booked_widget = QWidget()
+        self.booked_widget.setLayout(self.booked_layout)
+
+        self.stacked_appointment_layout.addWidget(self.booked_widget)
+        self.stacked_appointment_layout.setCurrentIndex(2)
+
+        if self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[12]) != "":
+            self.app_id = self.get_appointment_id()
+            self.email_booking()
+
+    def email_booking(self):
+        server = smtplib.SMTP('smtp-mail.outlook.com', 587)
+        server.starttls()
+        server.login("gentle.effects@outlook.com", "Thomas84")
+
+        fromaddr = "gentle.effects@outlook.com"
+        toaddr = "{0}, ".format(self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[12]))
+        bccaddr = "{0}, ".format("gentle.effects@outlook.com")
+        msg = MIMEMultipart()
+        msg['From'] = fromaddr
+        msg['To'] = toaddr
+        msg['Bcc'] = bccaddr
+        msg['Subject'] = "You booking for {0}".format(self.model.index(self.treatment_combobox.currentIndex(),1).data())
+
+        body = "Hi {2}, \n \n Your {3} appointment with Gentle Effects is booked for {4} at {5}. I look forward to seeing you then. \n \n Please have these handy when calling - Personal ID: {0}, Appointment ID: {1} \n  \n Kind Regards, \n Paula Lawrence \n Aestetic Nurse Practioner \n \n".format(self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0]),
+                                                                                                                                                                                                                                                                                                     self.app_id,
+                                                                                                                                                                                                                                                                                                     self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[1]),
+                                                                                                                                                                                                                                                                                                     self.model.index(self.treatment_combobox.currentIndex(),1).data(),
+                                                                                                                                                                                                                                                                                                     self.date_selector.selectedDate().toString(Qt.TextDate),
+                                                                                                                                                                                                                                                                                                     self.time_selector.time().toString(Qt.TextDate))
+
+        msg.attach(MIMEText(body, 'plain'))
+        
+        server.sendmail(fromaddr, toaddr, msg.as_string())
+        #server.sendmail(fromaddr, bccaddr, msg.as_string())
+
+
+
         

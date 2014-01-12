@@ -58,22 +58,12 @@ class AddCustomer(QWidget):
 		self.home_lineedit = QLineEdit()
 		self.email_lineedit = QLineEdit()
 
-		self.slash_label = QLabel("/")
-		self.slash2_label = QLabel("/")
+		self.date_lineedit = QDateEdit()
 
 		self.save_button = QPushButton("Save New Customer")
 		self.reset_button = QPushButton("Reset")
 
 		self.error_label = QLabel("Errors to Appear Here")
-
-		self.dateofbirth_layout = QHBoxLayout()
-		self.dateofbirth_layout.addWidget(self.day_lineedit)
-		self.dateofbirth_layout.addWidget(self.slash_label)
-		self.dateofbirth_layout.addWidget(self.month_lineedit)
-		self.dateofbirth_layout.addWidget(self.slash2_label)
-		self.dateofbirth_layout.addWidget(self.year_lineedit)
-		self.dateofbirth_widget = QWidget()
-		self.dateofbirth_widget.setLayout(self.dateofbirth_layout)
 
 		self.name_layout = QGridLayout()
 		self.name_layout.addWidget(self.fName_label,0,0)
@@ -81,7 +71,7 @@ class AddCustomer(QWidget):
 		self.name_layout.addWidget(self.lName_label,1,0)
 		self.name_layout.addWidget(self.lName_lineedit,1,1)
 		self.name_layout.addWidget(self.dateofbirth_label,2,0)
-		self.name_layout.addWidget(self.dateofbirth_widget,2,1)
+		self.name_layout.addWidget(self.date_lineedit,2,1)
 		self.name_widget = QWidget()
 		self.name_widget.setLayout(self.name_layout)
 
@@ -216,7 +206,7 @@ class AddCustomer(QWidget):
 			self.preferred = "Home"
 		details = {'FirstName':self.fName_lineedit.text(),
 			   'LastName':self.lName_lineedit.text(),
-			   'DateOfBirth':self.dateofbirth,
+			   'DateOfBirth':self.date_lineedit.date().toString(Qt.ISODate),
 			   'House':self.number_lineedit.text(),
 			   'Road':self.road_lineedit.text(),
 			   'City':self.city_lineedit.text(),

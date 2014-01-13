@@ -136,7 +136,7 @@ class MainWindow(QMainWindow):
         self.add_customer_widget = AddCustomer()
         self.setCentralWidget(self.add_customer_widget)
         #Connections - Signal
-        self.add_customer_widget.customerAddedSignal.connect(self.proceess_save_customer)
+        self.add_customer_widget.customerAddedSignal.connect(self.process_save_customer)
 
     def process_save_customer(self):
         details = self.add_customer_widget.customer_details()
@@ -154,9 +154,14 @@ class MainWindow(QMainWindow):
         SupplierWidget = AddSupplier()
         self.setCentralWidget(SupplierWidget)
 
-    def add_new_product(self):
+    def view_add_new_product(self):
         ProductWidget = AddProduct()
         self.setCentralWidget(ProductWidget)
+        #Connections - Signal
+        self.add_product_widget.productAddedSignal.connect(self.process_save_product)
+
+    def process_save_product(self):
+        details = self.add
 
     def create_order(self):
         OrderWidget = CreateOrder()

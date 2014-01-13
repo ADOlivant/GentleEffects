@@ -8,6 +8,8 @@ import re
 class AddProduct(QWidget):
 	"""Adding Product data to SQL Database with PyQt4"""
 
+        productAddedSignal = pyqtSignal()
+        
 	def __init__(self):
 		super().__init__()
 
@@ -65,16 +67,8 @@ class AddProduct(QWidget):
 		self.save_pushbutton.clicked.connect(self.save_product)
 		self.rest_pushbutton.clicked.connect(self.reset_product)
 
-	def save_product(self):
-		details = self.product_details()
-		self.query = QSqlQuery()
-		self.query.prepare("""INSERT INTO Product(Name,Price,Code,SupplierID)
-				      VALUES (?,?,?,?)""")
-		self.query.addBindValue(details['Name'])
-		self.query.addBindValue(details['Price'])
-		self.query.addBindValue(details['Code'])
-		self.query.addBindValue(details['SupplierID'])
-		self.query.exec_()
+	def save_product(self):		
+                self.productAddedSignal.emit()
 		self.save_pushbutton.setEnabled(False)
 
 	def reset_product(self):

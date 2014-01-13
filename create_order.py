@@ -12,8 +12,10 @@ class CreateOrder(QWidget):
 
     productSelectedSignal = pyqtSignal()
     
-    def __init__(self):
+    def __init__(self,connection):
         super().__init__()
+
+        self.connection = connection
 
         self.stacked_order_layout = QStackedLayout()
         self.setLayout(self.stacked_order_layout)
@@ -36,6 +38,7 @@ class CreateOrder(QWidget):
 
     def create_order(self):
         self.save_to_db()
+        self.order_id = self.find_order_id()
         self.create_order_layout()
 
     def order_details(self):
@@ -184,23 +187,24 @@ class CreateOrder(QWidget):
         self.product_view.hideColumn(4)
 
     def select_product(self):
+        self.productSelectedSignal.emit()
+        details = self.product_details()
+        self.connection.add_product_to_order(details)
+
+    def find_order_id(self):
+        details = {'DateOfOrder':self.date,
+                   'CustomerID':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0])}
+        self.order_id = self.connection.get_order_id(details)
+
+    def product_details(self):
         self.product_view.showColumn(0)
         self.selected_record = self.product_view.selectedIndexes()
-        product_details = {'Occurance':self.occurance
-            #'ProductID': self.product_view.model().data(self.selected_record[0]),
-                           #'Name':self.product_view.model().data(self.selected_record[1]),
-                           #'Cost':self.product_view.model().data(self.selected_record[2])
-            }
-        self.selected_products_list.append(product_details)
-        self.productSelectedSignal.emit()
-        #self.product_view.setSelectionMode(0)
-        self.product_view.setModel(None)
-        self.n_model = self.create_product_model(("",))
-        self.product_view.setModel(self.n_model)
-        print(self.selected_products_list)
+        details = {'ProductID':self.product_view.model().data(self.selected_record[0]),
+                   'OrderID':self.order_id,
+                   'Quantity':"1"}
+        return details
 
     def product_selected(self):
-        
         self.stacked_order_layout.setCurrentIndex(1)
         
     def get_customer_details(self):
@@ -220,11 +224,7 @@ class CreateOrder(QWidget):
         return details
 
     def current_order_items_model(self):
-        model = QSqlRelationalTableModel()
-        print(self.db.tables())
-        model.setTable(self.db.tables()[10])
-        model.setRelation(8,QSqlRelation("Product","ProductID","Price"))
-        return model 
+        self.model = self.connection.current_order_items_model 
         
         
         

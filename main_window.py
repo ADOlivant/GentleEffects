@@ -127,7 +127,7 @@ class MainWindow(QMainWindow):
         self.add_treatmnet.triggered.connect(self.add_new_treatment)
         self.new_appointment.triggered.connect(self.create_appointment)
         self.reset_central_widget.triggered.connect(self.reset_screen)
-        self.new_product.triggered.connect(self.add_new_product)
+        self.new_product.triggered.connect(self.view_add_new_product)
         self.new_supplier.triggered.connect(self.add_new_supplier)
         self.new_order.triggered.connect(self.create_order)
         self.add_user.triggered.connect(self.test_area)
@@ -155,16 +155,16 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(SupplierWidget)
 
     def view_add_new_product(self):
-        ProductWidget = AddProduct()
-        self.setCentralWidget(ProductWidget)
+        self.add_product_widget = AddProduct()
+        self.setCentralWidget(self.add_product_widget)
         #Connections - Signal
         self.add_product_widget.productAddedSignal.connect(self.process_save_product)
 
     def process_save_product(self):
-        details = self.add
+        pass
 
     def create_order(self):
-        OrderWidget = CreateOrder()
+        OrderWidget = CreateOrder(self.connection)
         self.setCentralWidget(OrderWidget)
 
     def reset_screen(self):

@@ -187,8 +187,8 @@ class CreateOrder(QWidget):
         self.product_view.hideColumn(4)
 
     def select_product(self):
-        self.productSelectedSignal.emit()
         details = self.product_details()
+        self.productSelectedSignal.emit()
         self.connection.add_product_to_order(details)
 
     def find_order_id(self):
@@ -199,6 +199,8 @@ class CreateOrder(QWidget):
     def product_details(self):
         self.product_view.showColumn(0)
         self.selected_record = self.product_view.selectedIndexes()
+        print (self.product_view.model())
+        print (self.selected_record)
         details = {'ProductID':self.product_view.model().data(self.selected_record[0]),
                    'OrderID':self.order_id,
                    'Quantity':"1"}

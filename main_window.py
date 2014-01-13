@@ -5,7 +5,7 @@ from PyQt4.QtSql import *
 import sys
 import os
 import re
-
+from SQL import *
 from add_treatment_widget import *
 from add_customer_widget import *
 from add_product_widget import *
@@ -27,16 +27,12 @@ class MainWindow(QMainWindow):
         self.status_label = QLabel()
         self.status_bar.addWidget(self.status_label)
 
-        self.db = QSqlDatabase.addDatabase("QSQLITE")
-        self.db.setDatabaseName("GentleEffects.db")
-        self.db.open()
-
-        self.status_label.setText("Connected to {0}".format(self.db.databaseName()))
+        self.path = "GentleEffects.db"
+        self.connection = SQL(self.path)
+        self.connection.open_database()
+        
+        self.status_label.setText("Connected to {0}".format(self.connection.db.databaseName()))
         self.setStatusBar(self.status_bar)
-
-        self.pragma_on = QSqlQuery()
-        self.pragma_on.prepare("""PRAGMA foreign_keys = ON""")
-        self.pragma_on.exec_()
 
         self.title_label = QLabel("""<html>
                                           <body>
@@ -127,7 +123,7 @@ class MainWindow(QMainWindow):
         self.reset_screen()
 
         #connections
-        self.new_customer.triggered.connect(self.add_new_customer)
+        self.new_customer.triggered.connect(self.view_add_new_customer)
         self.add_treatmnet.triggered.connect(self.add_new_treatment)
         self.new_appointment.triggered.connect(self.create_appointment)
         self.reset_central_widget.triggered.connect(self.reset_screen)
@@ -136,9 +132,15 @@ class MainWindow(QMainWindow):
         self.new_order.triggered.connect(self.create_order)
         self.add_user.triggered.connect(self.test_area)
         
-    def add_new_customer(self):
-        CustomerWidget = AddCustomer()
-        self.setCentralWidget(CustomerWidget)
+    def view_add_new_customer(self):
+        self.add_customer_widget = AddCustomer()
+        self.setCentralWidget(self.add_customer_widget)
+        #Connections - Signal
+        self.add_customer_widget.customerAddedSignal.connect(self.proceess_save_customer)
+
+    def process_save_customer(self):
+        details = self.add_customer_widget.customer_details()
+        self.connection.add_new_customer(details)
 
     def add_new_treatment(self): 
         TreatmentWidget = AddTreatment()

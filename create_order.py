@@ -107,12 +107,17 @@ class CreateOrder(QWidget):
 
         #OVERALL LAYOUT
         self.add_product_button = QPushButton("Add Product")
+
+        self.current_products = QTableView()
+        self.current_products_model = self.current_order_items_model()
+        self.current_products.setModel(self.current_products_model)
         
         self.layout = QGridLayout()
         self.layout.addWidget(self.order_title_label,0,0,1,2)
         self.layout.addWidget(self.order_error_message,1,0,1,2)
         self.layout.addWidget(self.customer_details_widget,2,0)
         self.layout.addWidget(self.add_product_button,3,0,1,2)
+        self.layout.addWidget(self.current_products,4,0,1,2)
 
         self.widget = QWidget()
         self.widget.setLayout(self.layout)
@@ -181,7 +186,8 @@ class CreateOrder(QWidget):
     def select_product(self):
         self.product_view.showColumn(0)
         self.selected_record = self.product_view.selectedIndexes()
-        product_details = {#'ProductID': self.product_view.model().data(self.selected_record[0]),
+        product_details = {'Occurance':self.occurance
+            #'ProductID': self.product_view.model().data(self.selected_record[0]),
                            #'Name':self.product_view.model().data(self.selected_record[1]),
                            #'Cost':self.product_view.model().data(self.selected_record[2])
             }
@@ -211,6 +217,15 @@ class CreateOrder(QWidget):
                    'Home':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[10]),
                    'Prefered':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[11]),
                    'Email':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[12])}
-        return details 
+        return details
+
+    def current_order_items_model(self):
+        model = QSqlRelationalTableModel()
+        print(self.db.tables())
+        model.setTable(self.db.tables()[10])
+        model.setRelation(8,QSqlRelation("Product","ProductID","Price"))
+        return model 
+        
+        
         
  

@@ -10,6 +10,7 @@ from SQL import *
 from add_treatment_widget import *
 from add_customer_widget import *
 from add_product_widget import *
+from amend_product_widget import *
 from add_supplier_widget import *
 from search_customer_widget import *
 from search_product_widget import *
@@ -133,11 +134,11 @@ class MainWindow(QMainWindow):
         self.new_supplier.triggered.connect(self.add_new_supplier)
         self.new_order.triggered.connect(self.create_order)
         self.add_user.triggered.connect(self.test_area)
-        self.ammend_product.triggered.connect(self.search_product)
+        self.ammend_product.triggered.connect(self.ammend_product_details)
 
-    def search_product(self):
-        self.search_product_widget = SearchProduct(self.connection)
-        self.setCentralWidget(self.search_product_widget)
+    def ammend_product_details(self):
+        self.ammend_product_widget = AmendProduct(self.connection)
+        self.setCentralWidget(self.ammend_product_widget)
         
     def view_add_new_customer(self):
         self.add_customer_widget = AddCustomer()

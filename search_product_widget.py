@@ -142,9 +142,22 @@ class SearchProduct(QWidget):
 
          self.stacked_layout.addWidget(self.product_view_widget)
 
+         #connection
+         self.select_product_btn.clicked.connect(self.selected_product)
+
+    def selected_product(self):
+        self.index = self.product_view.selectedIndexes()
+        self.product_id = self.product_view.model().data(self.index[0])
+        self.productSelectedSignal.emit()
+
     def selected_product_details(self):
-        self.index = self.prodcut_view.selectedIndexes()
-        self.product_id = self.product_view.model().data(self.index[0])      
+        details = {'ID':self.product_view.model().data(self.index[0]),
+                   'Name':self.product_view.model().data(self.index[1]),
+                   'Price':self.product_view.model().data(self.index[2]),
+                   'SupplierID':self.product_view.model().data(self.index[3])}
+        return details
+                   
+        
         
 
         

@@ -37,7 +37,8 @@ class CreateOrder(QWidget):
         self.search_customer_layout.customerSelectedSignal.connect(self.create_order)
 
     def create_order(self):
-        self.save_to_db()
+        details = self.order_details()
+        self.connection.create_order(details)
         self.order_id = self.find_order_id()
         self.create_order_layout()
 
@@ -46,18 +47,7 @@ class CreateOrder(QWidget):
                    'CustomerID':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0]),
                    'Ordered':"False",
                    'Delivered':"False"}
-        return details
-
-    def save_to_db(self):
-        details = self.order_details()
-        self.save_to_db = QSqlQuery()
-        self.save_to_db.prepare("""INSERT INTO Orders(DateOfOrder,CustomerID,OrderedFromSupplier,Delivered)
-                                   VALUES (?,?,?,?)""")
-        self.save_to_db.addBindValue(details['DateOfOrder'])
-        self.save_to_db.addBindValue(details['CustomerID'])
-        self.save_to_db.addBindValue(details['Ordered'])
-        self.save_to_db.addBindValue(details['Delivered'])
-        self.save_to_db.exec_()          
+        return details        
 
     def create_order_layout(self):
         #TITLE FOR LAYOUT
@@ -72,8 +62,6 @@ class CreateOrder(QWidget):
         self.order_error_message = QLabel()
         self.order_error_message.hide()
 
-        self.customer_data = self.get_customer_details()
-
         #CUSTOMER DETAILS LAYOUT
         self.customer_details_label = QLabel("""<html>
 					  <body>
@@ -81,6 +69,7 @@ class CreateOrder(QWidget):
 					  </body>
 				     </html>""")
         
+        self.customer_data = self.get_customer_details()
         self.customer_id_label = QLabel("ID: {0}".format(self.customer_data['CustomerID']))
         self.customer_name_label = QLabel("Name: {0}, {1}".format(self.customer_data['LastName'],self.customer_data['FirstName']))
         self.customer_dob_label = QLabel("Date of Birth: {0}".format(self.customer_data['DateOfBirth']))
@@ -104,7 +93,6 @@ class CreateOrder(QWidget):
         self.customer_details_layout.addWidget(self.customer_contact_label,4,0,1,2)
         self.customer_details_layout.addWidget(self.customer_email_label,5,0)
         self.customer_details_layout.addWidget(self.customer_email_button,5,1)
-
         self.customer_details_widget = QWidget()
         self.customer_details_widget.setLayout(self.customer_details_layout)
 
@@ -112,7 +100,7 @@ class CreateOrder(QWidget):
         self.add_product_button = QPushButton("Add Product")
 
         self.current_products = QTableView()
-        self.current_products_model = self.current_order_items_model()
+        self.current_products_model = self.connection.current_order_items_model()
         self.current_products.setModel(self.current_products_model)
         
         self.layout = QGridLayout()
@@ -138,10 +126,7 @@ class CreateOrder(QWidget):
 					  </body>
 				     </html>""")
         self.select_product_button = QPushButton("Select Current Product")
-
         self.search_lineedit = QLineEdit()
-
-        self.selected_products_list = []
 
         self.model = self.create_product_model(("",))
 
@@ -161,8 +146,6 @@ class CreateOrder(QWidget):
         self.product_widget.setLayout(self.product_layout)
 
         self.stacked_order_layout.addWidget(self.product_widget)
-
-        #self.stacked_order_layout.setCurrentIndex(2)
 
         #connections
         self.search_lineedit.textEdited.connect(self.refresh)
@@ -233,9 +216,6 @@ class CreateOrder(QWidget):
                    'Prefered':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[11]),
                    'Email':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[12])}
         return details
-
-    def current_order_items_model(self):
-        self.model = self.connection.current_order_items_model 
         
         
         

@@ -62,9 +62,19 @@ class SQL:
         def current_order_items_model(self):
                 model = QSqlRelationalTableModel()
                 print(self.db.tables())
-                model.setTable(self.db.tables()[10])
+                model.setTable(self.db.tables()[9])
                 model.setRelation(8,QSqlRelation("Product","ProductID","Price"))
                 return model
+
+        def create_order(self,details):
+                query = QSqlQuery()
+                query.prepare("""INSERT INTO Orders(DateOfOrder,CustomerID,OrderedFromSupplier,Delivered)
+                                   VALUES (?,?,?,?)""")
+                query.addBindValue(details['DateOfOrder'])
+                query.addBindValue(details['CustomerID'])
+                query.addBindValue(details['Ordered'])
+                query.addBindValue(details['Delivered'])
+                query.exec_()
 
         def add_product_to_order(self,details):
                 query = QSqlQuery()

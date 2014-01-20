@@ -18,6 +18,9 @@ class SearchProduct(QWidget):
 
         self.find_product_layout()
 
+        #Connections
+        self.radio_button_group.buttonClicked.connect(self.change_search_type)
+
     def find_product_layout(self):
         self.title_label = QLabel("""<html>
                                           <body>
@@ -87,6 +90,20 @@ class SearchProduct(QWidget):
         self.stacked_layout.addWidget(self.find_product_widget)
 
         self.stacked_layout.setCurrentIndex(0)
+
+    def change_search_type(self):
+        if self.radio_button_group.checkedId() == 0:
+            self.product_id_ledit.setEnabled(True)
+            self.product_name_ledit.setEnabled(False)
+            self.product_price_ledit.setEnabled(False)
+        elif self.radio_button_group.checkedId() == 1:
+            self.product_id_ledit.setEnabled(False)
+            self.product_name_ledit.setEnabled(True)
+            self.product_price_ledit.setEnabled(False)
+        elif self.radio_button_group.checkedId() == 2:
+            self.product_id_ledit.setEnabled(False)
+            self.product_name_ledit.setEnabled(False)
+            self.product_price_ledit.setEnabled(True)
         
 
         

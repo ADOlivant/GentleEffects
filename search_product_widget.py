@@ -24,7 +24,7 @@ class SearchProduct(QWidget):
                                                <p><span style=" font-size:16pt; font-weight:1000;">Search Products</span></p>
                                           </body>
                                      </html>""")
-        self.prodcut_id_lbl = QLabel("Product ID:")
+        self.product_id_lbl = QLabel("Product ID:")
         self.product_name_lbl = QLabel("Product Name:")
         self.product_price_lbl = QLabel("Product Price:")
 
@@ -32,7 +32,7 @@ class SearchProduct(QWidget):
         self.product_name_ledit = QLineEdit()
         self.product_name_ledit.setEnabled(False)
         self.product_price_ledit = QDoubleSpinBox()
-        self.prodcut_price_ledit.setPrefix("£")
+        self.product_price_ledit.setPrefix("£")
         self.product_price_ledit.setSingleStep(0.5)
         self.product_price_ledit.setMaximum(999.99)
         self.product_price_ledit.setEnabled(False)
@@ -55,9 +55,9 @@ class SearchProduct(QWidget):
         self.radio_button_group.addButton(self.price_radio)
         self.radio_button_group.setId(self.price_radio,2)
 
-        self.product_id_layout = QHBoxayout()
+        self.product_id_layout = QHBoxLayout()
         self.product_id_layout.addWidget(self.product_id_lbl)
-        self.prodcut_id_layout.addWidget(self.product_id_ledit)
+        self.product_id_layout.addWidget(self.product_id_ledit)
 
         self.product_name_layout = QHBoxLayout()
         self.product_name_layout.addWidget(self.product_name_lbl)

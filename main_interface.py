@@ -136,7 +136,7 @@ class MainWindow(QMainWindow):
         self.ammend_product.triggered.connect(self.search_product)
 
     def search_product(self):
-        self.search_product_widget = SearchProduct()
+        self.search_product_widget = SearchProduct(self.connection)
         self.setCentralWidget(self.search_product_widget)
         
     def view_add_new_customer(self):

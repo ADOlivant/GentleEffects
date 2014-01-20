@@ -10,16 +10,19 @@ class SearchProduct(QWidget):
     #Product Found Signal to fire when Product selected.
     productSelectedSignal = pyqtSignal()
     
-    def __init__(self):
+    def __init__(self,connection):
         super().__init__()
 
         self.stacked_layout = QStackedLayout()
         self.setLayout(self.stacked_layout)
 
+        self.connection = connection
+
         self.find_product_layout()
 
         #Connections
         self.radio_button_group.buttonClicked.connect(self.change_search_type)
+        self.find_product_btn.clicked.connect(self.find_product)
 
     def find_product_layout(self):
         self.title_label = QLabel("""<html>
@@ -104,6 +107,41 @@ class SearchProduct(QWidget):
             self.product_id_ledit.setEnabled(False)
             self.product_name_ledit.setEnabled(False)
             self.product_price_ledit.setEnabled(True)
+
+    def find_product(self):
+        if self.radio_button_group.checkedId() == 0:
+            self.search_values = (self.product_id_ledit.text(),)
+            self.model = self.connection.find_product_by_id(self.search_values)
+        elif self.radio_button_group.checkedId() == 1:
+            self.search_values = (self.product_name_ledit.text(),)
+            self.model = self.connection.find_product_by_name(self.search_values)
+        elif self.radio_button_group.checkedId() == 2:
+            self.search_values = (self.product_price_ledit.value(),)
+            self.model = self.connection.find_product_by_price(self.search_values)
+        self.select_product_layout_view()
+        self.stacked_layout.setCurrentIndex(1)
+
+    def select_product_layout_view(self):
+         self.title_label = QLabel("""<html>
+                                          <body>
+                                               <p><span style=" font-size:16pt; font-weight:1000;">Select Product</span></p>
+                                          </body>
+                                     </html>""")
+         self.select_product_btn = QPushButton("Select Product")
+         self.product_view = QTableView()
+         self.product_view.setSelectionBehavior(1)
+         self.product_view.setModel(self.model)
+
+         self.product_view_layout = QVBoxLayout()
+         self.product_view_layout.addWidget(self.title_label)
+         self.product_view_layout.addWidget(self.product_view)
+         self.product_view_layout.addWidget(self.select_product_btn)
+
+         self.product_view_widget = QWidget()
+         self.product_view_widget.setLayout(self.product_view_layout)
+
+         self.stacked_layout.addWidget(self.product_view_widget)    
+         
         
 
         

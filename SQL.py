@@ -58,6 +58,34 @@ class SQL:
                 query.addBindValue(details['SupplierID'])
                 query.exec_()
 
+        #SEARCH PRODUCT
+        def find_product_by_id(self,values):
+                model = QSqlQueryModel()
+                query = QSqlQuery()
+                query.prepare("""SELECT * FROM Product WHERE ProductID = ?""")
+                query.addBindValue(values[0])
+                query.exec_()
+                model.setQuery(query)
+                return model
+
+        def find_product_by_name(self,values):
+                model = QSqlQueryModel()
+                query = QSqlQuery()
+                query.prepare("""SELECT * FROM Product WHERE Name = ?""")
+                query.addBindValue(values[0])
+                query.exec_()
+                model.setQuery(query)
+                return model
+
+        def find_product_by_price(self,values):
+                model = QSqlQueryModel()
+                query = QSqlQuery()
+                query.prepare("""SELECT * FROM Product WHERE Price = ?""")
+                query.addBindValue(values[0])
+                query.exec_()
+                model.setQuery(query)
+                return model
+
         #CREATE ORDER
         def current_order_items_model(self):
                 model = QSqlRelationalTableModel()

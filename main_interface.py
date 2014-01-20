@@ -5,12 +5,14 @@ from PyQt4.QtSql import *
 import sys
 import os
 import re
+
 from SQL import *
 from add_treatment_widget import *
 from add_customer_widget import *
 from add_product_widget import *
 from add_supplier_widget import *
 from search_customer_widget import *
+from search_product_widget import *
 from create_appointment import *
 from create_order import *
 from welcome_widget import *
@@ -131,6 +133,11 @@ class MainWindow(QMainWindow):
         self.new_supplier.triggered.connect(self.add_new_supplier)
         self.new_order.triggered.connect(self.create_order)
         self.add_user.triggered.connect(self.test_area)
+        self.ammend_product.triggered.connect(self.search_product)
+
+    def search_product(self):
+        self.search_product_widget = SearchProduct()
+        self.setCentralWidget(self.search_product_widget)
         
     def view_add_new_customer(self):
         self.add_customer_widget = AddCustomer()

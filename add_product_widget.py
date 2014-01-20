@@ -28,7 +28,7 @@ class AddProduct(QWidget):
 		self.price_dblspinbox = QDoubleSpinBox()
 		self.price_dblspinbox.setPrefix("£")
 		self.price_dblspinbox.setSingleStep(0.5)
-		self.price_dblspinbox.setMaximum(500.00)
+		self.price_dblspinbox.setMaximum(999.99)
 		self.code_lineedit = QLineEdit()
 		self.create_table_model()
 		self.supplier_combobox = QComboBox()

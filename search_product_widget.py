@@ -140,8 +140,11 @@ class SearchProduct(QWidget):
          self.product_view_widget = QWidget()
          self.product_view_widget.setLayout(self.product_view_layout)
 
-         self.stacked_layout.addWidget(self.product_view_widget)    
-         
+         self.stacked_layout.addWidget(self.product_view_widget)
+
+    def selected_product_details(self):
+        self.index = self.prodcut_view.selectedIndexes()
+        self.product_id = self.product_view.model().data(self.index[0])      
         
 
         

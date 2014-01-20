@@ -29,11 +29,18 @@ class AddProduct(QWidget):
 		self.price_dblspinbox.setPrefix("£")
 		self.price_dblspinbox.setSingleStep(0.5)
 		self.price_dblspinbox.setMaximum(999.99)
+		self.price_dblspinbox.setButtonSymbols(2)
 		self.code_lineedit = QLineEdit()
 		self.create_table_model()
 		self.supplier_combobox = QComboBox()
 		self.supplier_combobox.setModel(self.model)
 		self.supplier_combobox.setModelColumn(1)
+
+                #Amending of Product 
+		self.supplier_lineedit = QLabel()
+		self.supplier_lineedit.hide()
+		self.supplier_change_btn = QPushButton("Change Supplier")
+		self.supplier_change_btn.hide()
 
 		self.data_layout = QGridLayout()
 		self.data_layout.addWidget(self.name_label,0,0)
@@ -44,6 +51,8 @@ class AddProduct(QWidget):
 		self.data_layout.addWidget(self.price_dblspinbox,1,1)
 		self.data_layout.addWidget(self.code_lineedit,2,1)
 		self.data_layout.addWidget(self.supplier_combobox,3,1)
+		self.data_layout.addWidget(self.supplier_lineedit,3,1)
+		self.data_layout.addWidget(self.supplier_change_btn,4,1)
 		self.data_widget = QWidget()
 		self.data_widget.setLayout(self.data_layout)
 

@@ -86,6 +86,18 @@ class SQL:
                 model.setQuery(query)
                 return model
 
+        #AMEND PRODUCT
+        def get_supplier_name_from_id(self,id_value):
+                query = QSqlQuery()
+                query.prepare("""SELECT Name
+                                 FROM Supplier
+                                 WHERE SupplierID = ?""")
+                query.addBindValue(id_value)
+                query.exec_90
+                while query.next():
+                        supplier_name = query.value(0)
+                return supplier_name
+
         #CREATE ORDER
         def current_order_items_model(self):
                 model = QSqlRelationalTableModel()

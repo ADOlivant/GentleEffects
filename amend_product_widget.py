@@ -15,6 +15,8 @@ class AmendProduct(QWidget):
         self.stacked_layout = QStackedLayout()
         self.setLayout(self.stacked_layout)
 
+        self.connection = connection
+        
         self.search_product_widget = SearchProduct(connection)
         self.stacked_layout.addWidget(self.search_product_widget)
         self.stacked_layout.setCurrentIndex(0)
@@ -31,9 +33,24 @@ class AmendProduct(QWidget):
                                                <p><span style=" font-size:16pt; font-weight:1000;">Amend Product</span></p>
                                           </body>
                                      </html>""")
-        self.amend_product_details.name_lineedit.setText(self.product_details[1])
+        self.amend_product_details.name_lineedit.setText(self.product_details['Name'])
+        self.amend_product_details.price_dblspinbox.setValue(self.product_details['Price'])
+        self.amend_product_details.code_lineedit.setText(self.product_details['Code'])
+        self.amend_product_details.supplier_combobox.hide()
+        #self.connection.get_supplier_name_from_id(details['SupplierID'])
+        self.amend_product_details.supplier_lineedit.setText(self.connection.get_supplier_name_from_id(details['SupplierID']))
+        self.amend_product_details.supplier_lineedit.show()
+        self.amend_product_details.supplier_change_btn.show()
+
+        #connections
+        self.amend_product_details.supplier_change_btn.clicked.connect(self.enable_supplier_combo)
 
         self.stacked_layout.addWidget(self.amend_product_details)
         self.stacked_layout.setCurrentIndex(1)
+
+    def enable_supplier_combo(self):
+        self.amend_product_details.supplier_change_btn.hide()
+        self.amend_product_details.supplier_lineedit.hide()
+        self.amend_product_details.supplier_combobox.show()
     
 

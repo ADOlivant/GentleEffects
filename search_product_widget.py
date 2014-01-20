@@ -154,7 +154,8 @@ class SearchProduct(QWidget):
         details = {'ID':self.product_view.model().data(self.index[0]),
                    'Name':self.product_view.model().data(self.index[1]),
                    'Price':self.product_view.model().data(self.index[2]),
-                   'SupplierID':self.product_view.model().data(self.index[3])}
+                   'Code':self.product_view.model().data(self.index[3]),
+                   'SupplierID':self.product_view.model().data(self.index[4])}
         return details
                    
         

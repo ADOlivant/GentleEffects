@@ -128,7 +128,7 @@ class CreateOrder(QWidget):
         self.stacked_order_layout.setCurrentIndex(1)
 
         #connections
-        self.add_product_button.clicked.connect(self.select_product_layout)
+        self.add_product_button.clicked.connect(self.view_select_product)
         
     def select_product_layout(self):
         #TITLE FOR LAYOUT
@@ -162,13 +162,22 @@ class CreateOrder(QWidget):
 
         self.stacked_order_layout.addWidget(self.product_widget)
 
-        self.occurance = 2 
-        self.stacked_order_layout.setCurrentIndex(self.occurance)
-        self.occurance = +1
+        #self.stacked_order_layout.setCurrentIndex(2)
 
         #connections
         self.search_lineedit.textEdited.connect(self.refresh)
         self.select_product_button.clicked.connect(self.select_product)
+
+    def view_select_product(self):
+        self.ran = False
+        if not self.ran:
+            self.select_product_layout()
+            self.stacked_order_layout.setCurrentIndex(2)
+            self.ran = True
+        else:
+            self.product_view.hidColumn(0)
+            self.stacked_order_layout.setCurrentIndex(2)
+            
 
     def create_product_model(self,values):
         model = QSqlQueryModel()

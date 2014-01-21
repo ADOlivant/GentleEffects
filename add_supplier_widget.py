@@ -17,6 +17,10 @@ class AddSupplier(QWidget):
 					  </body>
 				     </html>""")
 
+                #AMMENDMENT FUNCTIONALITY
+		self.combo_box = QComboBox()
+		self.combo_box.hide()
+
 		self.name_label = QLabel("Supplier Name")
 		self.number_label = QLabel("House Name / Number")
 		self.road_label = QLabel("Road")
@@ -72,6 +76,7 @@ class AddSupplier(QWidget):
 
 		self.main_layout = QVBoxLayout()
 		self.main_layout.addWidget(self.title_label)
+		self.main_layout.addWidget(self.combo_box)
 		self.main_layout.addWidget(self.error_label)
 		self.main_layout.addWidget(self.data_widget)
 		self.main_layout.addWidget(self.button_widget)

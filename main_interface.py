@@ -169,7 +169,8 @@ class MainWindow(QMainWindow):
         self.add_product_widget.productAddedSignal.connect(self.process_save_product)
 
     def process_save_product(self):
-        pass
+        details = self.add_product_widget.product_details()
+        self.connection.add_new_product(details)
 
     def create_order(self):
         OrderWidget = CreateOrder(self.connection)

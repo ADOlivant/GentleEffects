@@ -93,10 +93,21 @@ class SQL:
                                  FROM Supplier
                                  WHERE SupplierID = ?""")
                 query.addBindValue(id_value)
-                query.exec_90
+                query.exec_()
                 while query.next():
                         supplier_name = query.value(0)
                 return supplier_name
+
+        def amend_product_without_supplier(self,product_id,details):
+                query = QSqlQuery()
+                query.prepare("""UPDATE Product
+                                  SET Name = ?, Price = ?, Code = ?
+                                  WHERE ProductID = ?""")
+                query.addBindValue(details['Name'])
+                query.addBindValue(details['Price'])
+                query.addBindValue(details['Code'])
+                query.addBindValue(product_id)
+                query.exec_()
 
         #CREATE ORDER
         def current_order_items_model(self):

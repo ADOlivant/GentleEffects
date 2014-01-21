@@ -37,13 +37,13 @@ class AmendProduct(QWidget):
         self.amend_product_details.price_dblspinbox.setValue(self.product_details['Price'])
         self.amend_product_details.code_lineedit.setText(self.product_details['Code'])
         self.amend_product_details.supplier_combobox.hide()
-        #self.connection.get_supplier_name_from_id(details['SupplierID'])
-        self.amend_product_details.supplier_lineedit.setText(self.connection.get_supplier_name_from_id(details['SupplierID']))
+        self.amend_product_details.supplier_lineedit.setText(self.connection.get_supplier_name_from_id(self.product_details['SupplierID']))
         self.amend_product_details.supplier_lineedit.show()
         self.amend_product_details.supplier_change_btn.show()
 
         #connections
         self.amend_product_details.supplier_change_btn.clicked.connect(self.enable_supplier_combo)
+        self.amend_product_details.save_pushbutton.clicked.connect(self.update_product)
 
         self.stacked_layout.addWidget(self.amend_product_details)
         self.stacked_layout.setCurrentIndex(1)
@@ -52,5 +52,9 @@ class AmendProduct(QWidget):
         self.amend_product_details.supplier_change_btn.hide()
         self.amend_product_details.supplier_lineedit.hide()
         self.amend_product_details.supplier_combobox.show()
+
+    def update_product(self):
+        details = self.amend_product_details.product_details()
+        self.connection.amend_product_without_supplier(self.product_details['ID'],details)
     
 

@@ -25,6 +25,7 @@ class AmendProduct(QWidget):
         self.search_product_widget.productSelectedSignal.connect(self.amend_product_details)
 
     def amend_product_details(self):
+        self.supplier_included = None 
         self.amend_product_details = AddProduct()
         self.product_details = self.search_product_widget.selected_product_details()
         self.amend_product_details.save_pushbutton.setText("Amend Details")
@@ -52,9 +53,13 @@ class AmendProduct(QWidget):
         self.amend_product_details.supplier_change_btn.hide()
         self.amend_product_details.supplier_lineedit.hide()
         self.amend_product_details.supplier_combobox.show()
+        self.supplier_included = True
 
     def update_product(self):
         details = self.amend_product_details.product_details()
-        self.connection.amend_product_without_supplier(self.product_details['ID'],details)
+        if self.supplier_included:
+            self.connection.amend_product_with_supplier(self.product_details['ID'],details)
+        else:        
+            self.connection.amend_product_without_supplier(self.product_details['ID'],details)
     
 

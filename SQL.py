@@ -109,6 +109,18 @@ class SQL:
                 query.addBindValue(product_id)
                 query.exec_()
 
+        def amend_product_with_supplier(self,product_id,details):
+                query = QSqlQuery()
+                query.prepare("""UPDATE Product
+                                  SET Name = ?, Price = ?, Code = ?, SupplierID = ?
+                                  WHERE ProductID = ?""")
+                query.addBindValue(details['Name'])
+                query.addBindValue(details['Price'])
+                query.addBindValue(details['Code'])
+                query.addBindValue(details['SupplierID'])
+                query.addBindValue(product_id)
+                query.exec_()
+
         #CREATE ORDER
         def current_order_items_model(self):
                 model = QSqlRelationalTableModel()

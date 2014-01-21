@@ -41,6 +41,7 @@ class AmendProduct(QWidget):
         self.amend_product_details.supplier_lineedit.setText(self.connection.get_supplier_name_from_id(self.product_details['SupplierID']))
         self.amend_product_details.supplier_lineedit.show()
         self.amend_product_details.supplier_change_btn.show()
+        self.amend_product_details.rest_pushbutton.hide()
 
         #connections
         self.amend_product_details.supplier_change_btn.clicked.connect(self.enable_supplier_combo)
@@ -61,5 +62,7 @@ class AmendProduct(QWidget):
             self.connection.amend_product_with_supplier(self.product_details['ID'],details)
         else:        
             self.connection.amend_product_without_supplier(self.product_details['ID'],details)
+        self.amend_product_details.message_lbl.setText("Product Updated Successfully")
+        self.amend_product_details.message_lbl.show()
     
 

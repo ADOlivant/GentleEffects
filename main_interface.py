@@ -64,7 +64,7 @@ class MainWindow(QMainWindow):
         self.delete_supplier = QAction("Remove Supplier",self)
         #Product Management
         self.new_product = QAction("Add New Product",self)
-        self.ammend_product = QAction("Ammend Product Details",self)
+        self.ammend_product = QAction("Amend Product Details",self)
         self.delete_product = QAction("Delete Existing Product",self)
         #Order Management
         self.new_order = QAction("Add New Order",self)

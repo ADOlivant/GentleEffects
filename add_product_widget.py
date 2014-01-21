@@ -19,6 +19,9 @@ class AddProduct(QWidget):
 					  </body>
 				     </html>""")
 
+		self.message_lbl = QLabel()
+		self.message_lbl.hide()
+
 		self.name_label = QLabel("Product Name:")
 		self.price_label = QLabel("Product Price:")
 		self.code_label = QLabel("Product Code:")
@@ -67,6 +70,7 @@ class AddProduct(QWidget):
 
 		self.layout = QVBoxLayout()
 		self.layout.addWidget(self.title_label)
+		self.layout.addWidget(self.message_lbl)
 		self.layout.addWidget(self.data_widget)
 		self.layout.addWidget(self.button_widget)
 
@@ -78,6 +82,8 @@ class AddProduct(QWidget):
 
 	def save_product(self):		
 		self.productAddedSignal.emit()
+		self.message_lbl.setText("Product Added Successfully")
+		self.message_lbl.show()
 		self.save_pushbutton.setEnabled(False)
 
 	def reset_product(self):

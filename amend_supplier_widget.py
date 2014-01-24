@@ -36,6 +36,8 @@ class AmendSupplier(QWidget):
         self.stacked_layout.addWidget(self.amend_supplier_widget)
         self.stacked_layout.setCurrentIndex(0)
 
+        self.populate_lineedits()
+
         #connections
         self.amend_supplier_widget.combo_box.currentIndexChanged.connect(self.populate_lineedits)
 
@@ -45,17 +47,27 @@ class AmendSupplier(QWidget):
         self.model.select()
 
     def model_details(self):
-        details = {'Name':self.model.index(self.amend_supplier_widget.combo_box.currentIndex(),1).data(),}
-                    #'House':self.model.index(self.amend.supplier.widget.combo_box.currentIndex(),2).data(),
-                   # 'Road':self.model.index(self.amend.supplier.widget.combo_box.currentIndex(),3).data(),
-         #           'City':self.model.index(self.amend.supplier.widget.combo_box.currentIndex(),4).data(),
-         #           'County':self.model.index(self.amend.supplier.widget.combo_box.currentIndex(),5).data(),
-         #           'PostCode':self.model.index(self.amend.supplier.widget.combo_box.currentIndex(),6).data(),
-         #           'ContactNum':self.model.index(self.amend.supplier.widget.combo_box.currentIndex(),7).data(),
-           #         'Email':self.model.index(self.amend.supplier.widget.combo_box.currentIndex(),8).data(),
-        #            'Website':self.model.index(self.amend.supplier.widget.combo_box.currentIndex(),9).data()}
+        details = {'Name':self.model.index(self.amend_supplier_widget.combo_box.currentIndex(),1).data(),
+                    'House':self.model.index(self.amend_supplier_widget.combo_box.currentIndex(),2).data(),
+                    'Road':self.model.index(self.amend_supplier_widget.combo_box.currentIndex(),3).data(),
+                    'City':self.model.index(self.amend_supplier_widget.combo_box.currentIndex(),4).data(),
+                    'County':self.model.index(self.amend_supplier_widget.combo_box.currentIndex(),5).data(),
+                    'PostCode':self.model.index(self.amend_supplier_widget.combo_box.currentIndex(),6).data(),
+                    'ContactNum':self.model.index(self.amend_supplier_widget.combo_box.currentIndex(),7).data(),
+                    'Email':self.model.index(self.amend_supplier_widget.combo_box.currentIndex(),8).data(),
+                    'Website':self.model.index(self.amend_supplier_widget.combo_box.currentIndex(),9).data()}
         return details
 
     def populate_lineedits(self):
         supplier_details = self.model_details()
+        print(supplier_details)
         self.amend_supplier_widget.name_lineedit.setText(supplier_details['Name'])
+        self.amend_supplier_widget.number_lineedit.setText(supplier_details['House'])
+        self.amend_supplier_widget.road_lineedit.setText(supplier_details['Road'])
+        self.amend_supplier_widget.city_lineedit.setText(supplier_details['City'])
+        self.amend_supplier_widget.county_lineedit.setText(supplier_details['County'])
+        self.amend_supplier_widget.postcode_lineedit.setText(supplier_details['PostCode'])
+        self.amend_supplier_widget.contact_lineedit.setText(supplier_details['ContactNum'])
+        self.amend_supplier_widget.email_lineedit.setText(supplier_details['Email'])
+        self.amend_supplier_widget.website_lineedit.setText(supplier_details['Website'])
+        self.amend_supplier_widget.website_lineedit.setText(supplier_details['Website'])

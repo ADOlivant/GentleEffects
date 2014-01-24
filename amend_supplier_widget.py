@@ -40,6 +40,7 @@ class AmendSupplier(QWidget):
 
         #connections
         self.amend_supplier_widget.combo_box.currentIndexChanged.connect(self.populate_lineedits)
+        self.amend_supplier_widget.save_button.clicked.connect(self.update_supplier)
 
     def create_comobobox_model(self):
         self.model = QSqlRelationalTableModel()
@@ -70,8 +71,9 @@ class AmendSupplier(QWidget):
         self.amend_supplier_widget.email_lineedit.setText(supplier_details['Email'])
         self.amend_supplier_widget.website_lineedit.setText(supplier_details['Website'])
 
-    def updated_detaiils(self):
-        details = {'Name':self.amend_supplier_widget.name_lineedit.text(),
+    def updated_details(self):
+        details = {'ID':self.model.index(self.amend_supplier_widget.combo_box.currentIndex(),0).data(),
+                    'Name':self.amend_supplier_widget.name_lineedit.text(),
                     'House':self.amend_supplier_widget.number_lineedit.text(),
                     'Road':self.amend_supplier_widget.road_lineedit.text(),
                     'City':self.amend_supplier_widget.city_lineedit.text(),
@@ -81,3 +83,10 @@ class AmendSupplier(QWidget):
                     'Email':self.amend_supplier_widget.email_lineedit.text(),
                     'Website':self.amend_supplier_widget.website_lineedit.text()}
         return details
+
+    def update_supplier(self):
+        details = self.updated_details()
+        self.connection.amend_supplier(details)
+        self.amend_supplier_widget.save_button.setEnabled(False)
+        self.amend_supplier_widget.error_label.setText("Supplier Updated Succesfully")
+        self.amend_supplier_widget.error_label.show()

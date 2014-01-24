@@ -47,6 +47,24 @@ class SQL:
                  query.addBindValue(details['Email'])
                  query.exec_()
 
+        #AMEND SUPPLIER
+        def amend_supplier(self,details):
+                query = QSqlQuery()
+                query.prepare("""UPDATE Supplier
+                                  SET Name = ?, House = ?, Road = ?, City = ?, County = ?, PostCode = ?, ContactNum = ?, Email = ?, Website = ?
+                                  WHERE SupplierID = ?""")
+                query.addBindValue(details['Name'])
+                query.addBindValue(details['House'])
+                query.addBindValue(details['Road'])
+                query.addBindValue(details['City'])
+                query.addBindValue(details['County'])
+                query.addBindValue(details['PostCode'])
+                query.addBindValue(details['ContactNum'])
+                query.addBindValue(details['Email'])
+                query.addBindValue(details['Website'])
+                query.addBindValue(details['ID'])
+                
+
         #ADD PRODUCT
         def add_new_product(self,details):
                 query = QSqlQuery()

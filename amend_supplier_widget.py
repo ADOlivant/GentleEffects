@@ -87,7 +87,26 @@ class AmendSupplier(QWidget):
     def update_supplier(self):
         details = self.updated_details()
         self.connection.amend_supplier(details)
-        self.amend_supplier_widget.save_button.setEnabled(False)
+        self.amend_supplier_widget.save_button.hide()
         self.amend_supplier_widget.error_label.setText("Supplier Updated Succesfully")
         self.amend_supplier_widget.error_label.show()
-        self.amend_supplier_widget.combo_box.setEnabled(False)
+        self.amend_supplier_widget.combo_box.hide()
+        self.amend_supplier_widget.re_amend_button.show()
+        #connections
+        self.amend_supplier_widget.re_amend_button.clicked.connect(self.re_amend_details)
+
+    def re_amend_details(self):
+        self.create_comobobox_model()
+        self.amend_supplier_widget.combo_box.setModel(self.model)
+        self.amend_supplier_widget.combo_box.setModelColumn(1)
+        self.amend_supplier_widget.combo_box.show()
+        self.populate_lineedits()
+        self.amend_supplier_widget.combo_box.show()
+        self.amend_supplier_widget.save_button.show()
+        self.amend_supplier_widget.re_amend_button.hide()
+        self.amend_supplier_widget.error_label.hide()
+        self.amend_supplier_widget.save_button.setEnabled(True)
+        #connections
+        self.amend_supplier_widget.combo_box.currentIndexChanged.connect(self.populate_lineedits)
+        self.amend_supplier_widget.save_button.clicked.connect(self.update_supplier)
+        

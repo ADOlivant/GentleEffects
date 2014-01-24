@@ -22,6 +22,9 @@ class AddSupplier(QWidget):
 		#AMMENDMENT FUNCTIONALITY
 		self.combo_box = QComboBox()
 		self.combo_box.hide()
+		self.re_amend_button = QPushButton("Amend Previously Amended Details")
+		self.re_amend_button.hide()
+		
 
 		self.name_label = QLabel("Supplier Name")
 		self.number_label = QLabel("House Name / Number")
@@ -82,6 +85,7 @@ class AddSupplier(QWidget):
 		self.main_layout.addWidget(self.error_label)
 		self.main_layout.addWidget(self.data_widget)
 		self.main_layout.addWidget(self.button_widget)
+		self.main_layout.addWidget(self.re_amend_button)
 		self.setLayout(self.main_layout)
 
 		self.error_label.hide()

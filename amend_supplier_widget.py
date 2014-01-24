@@ -60,7 +60,6 @@ class AmendSupplier(QWidget):
 
     def populate_lineedits(self):
         supplier_details = self.model_details()
-        print(supplier_details)
         self.amend_supplier_widget.name_lineedit.setText(supplier_details['Name'])
         self.amend_supplier_widget.number_lineedit.setText(supplier_details['House'])
         self.amend_supplier_widget.road_lineedit.setText(supplier_details['Road'])
@@ -70,4 +69,15 @@ class AmendSupplier(QWidget):
         self.amend_supplier_widget.contact_lineedit.setText(supplier_details['ContactNum'])
         self.amend_supplier_widget.email_lineedit.setText(supplier_details['Email'])
         self.amend_supplier_widget.website_lineedit.setText(supplier_details['Website'])
-        self.amend_supplier_widget.website_lineedit.setText(supplier_details['Website'])
+
+    def updated_detaiils(self):
+        details = {'Name':self.amend_supplier_widget.name_lineedit.text(),
+                    'House':self.amend_supplier_widget.number_lineedit.text(),
+                    'Road':self.amend_supplier_widget.road_lineedit.text(),
+                    'City':self.amend_supplier_widget.city_lineedit.text(),
+                    'County':self.amend_supplier_widget.county_lineedit.text(),
+                    'PostCode':self.amend_supplier_widget.postcode_lineedit.text(),
+                    'ContactNum':self.amend_supplier_widget.contact_lineedit.text(),
+                    'Email':self.amend_supplier_widget.email_lineedit.text(),
+                    'Website':self.amend_supplier_widget.website_lineedit.text()}
+        return details

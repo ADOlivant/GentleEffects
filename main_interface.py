@@ -132,7 +132,7 @@ class MainWindow(QMainWindow):
         self.new_appointment.triggered.connect(self.create_appointment)
         self.reset_central_widget.triggered.connect(self.reset_screen)
         self.new_product.triggered.connect(self.view_add_new_product)
-        self.new_supplier.triggered.connect(self.add_new_supplier)
+        self.new_supplier.triggered.connect(self.view_add_new_supplier)
         self.new_order.triggered.connect(self.create_order)
         self.add_user.triggered.connect(self.test_area)
         self.ammend_product.triggered.connect(self.ammend_product_details)
@@ -160,9 +160,15 @@ class MainWindow(QMainWindow):
         create_appointment = CreateAppointment()
         self.setCentralWidget(create_appointment)
 
-    def add_new_supplier(self):
-        SupplierWidget = AddSupplier()
-        self.setCentralWidget(SupplierWidget)
+    def view_add_new_supplier(self):
+        self.add_supplier_widget = AddSupplier()
+        self.setCentralWidget(self.add_supplier_widget)
+        #Connections - Signal
+        self.add_supplier_widget.supplierAddedSignal.connect(self.process_save_supplier)
+
+    def process_save_supplier(self):
+        details = self.add_supplier_widget.product_details()
+        self.connection.add_new_supplier(details)
 
     def amend_supplier_details(self):
         amend_supplier_widget = AmendSupplier(self.connection)

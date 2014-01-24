@@ -6,6 +6,7 @@ import sys
 
 class SQL:
         def __init__(self,path):
+
                 self.path = path
                 self.db = None
 
@@ -30,9 +31,9 @@ class SQL:
         def add_new_customer(self,details):   
                  query = QSqlQuery()
                  query.prepare("""INSERT INTO Customer(FirstName,LastName,DateOfBirth,
-                                                                   House,Road,City,County,PostCode,
-                                                                   MobileNum,HomeNum,Preferred,Email)
-                                                  VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""")
+                                           House,Road,City,County,PostCode,
+                                           MobileNum,HomeNum,Preferred,Email)
+                                  VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""")
                  query.addBindValue(details['FirstName'])
                  query.addBindValue(details['LastName'])
                  query.addBindValue(details['DateOfBirth'])
@@ -47,12 +48,30 @@ class SQL:
                  query.addBindValue(details['Email'])
                  query.exec_()
 
+        #ADD SUPPLIER
+        def add_new_supplier(self,details):
+                query = QSqlQuery()
+                query.prepare("""INSERT INTO Supplier(Name,House,Road,City,
+                                       County,PostCode,ContactNum,
+                                       Email,Website)
+                              VALUES (?,?,?,?,?,?,?,?,?)""")
+                query.addBindValue(details['Name'])
+                query.addBindValue(details['House'])
+                query.addBindValue(details['Road'])
+                query.addBindValue(details['City'])
+                query.addBindValue(details['County'])
+                query.addBindValue(details['PostCode'])
+                query.addBindValue(details['ContactNum'])
+                query.addBindValue(details['Email'])
+                query.addBindValue(details['Website'])
+                query.exec_()
+
         #AMEND SUPPLIER
         def amend_supplier(self,details):
                 query = QSqlQuery()
                 query.prepare("""UPDATE Supplier
-                                  SET Name = ?, House = ?, Road = ?, City = ?, County = ?, PostCode = ?, ContactNum = ?, Email = ?, Website = ?
-                                  WHERE SupplierID = ?""")
+                          SET Name = ?, House = ?, Road = ?, City = ?, County = ?, PostCode = ?, ContactNum = ?, Email = ?, Website = ?
+                          WHERE SupplierID = ?""")
                 query.addBindValue(details['Name'])
                 query.addBindValue(details['House'])
                 query.addBindValue(details['Road'])
@@ -63,13 +82,13 @@ class SQL:
                 query.addBindValue(details['Email'])
                 query.addBindValue(details['Website'])
                 query.addBindValue(details['ID'])
-                
+                query.exec_()
 
         #ADD PRODUCT
         def add_new_product(self,details):
                 query = QSqlQuery()
                 query.prepare("""INSERT INTO Product(Name,Price,Code,SupplierID)
-                                  VALUES (?,?,?,?)""")
+                          VALUES (?,?,?,?)""")
                 query.addBindValue(details['Name'])
                 query.addBindValue(details['Price'])
                 query.addBindValue(details['Code'])
@@ -108,19 +127,19 @@ class SQL:
         def get_supplier_name_from_id(self,id_value):
                 query = QSqlQuery()
                 query.prepare("""SELECT Name
-                                 FROM Supplier
-                                 WHERE SupplierID = ?""")
+                         FROM Supplier
+                         WHERE SupplierID = ?""")
                 query.addBindValue(id_value)
                 query.exec_()
                 while query.next():
-                        supplier_name = query.value(0)
+                    supplier_name = query.value(0)
                 return supplier_name
 
         def amend_product_without_supplier(self,product_id,details):
                 query = QSqlQuery()
                 query.prepare("""UPDATE Product
-                                  SET Name = ?, Price = ?, Code = ?
-                                  WHERE ProductID = ?""")
+                          SET Name = ?, Price = ?, Code = ?
+                          WHERE ProductID = ?""")
                 query.addBindValue(details['Name'])
                 query.addBindValue(details['Price'])
                 query.addBindValue(details['Code'])
@@ -130,8 +149,8 @@ class SQL:
         def amend_product_with_supplier(self,product_id,details):
                 query = QSqlQuery()
                 query.prepare("""UPDATE Product
-                                  SET Name = ?, Price = ?, Code = ?, SupplierID = ?
-                                  WHERE ProductID = ?""")
+                          SET Name = ?, Price = ?, Code = ?, SupplierID = ?
+                          WHERE ProductID = ?""")
                 query.addBindValue(details['Name'])
                 query.addBindValue(details['Price'])
                 query.addBindValue(details['Code'])
@@ -150,7 +169,7 @@ class SQL:
         def create_order(self,details):
                 query = QSqlQuery()
                 query.prepare("""INSERT INTO Orders(DateOfOrder,CustomerID,OrderedFromSupplier,Delivered)
-                                   VALUES (?,?,?,?)""")
+                           VALUES (?,?,?,?)""")
                 query.addBindValue(details['DateOfOrder'])
                 query.addBindValue(details['CustomerID'])
                 query.addBindValue(details['Ordered'])
@@ -160,7 +179,7 @@ class SQL:
         def add_product_to_order(self,details):
                 query = QSqlQuery()
                 query.prepare("""INSERT INTO OrderLine(ProductID,OrderID,Quantity)
-                                 VALUES (?,?,?)""")
+                         VALUES (?,?,?)""")
                 query.addBindValue(details['ProductID'])
                 query.addBindValue(details['OrderID'])
                 query.addBindValue(details['Quantity'])
@@ -169,17 +188,17 @@ class SQL:
         def get_order_id(self,details):
                 query = QSqlQuery()
                 query.prepare("""SELECT OrderID
-                                 FROM Orders
-                                 WHERE DateOfOrder = ? AND CustomerID = ?""")
+                         FROM Orders
+                         WHERE DateOfOrder = ? AND CustomerID = ?""")
                 query.addBindValue(details['DateOfOrder'])
                 query.addBindValue(details['CustomerID'])
                 query.exec_()
                 while query.next():
-                        order_id = query.value(0)
-                        print (order_id)
+                    order_id = query.value(0)
+                    print (order_id)
                 return order_id
                 print (order_id)
-                
-                
+	
+	
 
-        
+    

@@ -90,3 +90,4 @@ class AmendSupplier(QWidget):
         self.amend_supplier_widget.save_button.setEnabled(False)
         self.amend_supplier_widget.error_label.setText("Supplier Updated Succesfully")
         self.amend_supplier_widget.error_label.show()
+        self.amend_supplier_widget.combo_box.setEnabled(False)

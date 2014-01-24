@@ -8,6 +8,8 @@ import re
 class AddSupplier(QWidget):
 	"""Adding Supplier data to SQL Database with PyQt4"""
 
+	supplierAddedSignal = pyqtSignal()
+
 	def __init__(self):
 		super().__init__()
 		
@@ -17,7 +19,7 @@ class AddSupplier(QWidget):
 					  </body>
 				     </html>""")
 
-                #AMMENDMENT FUNCTIONALITY
+		#AMMENDMENT FUNCTIONALITY
 		self.combo_box = QComboBox()
 		self.combo_box.hide()
 
@@ -80,12 +82,9 @@ class AddSupplier(QWidget):
 		self.main_layout.addWidget(self.error_label)
 		self.main_layout.addWidget(self.data_widget)
 		self.main_layout.addWidget(self.button_widget)
-		#self.main_widget = QWidget()
 		self.setLayout(self.main_layout)
 
 		self.error_label.hide()
-
-		#self.setCentralWidget(self.main_widget)
 
 		#connections
 		self.reset_button.clicked.connect(self.reset_data)
@@ -97,21 +96,7 @@ class AddSupplier(QWidget):
 
 	def save_data(self):
 		details = self.product_details()
-		self.query = QSqlQuery()
-		self.query.prepare("""INSERT INTO Supplier(Name,House,Road,City,
-                                                           County,PostCode,ContactNum,
-                                                           Email,Website)
-				      VALUES (?,?,?,?,?,?,?,?,?)""")
-		self.query.addBindValue(details['Name'])
-		self.query.addBindValue(details['House'])
-		self.query.addBindValue(details['Road'])
-		self.query.addBindValue(details['City'])
-		self.query.addBindValue(details['County'])
-		self.query.addBindValue(details['PostCode'])
-		self.query.addBindValue(details['ContactNum'])
-		self.query.addBindValue(details['Email'])
-		self.query.addBindValue(details['Website'])
-		self.query.exec_()
+		self.supplierAddedSignal.emit()
 		self.save_button.setEnabled(False)
 		self.error_label.setText("Supplier Added Succesfully")
 		self.error_label.show()
@@ -138,7 +123,7 @@ class AddSupplier(QWidget):
 			   'PostCode':self.postcode_lineedit.text(),
 			   'ContactNum':self.contact_lineedit.text(),
 			   'Email':self.email_lineedit.text(),
-                           'Website':self.website_lineedit.text()}
+			   'Website':self.website_lineedit.text()}
 		return details
 
 if __name__ == "__main__":

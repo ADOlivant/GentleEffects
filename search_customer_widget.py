@@ -155,8 +155,6 @@ class SearchCustomer(QWidget):
         def selected_customer_details(self):
                 self.index = self.customer_view.selectedIndexes()
                 self.customer_id = self.customer_view.model().data(self.index[0])
-                #self.customer_view.setDisabled(True)
-                #self.select_customer_button.setDisabled(True)
                 self.stacked_layout.setCurrentIndex(0)
                 self.customerSelectedSignal.emit()
                 return self.customer_id

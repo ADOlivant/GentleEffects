@@ -215,4 +215,29 @@ class SearchAppointment(QWidget):
             self.appointment_treatment_combobox.setEnabled(True)
 
     def find_appointment(self):
-        pass
+        if self.radio_button_group.checkedId() == 3:
+            self.search_values = (self.customer_first_name_ledit.text(),self.customer_last_name_ledit.text(),)
+            self.model = self.connection.find_appointment_by_customer_name(self.search_values)
+        self.select_appointment_layout_view()
+        self.stacked_layout.setCurrentIndex(1)
+
+    def select_appointment_layout_view(self):
+        self.title_label = QLabel("""<html>
+                                          <body>
+                                               <p><span style=" font-size:16pt; font-weight:1000;">Select Appointment</span></p>
+                                          </body>
+                                     </html>""")
+        self.select_appointment_btn = QPushButton("Select Appointment")
+        self.appointment_view = QTableView()
+        self.appointment_view.setSelectionBehavior(1)
+        self.appointment_view.setModel(self.model)
+
+        self.appointment_view_layout = QVBoxLayout()
+        self.appointment_view_layout.addWidget(self.title_label)
+        self.appointment_view_layout.addWidget(self.appointment_view)
+        self.appointment_view_layout.addWidget(self.select_appointment_btn)
+
+        self.appointment_view_widget = QWidget()
+        self.appointment_view_widget.setLayout(self.appointment_view_layout)
+
+        self.stacked_layout.addWidget(self.appointment_view_widget)

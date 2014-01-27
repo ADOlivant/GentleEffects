@@ -93,7 +93,7 @@ class SQL:
                                         Appointment.CustomerID,
                                         Appointment.TreatmentID
                                 FROM Appointment,Customer
-                                WHERE Customer.FirstName = ? AND Customer.LastName = ?""")
+                                WHERE Customer.FirstName = ? AND Customer.LastName = ? AND Appointment.CustomerID = Customer.CustomerID""")
                 query.addBindValue(details[0])
                 query.addBindValue(details[1])
                 query.exec_()

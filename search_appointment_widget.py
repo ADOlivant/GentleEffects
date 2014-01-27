@@ -48,7 +48,7 @@ class SearchAppointment(QWidget):
         self.appointmnet_id_layout.addWidget(self.appointment_id_ledit)
         
         self.appointment_date_selector = QCalendarWidget()
-        self.appointment_date_selector.hide()
+        self.appointment_date_selector.setEnabled(False)
         self.appointment_time_selector = QTimeEdit()
         self.appointment_time_selector.setDisplayFormat("HH:mm")
         self.appointment_time_selector.setEnabled(False)
@@ -155,7 +155,7 @@ class SearchAppointment(QWidget):
     def change_search_type(self):
         if self.radio_button_group.checkedId() == 0:
             self.appointment_id_ledit.setEnabled(True)
-            self.appointment_date_selector.hide()
+            self.appointment_date_selector.setEnabled(False)
             self.appointment_time_selector.setEnabled(False)
             self.customer_id_ledit.setEnabled(False)
             self.customer_first_name_ledit.setEnabled(False)
@@ -164,8 +164,8 @@ class SearchAppointment(QWidget):
             self.customer_postcode_ledit.setEnabled(False)
             self.appointment_treatment_combobox.setEnabled(False)
         elif self.radio_button_group.checkedId() == 1:
-            self.appointment_id_ledit.setEnabled(True)
-            self.appointment_date_selector.show()
+            self.appointment_id_ledit.setEnabled(False)
+            self.appointment_date_selector.setEnabled(True)
             self.appointment_time_selector.setEnabled(True)
             self.customer_id_ledit.setEnabled(False)
             self.customer_first_name_ledit.setEnabled(False)
@@ -174,8 +174,8 @@ class SearchAppointment(QWidget):
             self.customer_postcode_ledit.setEnabled(False)
             self.appointment_treatment_combobox.setEnabled(False)
         elif self.radio_button_group.checkedId() == 2:
-            self.appointment_id_ledit.setEnabled(True)
-            self.appointment_date_selector.hide()
+            self.appointment_id_ledit.setEnabled(False)
+            self.appointment_date_selector.setEnabled(False)
             self.appointment_time_selector.setEnabled(False)
             self.customer_id_ledit.setEnabled(True)
             self.customer_first_name_ledit.setEnabled(False)
@@ -184,8 +184,8 @@ class SearchAppointment(QWidget):
             self.customer_postcode_ledit.setEnabled(False)
             self.appointment_treatment_combobox.setEnabled(False)
         elif self.radio_button_group.checkedId() == 3:
-            self.appointment_id_ledit.setEnabled(True)
-            self.appointment_date_selector.hide()
+            self.appointment_id_ledit.setEnabled(False)
+            self.appointment_date_selector.setEnabled(False)
             self.appointment_time_selector.setEnabled(False)
             self.customer_id_ledit.setEnabled(False)
             self.customer_first_name_ledit.setEnabled(True)
@@ -194,8 +194,8 @@ class SearchAppointment(QWidget):
             self.customer_postcode_ledit.setEnabled(False)
             self.appointment_treatment_combobox.setEnabled(False)
         elif self.radio_button_group.checkedId() == 4:
-            self.appointment_id_ledit.setEnabled(True)
-            self.appointment_date_selector.hide()
+            self.appointment_id_ledit.setEnabled(False)
+            self.appointment_date_selector.setEnabled(False)
             self.appointment_time_selector.setEnabled(False)
             self.customer_id_ledit.setEnabled(False)
             self.customer_first_name_ledit.setEnabled(False)
@@ -204,8 +204,8 @@ class SearchAppointment(QWidget):
             self.customer_postcode_ledit.setEnabled(True)
             self.appointment_treatment_combobox.setEnabled(False)
         elif self.radio_button_group.checkedId() == 5:
-            self.appointment_id_ledit.setEnabled(True)
-            self.appointment_date_selector.hide()
+            self.appointment_id_ledit.setEnabled(False)
+            self.appointment_date_selector.setEnabled(False)
             self.appointment_time_selector.setEnabled(False)
             self.customer_id_ledit.setEnabled(False)
             self.customer_first_name_ledit.setEnabled(False)

@@ -53,7 +53,58 @@ class SQL:
                 model = QSqlRelationalTableModel()
                 model.setTable("Treatment")
                 model.select()
+                return model
+
+        #SEARCH APPOINTMENT
+        def find_appointment_by_id(self,details):
+                model = QSqlQueryModel()
+                query = QSqlQuery()
+                query.prepare("""SELECT * FROM Appointment WHERE AppointmentID = ?""")
+                query.addBindValue(values[0])
+                query.exec_()
+                model.setQuery(query)
+                return model
+
+        def find_appointment_by_details(self,details):
+                model = QSqlQueryModel()
+                query = QSqlQuery()
+                query.prepare("""SELECT * FROM Appointment WHERE AppointmentDate = ? AND AppointmentTime = ?""")
+                query.addBindValue(details[0])
+                query.addBindValue(details[1])
+                query.exec_()
+                model.setQuery(query)
+                return model
+
+        def find_appointmnet_by_customer_id(self,details):
+                model = QSqlQueryModel()
+                query = QSqlQuery()
+                query.prepare("""SELECT * FROM Appointment WHERE CustomerID = ?""")
+                query.addBindValue(details[0])
+                query.exec_()
+                model.setQuery(query)
                 return model 
+
+        def find_appointment_by_customer_name(self,details):
+                model = QSqlQueryModel()
+                query = QSqlQuery()
+                query.prepare("""SELECT Appointment.AppointmentID,
+                                        Appointment.AppointmentTime,
+                                        Appointment.AppointmentDate,
+                                        Appointment.CustomerID,
+                                        Appointment.TreatmentID
+                                FROM Appointment,Customer
+                                WHERE Customer.FirstName = ? AND Customer.LastName = ?""")
+                query.addBindValue(details[0])
+                query.addBindValue(details[1])
+                query.exec_()
+                model.setQuery(query)
+                return model
+
+        def find_appointment_by_customer_address(self,details):
+                pass
+
+        def find_appointment_by_treatment(self,details):
+                pass
 
         #ADD SUPPLIER
         def add_new_supplier(self,details):

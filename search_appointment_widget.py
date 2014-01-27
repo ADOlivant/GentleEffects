@@ -22,7 +22,7 @@ class SearchAppointment(QWidget):
 
         #connections
         self.radio_button_group.buttonClicked.connect(self.change_search_type)
-        self.find_appointment_button.clicked.connect(self.find_appointment)
+        self.find_appointment_btn.clicked.connect(self.find_appointment)
 
     def find_appointment_layout(self):
         self.title_label = QLabel("""<html>
@@ -33,7 +33,7 @@ class SearchAppointment(QWidget):
 
         self.appointment_id_label = QLabel("Appointment ID:")
         self.appointment_date_label = QLabel("Appointment Date:")
-        self.appointmnet_time_label = QLabel("Appoitment Time:")
+        self.appointment_time_label = QLabel("Appoitment Time:")
         self.customer_id_label = QLabel("Customer ID:")
         self.customer_first_name_label = QLabel("Customer First Name:")
         self.customer_last_name_label = QLabel("Customer Last Name:")
@@ -63,7 +63,7 @@ class SearchAppointment(QWidget):
         self.customer_id_ledit.setEnabled(False)
 
         self.customer_id_layout = QHBoxLayout()
-        self.cusotmer_id_layout.addWidget(self.customer_id_label)
+        self.customer_id_layout.addWidget(self.customer_id_label)
         self.customer_id_layout.addWidget(self.customer_id_ledit)
         
         self.customer_first_name_ledit = QLineEdit()
@@ -88,15 +88,15 @@ class SearchAppointment(QWidget):
         self.customer_address_layout.addWidget(self.customer_postcode_label,1,0)
         self.customer_address_layout.addWidget(self.customer_postcode_ledit,1,1)
         
-        self.appointment_treatmet_combobox = QComboBox()
-        self.appointmnet_treatment_model = self.connection.create_treatment_combobox_model()
-        self.appointment_treatment.setModel(self.appointment_treatment_model)
-        self.appointment_treatment.setModelColumn(1)
-        self.appointmnet_treatment.setEnabled(False)
+        self.appointment_treatment_combobox = QComboBox()
+        self.appointment_treatment_model = self.connection.create_treatment_combobox_model()
+        self.appointment_treatment_combobox.setModel(self.appointment_treatment_model)
+        self.appointment_treatment_combobox.setModelColumn(1)
+        self.appointment_treatment_combobox.setEnabled(False)
 
         self.appointment_treatment_layout = QHBoxLayout()
-        self.appointmnet_treatment_layout.addWidget(self.appointment_treatment_label)
-        self.appointmnet_treatment_layout.addWidget(self.appointment_treatmnet_ledit)
+        self.appointment_treatment_layout.addWidget(self.appointment_treatment_label)
+        self.appointment_treatment_layout.addWidget(self.appointment_treatment_combobox)
 
         self.find_appointment_btn = QPushButton("Find Appointment")
 
@@ -104,18 +104,18 @@ class SearchAppointment(QWidget):
         self.radio_button_group = QButtonGroup()
 
         self.appointment_id_radio = QRadioButton()
-        self.appointmnet_details_radio = QRadioButton()
+        self.appointment_details_radio = QRadioButton()
         self.customer_id_radio = QRadioButton()
         self.customer_name_radio = QRadioButton()
         self.customer_address_radio = QRadioButton()
         self.appointment_treatment_radio = QRadioButton()
 
-        self.appointmnet_id_radio.setChecked(True)
+        self.appointment_id_radio.setChecked(True)
 
         self.radio_button_group.addButton(self.appointment_id_radio)
         self.radio_button_group.setId(self.appointment_id_radio,0)
-        self.radio_button_group.addButton(self.appointmnet_details_radio)
-        self.radio_button_group.setId(self.appointmnet_details_radio,1)
+        self.radio_button_group.addButton(self.appointment_details_radio)
+        self.radio_button_group.setId(self.appointment_details_radio,1)
         self.radio_button_group.addButton(self.customer_id_radio)
         self.radio_button_group.setId(self.customer_id_radio,2)
         self.radio_button_group.addButton(self.customer_name_radio)
@@ -147,13 +147,72 @@ class SearchAppointment(QWidget):
         self.layout.addWidget(self.radio_button_box)
 
         self.find_appointment_widget = QWidget()
-        self.find_appointmnet_widget.setLayout(self.layout)
-        self.stacked_layout.addWidget(self.find_appointmnet_widget)
+        self.find_appointment_widget.setLayout(self.layout)
+        self.stacked_layout.addWidget(self.find_appointment_widget)
 
         self.stacked_layout.setCurrentIndex(0)
         
     def change_search_type(self):
-        pass
+        if self.radio_button_group.checkedId() == 0:
+            self.appointment_id_ledit.setEnabled(True)
+            self.appointment_date_selector.hide()
+            self.appointment_time_selector.setEnabled(False)
+            self.customer_id_ledit.setEnabled(False)
+            self.customer_first_name_ledit.setEnabled(False)
+            self.customer_last_name_ledit.setEnabled(False)
+            self.customer_number_ledit.setEnabled(False)
+            self.customer_postcode_ledit.setEnabled(False)
+            self.appointment_treatment_combobox.setEnabled(False)
+        elif self.radio_button_group.checkedId() == 1:
+            self.appointment_id_ledit.setEnabled(True)
+            self.appointment_date_selector.show()
+            self.appointment_time_selector.setEnabled(True)
+            self.customer_id_ledit.setEnabled(False)
+            self.customer_first_name_ledit.setEnabled(False)
+            self.customer_last_name_ledit.setEnabled(False)
+            self.customer_number_ledit.setEnabled(False)
+            self.customer_postcode_ledit.setEnabled(False)
+            self.appointment_treatment_combobox.setEnabled(False)
+        elif self.radio_button_group.checkedId() == 2:
+            self.appointment_id_ledit.setEnabled(True)
+            self.appointment_date_selector.hide()
+            self.appointment_time_selector.setEnabled(False)
+            self.customer_id_ledit.setEnabled(True)
+            self.customer_first_name_ledit.setEnabled(False)
+            self.customer_last_name_ledit.setEnabled(False)
+            self.customer_number_ledit.setEnabled(False)
+            self.customer_postcode_ledit.setEnabled(False)
+            self.appointment_treatment_combobox.setEnabled(False)
+        elif self.radio_button_group.checkedId() == 3:
+            self.appointment_id_ledit.setEnabled(True)
+            self.appointment_date_selector.hide()
+            self.appointment_time_selector.setEnabled(False)
+            self.customer_id_ledit.setEnabled(False)
+            self.customer_first_name_ledit.setEnabled(True)
+            self.customer_last_name_ledit.setEnabled(True)
+            self.customer_number_ledit.setEnabled(False)
+            self.customer_postcode_ledit.setEnabled(False)
+            self.appointment_treatment_combobox.setEnabled(False)
+        elif self.radio_button_group.checkedId() == 4:
+            self.appointment_id_ledit.setEnabled(True)
+            self.appointment_date_selector.hide()
+            self.appointment_time_selector.setEnabled(False)
+            self.customer_id_ledit.setEnabled(False)
+            self.customer_first_name_ledit.setEnabled(False)
+            self.customer_last_name_ledit.setEnabled(False)
+            self.customer_number_ledit.setEnabled(True)
+            self.customer_postcode_ledit.setEnabled(True)
+            self.appointment_treatment_combobox.setEnabled(False)
+        elif self.radio_button_group.checkedId() == 5:
+            self.appointment_id_ledit.setEnabled(True)
+            self.appointment_date_selector.hide()
+            self.appointment_time_selector.setEnabled(False)
+            self.customer_id_ledit.setEnabled(False)
+            self.customer_first_name_ledit.setEnabled(False)
+            self.customer_last_name_ledit.setEnabled(False)
+            self.customer_number_ledit.setEnabled(False)
+            self.customer_postcode_ledit.setEnabled(False)
+            self.appointment_treatment_combobox.setEnabled(True)
 
     def find_appointment(self):
         pass

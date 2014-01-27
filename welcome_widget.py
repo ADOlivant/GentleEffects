@@ -16,6 +16,7 @@ class WelcomeWidget(QWidget):
 					             </body>
 					       </html>""")
 		self.logo_image = QPixmap(os.getcwd() + "\gelogo.png")
+		self.logo_image.scaled(250,50,Qt.KeepAspectRatio, Qt.FastTransformation)
 		self.logo = QLabel()
 		self.logo.setPixmap(self.logo_image)
 		self.cms_label = QLabel("""<html>
@@ -28,7 +29,7 @@ class WelcomeWidget(QWidget):
 
 		self.layout = QVBoxLayout()
 		self.layout.addWidget(self.welcome_label)
-		self.layout.addWidget(self.logo)
+		#self.layout.addWidget(self.logo)
 		self.layout.addWidget(self.cms_label)
 
 		self.setLayout(self.layout)

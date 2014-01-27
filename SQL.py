@@ -48,6 +48,13 @@ class SQL:
                  query.addBindValue(details['Email'])
                  query.exec_()
 
+        #APPOINTMENT
+        def create_treatment_combobox_model(self):
+                model = QSqlRelationalTableModel()
+                model.setTable("Treatment")
+                model.select()
+                return model 
+
         #ADD SUPPLIER
         def add_new_supplier(self,details):
                 query = QSqlQuery()

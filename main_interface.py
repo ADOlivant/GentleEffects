@@ -138,7 +138,7 @@ class MainWindow(QMainWindow):
         self.add_user.triggered.connect(self.test_area)
         self.ammend_product.triggered.connect(self.ammend_product_details)
         self.amend_supplier.triggered.connect(self.amend_supplier_details)
-        self.edit_appointmnet.triggered.connect(self.edit_appointment_details)
+        self.edit_appointment.triggered.connect(self.edit_appointment_details)
 
     def ammend_product_details(self):
         self.ammend_product_widget = AmendProduct(self.connection)
@@ -163,7 +163,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(create_appointment)
 
     def edit_appointment_details(self):
-        edit_appointment = SearchAppointment(connection)
+        edit_appointment = SearchAppointment(self.connection)
         self.setCentralWidget(edit_appointment)
 
     def view_add_new_supplier(self):

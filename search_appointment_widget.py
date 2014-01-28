@@ -215,9 +215,24 @@ class SearchAppointment(QWidget):
             self.appointment_treatment_combobox.setEnabled(True)
 
     def find_appointment(self):
-        if self.radio_button_group.checkedId() == 3:
+        if self.radio_button_group.checkedId() == 0:
+            self.search_values = (self.appointment_id_ledit.text(),)
+            self.model = self.connection.find_appointment_by_id(self.search_values)
+        elif self.radio_button_group.checkedId() == 1:
+            self.search_values = None
+            self.model = self.connection.find_appointment_by_details(self.search_values)
+        elif self.radio_button_group.checkedId() == 2:
+            self.search_values = (self.customer_id_ledit.text(),)
+            self.model = self.connection.find_appointment_by_customer_id(self.search_values)
+        elif self.radio_button_group.checkedId() == 3:
             self.search_values = (self.customer_first_name_ledit.text(),self.customer_last_name_ledit.text(),)
             self.model = self.connection.find_appointment_by_customer_name(self.search_values)
+        elif self.radio_button_group.checkedId() == 4:
+            self.search_values = (self.customer_number_ledit.text(),self.customer_postcode_ledit.text(),)
+            self.model = self.connection.find_appointment_by_customer_address(self.search_values)
+        elif self.radio_button_group.checkedId() == 5:
+            self.search_values = (self.appointment_treatment_model.index(self.appointment_treatment_combobox.currentIndex(),0).data(),)
+            self.model = self.connection.find_appointment_by_treatment(self.search_values)
         self.select_appointment_layout_view()
         self.stacked_layout.setCurrentIndex(1)
 

@@ -75,7 +75,7 @@ class SQL:
                 model.setQuery(query)
                 return model
 
-        def find_appointmnet_by_customer_id(self,details):
+        def find_appointment_by_customer_id(self,details):
                 model = QSqlQueryModel()
                 query = QSqlQuery()
                 query.prepare("""SELECT * FROM Appointment WHERE CustomerID = ?""")
@@ -119,7 +119,7 @@ class SQL:
         def find_appointment_by_treatment(self,details):
                 model = QSqlQueryModel()
                 query = QSqlQuery()
-                query.prepare("""SELECT * FROM Appointment WHERE TreatmnetID = ?""")
+                query.prepare("""SELECT * FROM Appointment WHERE TreatmentID = ?""")
                 query.addBindValue(details[0])
                 query.exec_()
                 model.setQuery(query)

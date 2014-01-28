@@ -50,6 +50,35 @@ class AmendAppointment(CreateAppointment):
         self.preferred = self.customer_details['Preferred']
 
         self.email = self.customer_details['Email']
+
+    def create_appointment(self):
+        self.create_appointment_layout()
+        self.amend_details()
+        self.stacked_appointment_layout.setCurrentIndex(1)
+
+    def enable_creation_first_run(self):
+        self.select_treatment_button.hide()
+        self.select_another_button.show()
+        self.treatment_combobox.hide()
+        self.treatment_text.setText("Test")
+        self.treatment_text.show()
+        self.treatment_duration_label.show()
+        self.treatment_duration_details.setText("Test")
+        self.treatment_duration_details.show()
+        self.treatment_cost_label.show()
+        self.treatment_cost_text = "£ {0}".format("2.99")
+        self.treatment_cost_details.setText(self.treatment_cost_text)
+        self.treatment_cost_details.show()
+        self.treatment_booking_widget.show()
+        self.book_appointment_button.show()
+    def amend_details(self):
+        self.title_label.setText("""<html>
+					  <body>
+					       <p><span style=" font-size:16pt; font-weight:1000; color:Green">Amend Appointment</span></p>
+					  </body>
+				     </html>""")
+        self.book_appointment_button.setText("Amend Appointment Booking")
+        self.enable_creation_first_run()
         
     
         

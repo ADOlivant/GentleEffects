@@ -101,10 +101,29 @@ class SQL:
                 return model
 
         def find_appointment_by_customer_address(self,details):
-                pass
+                model = QSqlQueryModel()
+                query = QSqlQuery()
+                query.prepare("""SELECT Appointment.AppointmentID,
+                                        Appointment.AppointmentTime,
+                                        Appointment.AppointmentDate,
+                                        Appointment.CustomerID,
+                                        Appointment.TreatmentID
+                                FROM Appointment,Customer
+                                WHERE Customer.House = ? AND Customer.PostCode = ? AND Appointment.CustomerID = Customer.CustomerID""")
+                query.addBindValue(details[0])
+                query.addBindValue(details[1])
+                query.exec_()
+                model.setQuery(query)
+                return model
 
         def find_appointment_by_treatment(self,details):
-                pass
+                model = QSqlQueryModel()
+                query = QSqlQuery()
+                query.prepare("""SELECT * FROM Appointment WHERE TreatmnetID = ?""")
+                query.addBindValue(details[0])
+                query.exec_()
+                model.setQuery(query)
+                return model 
 
         #ADD SUPPLIER
         def add_new_supplier(self,details):

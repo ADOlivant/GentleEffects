@@ -10,6 +10,11 @@ class SQL:
                 self.path = path
                 self.db = None
 
+                #PRAGMA
+                self.pragma_on = QSqlQuery()
+                self.pragma_on.prepare("""PRAGMA foreign_keys = ON""")
+                self.pragma_on.exec_()
+
         def open_database(self):
                 if self.db:
                         self.close_database()
@@ -17,10 +22,6 @@ class SQL:
                 self.db = QSqlDatabase.addDatabase("QSQLITE")
                 self.db.setDatabaseName(self.path)
                 open_db = self.db.open()
-
-                self.pragma_on = QSqlQuery()
-                self.pragma_on.prepare("""PRAGMA foreign_keys = ON""")
-                self.pragma_on.exec_()
 
                 return open_db
 
@@ -54,6 +55,29 @@ class SQL:
                 model.setTable("Treatment")
                 model.select()
                 return model
+
+        def customer_details_from_customer_id(self,id_value):
+                query = QSqlQuery()
+                query.prepare("""SELECT *
+                         FROM Customer
+                         WHERE CustomerID = ?""")
+                query.addBindValue(id_value)
+                query.exec_()
+                while query.next():
+                    customer_details = {'CustomerID': query.value(0),
+                                        'FirstName': query.value(1),
+                                        'LastName': query.value(2),
+                                        'DateOfBirth': query.value(3),
+                                        'House': query.value(4),
+                                        'Road': query.value(5),
+                                        'City': query.value(6),
+                                        'County': query.value(7),
+                                        'PostCode':query.value(8),
+                                        'MobileNum':query.value(9),
+                                        'HomeNum' query.value(10),
+                                        'Preferred': query.value(11),
+                                        'Emial': query.value(12)}
+                return customer_details
 
         #SEARCH APPOINTMENT
         def find_appointment_by_id(self,details):

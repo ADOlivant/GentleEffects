@@ -9,18 +9,21 @@ import webbrowser
 from send_email import *
 
 from search_customer_widget import *
+from SQL import *
 
 class CreateAppointment(QWidget):
     """This is what will be used to create an appointment"""
 
-    def __init__(self):
+    def __init__(self, connection):
         super().__init__()
+
+        self.connection = connection
 
         self.stacked_appointment_layout = QStackedLayout()
         self.setLayout(self.stacked_appointment_layout)
-        self.find_customer_layout()
+        self.find_layout()
 
-    def find_customer_layout(self):
+    def find_layout(self):
         self.search_customer_layout = SearchCustomer()
         self.stacked_appointment_layout.addWidget(self.search_customer_layout)
         self.stacked_appointment_layout.setCurrentIndex(0)

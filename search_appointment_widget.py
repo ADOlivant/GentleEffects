@@ -8,7 +8,7 @@ import re
 class SearchAppointment(QWidget):
 
     #Appointment Found Signal to fire when Appointmnet Selected
-    appointmentSelectedWidget = pyqtSignal()
+    appointmentSelectedSignal = pyqtSignal()
 
     def __init__(self, connection ):
         super().__init__()
@@ -256,3 +256,9 @@ class SearchAppointment(QWidget):
         self.appointment_view_widget.setLayout(self.appointment_view_layout)
 
         self.stacked_layout.addWidget(self.appointment_view_widget)
+
+        #connections
+        self.select_appointment_btn.clicked.connect(self.select_appointment)
+
+    def select_appointment(self):
+        self.appointmentSelectedSignal.emit()

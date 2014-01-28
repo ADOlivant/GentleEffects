@@ -17,6 +17,7 @@ from search_appointment_widget import *
 from search_customer_widget import *
 from search_product_widget import *
 from create_appointment import *
+from amend_appointment_widget import *
 from create_order import *
 from welcome_widget import *
 
@@ -159,11 +160,11 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(TreatmentWidget)
 
     def create_appointment(self):
-        create_appointment = CreateAppointment()
+        create_appointment = CreateAppointment(self.connection)
         self.setCentralWidget(create_appointment)
 
     def edit_appointment_details(self):
-        edit_appointment = SearchAppointment(self.connection)
+        edit_appointment = AmendAppointment(self.connection)
         self.setCentralWidget(edit_appointment)
 
     def view_add_new_supplier(self):

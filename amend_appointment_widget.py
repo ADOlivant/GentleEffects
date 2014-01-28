@@ -71,6 +71,7 @@ class AmendAppointment(CreateAppointment):
         self.treatment_cost_details.show()
         self.treatment_booking_widget.show()
         self.book_appointment_button.show()
+        
     def amend_details(self):
         self.title_label.setText("""<html>
 					  <body>
@@ -79,6 +80,10 @@ class AmendAppointment(CreateAppointment):
 				     </html>""")
         self.book_appointment_button.setText("Amend Appointment Booking")
         self.enable_creation_first_run()
+
+        self.selected_date = QDate().fromString("1999-10-1",Qt.ISODate)
+        print(self.selected_date)
+        self.date_selector.setSelectedDate(self.selected_date)
         
     
         

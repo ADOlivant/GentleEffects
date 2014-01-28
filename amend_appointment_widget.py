@@ -26,30 +26,30 @@ class AmendAppointment(CreateAppointment):
         self.customer_id = 5
         self.customer_details = self.connection.customer_details_from_customer_id(self.customer_id)
         
-        self.customer_id = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0])
+        self.customer_id = self.customer_details['CustomerID']
 
-        self.first_name = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[1])
-        self.last_name = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[2])
+        self.first_name = self.customer_details['FirstName']
+        self.last_name = self.customer_details['LastName']
         self.customer_name = "{0}, {1}".format(self.last_name,self.first_name)
 
-        self.date_of_birth = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[3])
+        self.date_of_birth = self.customer_details['DateOfBirth']
 
-        self.house = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[4])
-        self.road = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[5])
-        self.city = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[6])
-        self.county = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[7])
-        self.postcode = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[8])
+        self.house = self.customer_details['House']
+        self.road = self.customer_details['Road']
+        self.city = self.customer_details['City']
+        self.county = self.customer_details['County']
+        self.postcode = self.customer_details['PostCode']
         self.customer_address = "{0} {1}, {2}, {3}, {4}".format(self.house,
                                                        self.road,
                                                        self.city,
                                                        self.county,
                                                        self.postcode)
 
-        self.mobile = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[9])
-        self.home = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[10])
-        self.preferred = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[11])
+        self.mobile = self.customer_details['MobileNum']
+        self.home = self.customer_details['HomeNum']
+        self.preferred = self.customer_details['Preferred']
 
-        self.email = self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[12])
+        self.email = self.customer_details['Email']
         
     
         

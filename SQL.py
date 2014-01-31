@@ -74,7 +74,7 @@ class SQL:
                                         'County': query.value(7),
                                         'PostCode':query.value(8),
                                         'MobileNum':query.value(9),
-                                        'HomeNum' query.value(10),
+                                        'HomeNum': query.value(10),
                                         'Preferred': query.value(11),
                                         'Emial': query.value(12)}
                 return customer_details

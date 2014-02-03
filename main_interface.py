@@ -16,7 +16,6 @@ from amend_supplier_widget import *
 from search_appointment_widget import *
 from search_customer_widget import *
 from search_product_widget import *
-from search_treatment_widget import *
 from create_appointment import *
 from amend_appointment_widget import *
 from create_order import *
@@ -141,7 +140,6 @@ class MainWindow(QMainWindow):
         self.ammend_product.triggered.connect(self.ammend_product_details)
         self.amend_supplier.triggered.connect(self.amend_supplier_details)
         self.edit_appointment.triggered.connect(self.edit_appointment_details)
-        self.edit_treatment.triggered.connect(self.amend_treatment_details)
 
     def ammend_product_details(self):
         self.ammend_product_widget = AmendProduct(self.connection)
@@ -160,10 +158,6 @@ class MainWindow(QMainWindow):
     def add_new_treatment(self): 
         TreatmentWidget = AddTreatment()
         self.setCentralWidget(TreatmentWidget)
-
-    def amend_treatment_details(self):
-        amend_treatment_widget = SearchTreatment(self.connection)
-        self.setCentralWidget(amend_treatment_widget)
 
     def create_appointment(self):
         create_appointment = CreateAppointment(self.connection)

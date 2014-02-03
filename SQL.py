@@ -49,34 +49,6 @@ class SQL:
                  query.addBindValue(details['Email'])
                  query.exec_()
 
-        #TREATMENT
-        def find_treatment_by_id(self,values):
-                model = QSqlQueryModel()
-                query = QSqlQuery()
-                query.prepare("""SELECT * FROM Treatment WHERE TreatmentID = ?""")
-                query.addBindValue(values[0])
-                query.exec_()
-                model.setQuery(query)
-                return model
-
-        def find_treatment_by_name(self,values):
-                model = QSqlQueryModel()
-                query = QSqlQuery()
-                query.prepare("""SELECT * FROM Treatment WHERE Name = ?""")
-                query.addBindValue(values[0])
-                query.exec_()
-                model.setQuery(query)
-                return model 
-
-        def find_treatment_by_price(self,values):
-                model = QSqlQueryModel()
-                query = QSqlQuery()
-                query.prepare("""SELECT * FROM Treatment WHERE Cost = ?""")
-                query.addBindValue(values[0])
-                query.exec_()
-                model.setQuery(query)
-                return model
-
         #APPOINTMENT
         def create_treatment_combobox_model(self):
                 model = QSqlRelationalTableModel()
@@ -102,7 +74,7 @@ class SQL:
                                         'County': query.value(7),
                                         'PostCode':query.value(8),
                                         'MobileNum':query.value(9),
-                                        'HomeNum': query.value(10),
+                                        'HomeNum':query.value(10),
                                         'Preferred': query.value(11),
                                         'Email': query.value(12)}
                 return customer_details

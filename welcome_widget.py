@@ -29,7 +29,7 @@ class WelcomeWidget(QWidget):
 
 		self.layout = QVBoxLayout()
 		self.layout.addWidget(self.welcome_label)
-		#self.layout.addWidget(self.logo)
+		self.layout.addWidget(self.logo)
 		self.layout.addWidget(self.cms_label)
 
 		self.setLayout(self.layout)

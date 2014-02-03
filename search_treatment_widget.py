@@ -8,7 +8,7 @@ class SearchTreatment(QWidget):
     """This will be used to search for treatments and then to ammend or delete"""
 
     #Product Found Signal to fire when Product selected.
-    teratmentSelectedSignal = pyqtSignal()
+    treatmentSelectedSignal = pyqtSignal()
     
     def __init__(self,connection):
         super().__init__()
@@ -27,7 +27,7 @@ class SearchTreatment(QWidget):
     def find_treatment_layout(self):
         self.title_label = QLabel("""<html>
                                           <body>
-                                               <p><span style=" font-size:16pt; font-weight:1000;">Search Treatments</span></p>
+                                               <p><span style=" fontsize:16pt; fontweight:1000;">Search Treatments</span></p>
                                           </body>
                                      </html>""")
         self.treatment_id_lbl = QLabel("Treatment ID:")
@@ -109,12 +109,23 @@ class SearchTreatment(QWidget):
             self.treatment_price_ledit.setEnabled(True)
 
     def find_treatment(self):
-        print("Hello")
+        if self.radio_button_group.checkedId() == 0:
+            self.search_values = (self.treatment_id_ledit.text(),)
+            self.model = self.connection.find_treatment_by_id(self.search_values)
+        elif self.radio_button_group.checkedId() == 1:
+            self.search_values = (self.treatment_name_ledit.text(),)
+            self.model = self.connection.find_treatment_by_name(self.search_values)
+        elif self.radio_button_group.checkedId() == 2:
+            self.search_values = (self.treatment_price_ledit.value(),)
+            self.model = self.connection.find_treatment_by_price(self.search_values)
+        self.select_treatment_layout_view()
+        self.stacked_layout.setCurrentIndex(1)
+
 
     def select_treatment_layout_view(self):
          self.title_label = QLabel("""<html>
                                           <body>
-                                               <p><span style=" font-size:16pt; font-weight:1000;">Select Treatment</span></p>
+                                               <p><span style=" fontsize:16pt; fontweight:1000;">Select Treatment</span></p>
                                           </body>
                                      </html>""")
          self.select_treatment_btn = QPushButton("Select Treatment")

@@ -19,6 +19,7 @@ from search_product_widget import *
 from search_treatment_widget import *
 from create_appointment import *
 from amend_appointment_widget import *
+from amend_treatment_widget import * 
 from create_order import *
 from welcome_widget import *
 
@@ -162,7 +163,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(TreatmentWidget)
 
     def amend_treatment_details(self):
-        amend_treatment_widget = SearchTreatment(self.connection)
+        amend_treatment_widget = AmendTreatment(self.connection)
         self.setCentralWidget(amend_treatment_widget)
 
     def create_appointment(self):

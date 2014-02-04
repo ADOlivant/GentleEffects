@@ -87,7 +87,7 @@ class SQL:
                 query.addBindValue(details['Name'])
                 query.addBindValue(details['Cost'])
                 query.addBindValue(details['Duration'])
-                query.addBindValue(details['ID'])
+                query.addBindValue(id)
                 query.exec_()
 
 

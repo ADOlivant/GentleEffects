@@ -86,8 +86,8 @@ class AddTreatment(QWidget):
 
 	def treatment_details(self):
 		details = {'Name':self.name_lineedit.text(),
-		   'Cost':self.cost_dblspinbox.value(),
-		   'Duration':self.time_lineedit.time()}
+                           'Cost':self.cost_dblspinbox.value(),
+                          'Duration':self.time_lineedit.time()}
 		return details
 
 if __name__ == "__main__":

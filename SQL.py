@@ -10,7 +10,7 @@ class SQL:
                 self.path = path
                 self.db = None
 
-                #PRAGMA
+        def pragma(self):
                 self.pragma_on = QSqlQuery()
                 self.pragma_on.prepare("""PRAGMA foreign_keys = ON""")
                 self.pragma_on.exec_()
@@ -22,6 +22,8 @@ class SQL:
                 self.db = QSqlDatabase.addDatabase("QSQLITE")
                 self.db.setDatabaseName(self.path)
                 open_db = self.db.open()
+
+                self.pragma()
 
                 return open_db
 
@@ -76,6 +78,17 @@ class SQL:
                 query.exec_()
                 model.setQuery(query)
                 return model
+
+        def amend_treatment_with_id(self,id,details):
+                query = QSqlQuery()
+                query.prepare("""UPDATE Treatment
+                          SET Name = ?, Cost = ?, Duration = ?
+                          WHERE TreatmentID = ?""")
+                query.addBindValue(details['Name'])
+                query.addBindValue(details['Cost'])
+                query.addBindValue(details['Duration'])
+                query.addBindValue(details['ID'])
+                query.exec_()
 
 
         #APPOINTMENT

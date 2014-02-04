@@ -154,7 +154,6 @@ class SearchTreatment(QWidget):
     def selected_treatment_details(self):
         details = {'ID':self.treatment_view.model().data(self.index[0]),
                    'Name':self.treatment_view.model().data(self.index[1]),
-                   'Price':self.treatment_view.model().data(self.index[2]),
-                   'Code':self.treatment_view.model().data(self.index[3]),
-                   'SupplierID':self.treatment_view.model().data(self.index[4])}
+                   'Cost':self.treatment_view.model().data(self.index[2]),
+                   'Duration':self.treatment_view.model().data(self.index[3])}
         return details

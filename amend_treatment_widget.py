@@ -35,6 +35,20 @@ class AmendTreatment(QWidget):
                                      </html>""")
         self.amend_treatment_widget.save_pushbutton.setText("Save Amended Details")
         self.amend_treatment_widget.reset_pushbutton.hide()
-        
+
+        self.treatment_details = self.search_treatment_widget.selected_treatment_details()
+
+        self.amend_treatment_widget.name_lineedit.setText(self.treatment_details['Name'])
+        self.amend_treatment_widget.cost_dblspinbox.setValue(self.treatment_details['Cost'])
+        #QTimeEdit doesn't accept string values, conversion to date from string (Class Reference Lookup)
+        #self.amend_treatment_widget.time_lineedit.setTime(self.treatment_details['Duration'])
+
+        self.amend_treatment_details.save_pushbutton.clicked.connect(self.update_treatment)
+
         self.stacked_layout.addWidget(self.amend_treatment_widget)
         self.stacked_layout.setCurrentIndex(1)
+
+    def update_treatment(self):
+        details = self.amend_treatment_details.treatment_details()
+        self.connection.amend_treatment_with_id(self.product_details['ID]'],details)
+                                                

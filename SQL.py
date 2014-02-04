@@ -126,7 +126,7 @@ class SQL:
                 model = QSqlQueryModel()
                 query = QSqlQuery()
                 query.prepare("""SELECT * FROM Appointment WHERE AppointmentID = ?""")
-                query.addBindValue(values[0])
+                query.addBindValue(details[0])
                 query.exec_()
                 model.setQuery(query)
                 return model

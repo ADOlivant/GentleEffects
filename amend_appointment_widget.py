@@ -23,7 +23,7 @@ class AmendAppointment(CreateAppointment):
 
     def get_customer_details(self):
 
-        self.customer_id = 5
+        self.customer_id = self.previous_data['CustomerID']
         self.customer_details = self.connection.customer_details_from_customer_id(self.customer_id)
         
         self.customer_id = self.customer_details['CustomerID']
@@ -53,6 +53,7 @@ class AmendAppointment(CreateAppointment):
 
     def create_appointment(self):
         self.create_appointment_layout()
+        self.previous_data = self.previous_appointment_data()
         self.amend_details()
         self.stacked_appointment_layout.setCurrentIndex(1)
 
@@ -79,11 +80,21 @@ class AmendAppointment(CreateAppointment):
 					  </body>
 				     </html>""")
         self.book_appointment_button.setText("Amend Appointment Booking")
+        
         self.enable_creation_first_run()
 
-        self.selected_date = QDate().fromString("1999-10-1",Qt.ISODate)
+        self.selected_date = QDate().fromString("2014-02-04",Qt.ISODate)
         print(self.selected_date)
         self.date_selector.setSelectedDate(self.selected_date)
+
+    def previous_appointment_data(self):
+        self.index = self.search_appointment_layout.appointment_view.selectedIndexes()
+        previous_data = {'Time':self.search_appointment_layout.appointment_view.model.data(self.index[1]),
+                         'Date':self.search_appointment_layout.appointment_view.model.data(self.index[2]),
+                         'CustomerID':self.search_appointment_layout.appointment_view.model.data(self.index[3]),
+                         'CustomerID':self.search_appointment_layout.appointment_view.model.data(self.index[4])}
+        return previous_data
+                         
         
     
         

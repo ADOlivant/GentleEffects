@@ -40,7 +40,6 @@ class AmendTreatment(QWidget):
 
         self.amend_treatment_widget.name_lineedit.setText(self.treatment_details['Name'])
         self.amend_treatment_widget.cost_dblspinbox.setValue(self.treatment_details['Cost'])
-        #QTimeEdit doesn't accept string values, conversion to date from string (Class Reference Lookup)
         self.amend_treatment_widget.time_lineedit.setTime(QTime.fromString(self.treatment_details['Duration'],"HH:mm"))
 
         #connections

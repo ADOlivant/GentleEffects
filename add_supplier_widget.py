@@ -6,7 +6,7 @@ import sys
 import re
 
 class AddSupplier(QWidget):
-	"""Adding Supplier data to SQL Database with PyQt4"""
+	"""Adding Supplier data to SQL Database, Gentle Effects, with Python and PyQt4"""
 
 	supplierAddedSignal = pyqtSignal()
 

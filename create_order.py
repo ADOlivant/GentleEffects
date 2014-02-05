@@ -3,7 +3,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtSql import *
 
 import sys
-from datetime import date
+import datetime
 
 from search_customer_widget import *
 

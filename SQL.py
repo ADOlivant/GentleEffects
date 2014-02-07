@@ -337,6 +337,7 @@ class SQL:
                 query.exec_()
                 while query.next():
                     order_id = query.value(0)
+                    print(order_id)
                 return order_id
 	
 	

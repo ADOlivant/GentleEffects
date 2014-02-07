@@ -3,7 +3,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtSql import *
 
 import sys
-import datetime
+from datetime import datetime
 
 from search_customer_widget import *
 
@@ -25,7 +25,7 @@ class CreateOrder(QWidget):
         self.find_customer_layout()
 
         #connections
-        self.productSelectedSignal(self.product_selected)
+        #self.productSelectedSignal(self.product_selected)
 
     def find_customer_layout(self):
         self.search_customer_layout = SearchCustomer()
@@ -47,6 +47,11 @@ class CreateOrder(QWidget):
                    'Ordered':"False",
                    'Delivered':"False"}
         return details
+
+    def find_order_id(self):
+        details = {'DateOfOrder':self.now,
+                   'CustomerID':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0])}
+        self.order_id = self.connection.get_order_id(details)
 
     def create_order_layout(self):
         #TITLE FOR LAYOUT
@@ -97,23 +102,94 @@ class CreateOrder(QWidget):
 
         
 
-        #OVERALL LAYOUT
-        self.add_product_button = QPushButton("Add Product")
+        #ADD / REMOVE BUTTON LAYOUT
+        self.add_product_button = QPushButton("Add Product >>")
+        self.remove_product_button = QPushButton("<< Remove Product")
+        self.button_layout = QVBoxLayout()
+        self.button_layout.addWidget(self.add_product_button)
+        self.button_layout.addWidget(self.remove_product_button)
 
+        self.button_widget = QWidget()
+        self.button_widget.setLayout(self.button_layout)
+
+        #ALL PRODUCT LAYOUT
+        self.search_product_lineedit = QLineEdit()
+        self.model = self.create_product_model(("",))
+
+        self.product_view = QTableView()
+        self.product_view.setSelectionBehavior(1)
+        self.product_view.setModel(self.model)
+        self.product_view.hideColumn(0)
+        self.product_view.hideColumn(4)
+
+        self.product_layout = QVBoxLayout()
+        self.product_layout.addWidget(self.search_product_lineedit)
+        self.product_layout.addWidget(self.product_view)
+        self.product_widget = QWidget()
+        self.product_widget.setLayout(self.product_layout)
+
+        #SELECTED PRODUCT LAYOUT
         self.current_products = QTableView()
 
         self.product_selection = QTableView()
         self.current_products_model = self.connection.current_order_items_model()
         self.current_products.setModel(self.current_products_model)
+
+        #ORDER SELECTION LAYOUT
+        self.order_selection_layout = QHBoxLayout()
+        self.order_selection_layout.addWidget(self.product_widget)
+        self.order_selection_layout.addWidget(self.button_widget)
+        self.order_selection_layout.addWidget(self.current_products)
+
+        self.order_selection_widget = QWidget()
+        self.order_selection_widget.setLayout(self.order_selection_layout)
+        
         
         self.layout = QGridLayout()
         self.layout.addWidget(self.order_title_label,0,0,1,2)
         self.layout.addWidget(self.order_error_message,1,0,1,2)
         self.layout.addWidget(self.customer_details_widget,2,0)
-        self.layout.addWidget(self.add_product_button,3,0,1,2)
-        self.layout.addWidget(self.current_products,4,0,1,2)
+        self.layout.addWidget(self.order_selection_widget,3,0,1,2)
 
         self.widget = QWidget()
         self.widget.setLayout(self.layout)
         self.stacked_order_layout.addWidget(self.widget)
         self.stacked_order_layout.setCurrentIndex(1)
+
+    def get_customer_details(self):
+        details = {'CustomerID':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[0]),
+                   'FirstName':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[1]),
+                   'LastName':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[2]),
+                   'DateOfBirth':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[3]),
+                   'House':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[4]),
+                   'Road':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[5]),
+                   'City':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[6]),
+                   'County':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[7]),
+                   'Postcode':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[8]),
+                   'Mobile':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[9]),
+                   'Home':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[10]),
+                   'Prefered':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[11]),
+                   'Email':self.search_customer_layout.customer_view.model().data(self.search_customer_layout.index[12])}
+        return details
+
+    def create_product_model(self,values):
+        model = QSqlQueryModel()
+        query = QSqlQuery()
+        query.prepare("""SELECT * FROM Product WHERE Name LIKE (?)""")
+        query.addBindValue('%{0}%'.format(values[0]))
+        query.exec_()
+        model.setQuery(query)
+        return model
+    
+    def refresh(self):
+        self.search_values = (self.search_lineedit.text(),)
+        self.new_model = self.create_product_model(self.search_values)
+        self.product_view.setModel(self.new_model)
+        self.product_view.hideColumn(0)
+
+    def select_product(self):
+        details = self.product_details()
+        self.productSelectedSignal.emit()
+        self.connection.add_product_to_order(details)
+        self.product_view.hideColumn(4)
+    

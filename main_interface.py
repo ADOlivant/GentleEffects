@@ -20,7 +20,7 @@ from search_treatment_widget import *
 from create_appointment import *
 from amend_appointment_widget import *
 from amend_treatment_widget import * 
-from create_order import *
+from create_order_widget import *
 from welcome_widget import *
 
 class MainWindow(QMainWindow):

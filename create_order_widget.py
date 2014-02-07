@@ -128,6 +128,9 @@ class CreateOrder(QWidget):
         self.product_widget = QWidget()
         self.product_widget.setLayout(self.product_layout)
 
+        #connections
+        self.search_product_lineedit.textEdited.connect(self.refresh)
+
         #SELECTED PRODUCT LAYOUT
         self.current_products = QTableView()
 
@@ -182,7 +185,7 @@ class CreateOrder(QWidget):
         return model
     
     def refresh(self):
-        self.search_values = (self.search_lineedit.text(),)
+        self.search_values = (self.search_product_lineedit.text(),)
         self.new_model = self.create_product_model(self.search_values)
         self.product_view.setModel(self.new_model)
         self.product_view.hideColumn(0)

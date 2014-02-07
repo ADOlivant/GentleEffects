@@ -207,13 +207,12 @@ class CreateOrder(QWidget):
 
     def get_quantity(self):
         self.quantity_box = QInputDialog()
-        self.quantity_box.setInputMode(1)
-        self.quantity_box.open()
-        self.quantity_box.done(self.quantity_box.intValue())
+        self.quantity = self.quantity_box.getInt(self.quantity_box,"Title","Label",1,1,999,1)
+        self.quantity = self.quantity[0]
+        print(self.quantity)
 
     def add_product(self):
         self.get_quantity()
-        self.quantity = 1
 
         self.product_view.showColumn(0)
         self.selected_record = self.product_view.selectedIndexes()

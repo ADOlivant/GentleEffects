@@ -304,7 +304,6 @@ class SQL:
         #CREATE ORDER
         def current_order_items_model(self):
                 model = QSqlRelationalTableModel()
-                print(self.db.tables())
                 model.setTable(self.db.tables()[9])
                 model.setRelation(8,QSqlRelation("Product","ProductID","Price"))
                 return model
@@ -338,9 +337,7 @@ class SQL:
                 query.exec_()
                 while query.next():
                     order_id = query.value(0)
-                    print (order_id)
                 return order_id
-                print (order_id)
 	
 	
 

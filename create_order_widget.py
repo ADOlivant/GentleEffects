@@ -3,7 +3,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtSql import *
 
 import sys
-from datetime import datetime
+import datetime
 
 from search_customer_widget import *
 
@@ -20,7 +20,7 @@ class CreateOrder(QWidget):
         self.stacked_order_layout = QStackedLayout()
         self.setLayout(self.stacked_order_layout)
 
-        self.now = datetime.now()
+        self.now = datetime.datetime.now()
 
         self.find_customer_layout()
 
@@ -112,6 +112,9 @@ class CreateOrder(QWidget):
         self.button_widget = QWidget()
         self.button_widget.setLayout(self.button_layout)
 
+        #connections
+        self.add_product_button.clicked.connect(self.add_product)
+
         #ALL PRODUCT LAYOUT
         self.search_product_lineedit = QLineEdit()
         self.model = self.create_product_model(("",))
@@ -133,9 +136,7 @@ class CreateOrder(QWidget):
 
         #SELECTED PRODUCT LAYOUT
         self.current_products = QTableView()
-
-        self.product_selection = QTableView()
-        self.current_products_model = self.connection.current_order_items_model()
+        self.current_products_model = self.create_current_product_model(self.order_id)
         self.current_products.setModel(self.current_products_model)
 
         #ORDER SELECTION LAYOUT
@@ -183,6 +184,18 @@ class CreateOrder(QWidget):
         query.exec_()
         model.setQuery(query)
         return model
+
+    def create_current_product_model(self,value):
+        model = QSqlQueryModel()
+        query = QSqlQuery()
+        #WHERE OrderLine.ProductID = Product.ID AND OrderLine.OrderID = (?)
+        query.prepare("""SELECT Product.Name, Product.Price, Product.Code, OrderLine.Quantity
+                         FROM Product, OrderLine
+                         WHERE OrderLine.OrderID = (?)""")
+        query.addBindValue(value)
+        query.exec_()
+        model.setQuery(query)
+        return model 
     
     def refresh(self):
         self.search_values = (self.search_product_lineedit.text(),)
@@ -190,9 +203,34 @@ class CreateOrder(QWidget):
         self.product_view.setModel(self.new_model)
         self.product_view.hideColumn(0)
 
+        self.current_products_model = self.create_current_product_model(self.order_id)
+        self.current_products.setModel(self.current_products_model)
+
     def select_product(self):
         details = self.product_details()
         self.productSelectedSignal.emit()
         self.connection.add_product_to_order(details)
         self.product_view.hideColumn(4)
+
+    def get_quantity(self):
+        self.quantity_box = QInputDialog()
+        self.quantity_box.setInputMode(1)
+        self.quantity_box.open()
+
+    def add_product(self):
+        self.get_quantity()
+        self.quantity = self.quantity_box.intValue()
+
+        self.product_view.showColumn(0)
+        self.selected_record = self.product_view.selectedIndexes()
+        details = {'ProductID':self.product_view.model().data(self.selected_record[0]),
+                   'OrderID':self.order_id,
+                   'Quantity':self.quantity}
+
+        self.productSelectedSignal.emit()
+        self.connection.add_product_to_order(details)
+        self.refresh()
+
+        
+        
     

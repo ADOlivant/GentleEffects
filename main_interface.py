@@ -9,6 +9,7 @@ import re
 from SQL import *
 from add_treatment_widget import *
 from add_customer_widget import *
+from add_medical_information import *
 from add_product_widget import *
 from amend_product_widget import *
 from add_supplier_widget import *
@@ -98,7 +99,7 @@ class MainWindow(QMainWindow):
         self.customer_menu.addAction(self.new_customer)
         self.customer_menu.addSeparator()
         #self.customer_menu.addAction(self.edit_customer)
-        #self.customer_menu.addAction(self.edit_medical)
+        self.customer_menu.addAction(self.edit_medical)
         self.customer_menu.addSeparator()
         #self.customer_menu.addAction(self.add_allergy)
         #self.customer_menu.addAction(self.edit_allergy)
@@ -143,6 +144,7 @@ class MainWindow(QMainWindow):
         self.amend_supplier.triggered.connect(self.amend_supplier_details)
         self.edit_appointment.triggered.connect(self.edit_appointment_details)
         self.edit_treatment.triggered.connect(self.amend_treatment_details)
+        self.edit_medical.triggered.connect(self.add_medical_information)
 
     def ammend_product_details(self):
         self.ammend_product_widget = AmendProduct(self.connection)
@@ -157,6 +159,10 @@ class MainWindow(QMainWindow):
     def process_save_customer(self):
         details = self.add_customer_widget.customer_details()
         self.connection.add_new_customer(details)
+
+    def add_medical_information(self):
+        add_medical_information_widget = AddMedicalInfo()
+        self.setCentralWidget(add_medical_information_widget)
 
     def add_new_treatment(self): 
         TreatmentWidget = AddTreatment()

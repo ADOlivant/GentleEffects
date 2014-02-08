@@ -158,3 +158,20 @@ class SearchCustomer(QWidget):
                 self.stacked_layout.setCurrentIndex(0)
                 self.customerSelectedSignal.emit()
                 return self.customer_id
+
+        def get_customer_details(self):
+                self.index = self.customer_view.selectedIndexes()
+                details = {'CustomerID':self.customer_view.model().data(self.index[0]),
+                           'FirstName':self.customer_view.model().data(self.index[1]),
+                           'LastName':self.customer_view.model().data(self.index[2]),
+                           'DateOfBirth':self.customer_view.model().data(self.index[3]),
+                           'House':self.customer_view.model().data(self.index[4]),
+                           'Road':self.customer_view.model().data(self.index[5]),
+                           'City':self.customer_view.model().data(self.index[6]),
+                           'County':self.customer_view.model().data(self.index[7]),
+                           'Postcode':self.customer_view.model().data(self.index[8]),
+                           'Mobile':self.customer_view.model().data(self.index[9]),
+                           'Home':self.customer_view.model().data(self.index[10]),
+                           'Prefered':self.customer_view.model().data(self.index[11]),
+                           'Email':self.customer_view.model().data(self.index[12])}
+                return details

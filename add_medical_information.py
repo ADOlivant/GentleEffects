@@ -28,8 +28,32 @@ class AddMedicalInfo(QWidget):
         self.stacked_layout.setCurrentIndex(0)
 
         #connections
-        self.search_customer_widget.customerSelectedSignal.connect(self.add_medical_info)
+        self.search_customer_widget.customerSelectedSignal.connect(self.medical_info_selection)
 
+    def medical_info_selection(self):
+
+        self.customer_details = self.search_customer_widget.get_customer_details()
+        
+        self.title_label = QLabel("""<html>
+                                          <body>
+                                               <p><span style=" font-size:16pt; font-weight:1000;">Customer Medical Infomation</span></p>
+                                          </body>
+                                     </html>""")
+        self.add_push_button = QPushButton("Add Medical Information for {0} {1}".format(self.customer_details['FirstName'],
+                                                                                        self.customer_details['LastName']))
+        self.edit_push_button = QPushButton("Edit Medical Information for {0} {1}".format("Test","Test"))
+
+        self.selection_layout = QVBoxLayout()
+        self.selection_layout.addWidget(self.title_label)
+        self.selection_layout.addWidget(self.add_push_button)
+        self.selection_layout.addWidget(self.edit_push_button)
+
+        self.selection_widget = QWidget()
+        self.selection_widget.setLayout(self.selection_layout)
+
+        self.stacked_layout.addWidget(self.selection_widget)
+        self.stacked_layout.setCurrentIndex(1)
+        
     def add_medical_info(self):
 
         self.title_label = QLabel("""<html>

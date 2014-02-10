@@ -161,7 +161,7 @@ class MainWindow(QMainWindow):
         self.connection.add_new_customer(details)
 
     def add_medical_information(self):
-        add_medical_information_widget = AddMedicalInfo()
+        add_medical_information_widget = AddMedicalInfo(self.connection)
         self.setCentralWidget(add_medical_information_widget)
 
     def add_new_treatment(self): 

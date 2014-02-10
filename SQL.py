@@ -51,6 +51,15 @@ class SQL:
                  query.addBindValue(details['Email'])
                  query.exec_()
 
+        def find_medical_info_by_customer_id(self,value):
+                 model = QSqlQueryModel()
+                 query = QSqlQuery()
+                 query.prepare("""SELECT * FROM MedicalInformation WHERE CustomerID =(?)""")
+                 query.addBindValue(value)
+                 query.exec_()
+                 model.setQuery(query)
+                 return model 
+
         #TREATMENT
         def find_treatment_by_id(self,values):
                 model = QSqlQueryModel()
@@ -338,8 +347,4 @@ class SQL:
                 while query.next():
                     order_id = query.value(0)
                     print(order_id)
-                return order_id
-	
-	
-
-    
+                return order_id    

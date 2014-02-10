@@ -14,8 +14,10 @@ class AddMedicalInfo(QWidget):
     #MedicalInfo Signal to fire when details are added.
     medicalInfoAddedSignal = pyqtSignal()
 
-    def __init__(self):
+    def __init__(self,connection ):
         super().__init__()
+
+        self.connection = connection
 
         self.stacked_layout = QStackedLayout()
         self.setLayout(self.stacked_layout)
@@ -41,7 +43,8 @@ class AddMedicalInfo(QWidget):
                                      </html>""")
         self.add_push_button = QPushButton("Add Medical Information for {0} {1}".format(self.customer_details['FirstName'],
                                                                                         self.customer_details['LastName']))
-        self.edit_push_button = QPushButton("Edit Medical Information for {0} {1}".format("Test","Test"))
+        self.edit_push_button = QPushButton("Edit Medical Information for {0} {1}".format(self.customer_details['FirstName'],
+                                                                                        self.customer_details['LastName']))
 
         self.selection_layout = QVBoxLayout()
         self.selection_layout.addWidget(self.title_label)
@@ -53,6 +56,10 @@ class AddMedicalInfo(QWidget):
 
         self.stacked_layout.addWidget(self.selection_widget)
         self.stacked_layout.setCurrentIndex(1)
+
+        #connection 
+        self.add_push_button.clicked.connect(self.add_medical_info)
+        self.edit_push_button.clicked.connect(self.edit_medical_information)
         
     def add_medical_info(self):
 
@@ -66,13 +73,20 @@ class AddMedicalInfo(QWidget):
         self.error_label.hide()
 
         self.customer_name = QLabel()
-        self.customer_name.setText("Customer Name: {0} {1}".format("Test","Test"))
+        self.customer_name.setText("Customer Name: {0} {1}".format(self.customer_details['FirstName'],
+                                                                    self.customer_details['LastName']))
 
         self.customer_address = QLabel()
-        self.customer_address.setText("Customer Address: {0} {1}, {2}, {3}".format("Test","Test","Test","Test"))
+        self.customer_address.setText("Customer Address: {0}, {1}, {2}, {3}, {4}".format(self.customer_details['House'],
+                                                                                        self.customer_details['Road'],
+                                                                                        self.customer_details['City'],
+                                                                                        self.customer_details['County'],
+                                                                                        self.customer_details['Postcode']))
 
         self.customer_contact = QLabel()
-        self.customer_contact.setText("Contact Details: {0}, {1}, {2}".format("Test","Test","Test"))
+        self.customer_contact.setText("Contact Details: {0}, {1}, {2}".format(self.customer_details['Home'],
+                                                                                self.customer_details['Mobile'],
+                                                                                self.customer_details['Email']))
 
         self.date_time = QLabel()
         self.date_time_stamp = datetime.datetime.now()
@@ -83,7 +97,7 @@ class AddMedicalInfo(QWidget):
         self.date_time.setText("Date & Time Stamp: {0}".format(self.date_time_stamp_display))
 
         self.medical_information_label = QLabel("Medical Information")
-        self.medical_information_ledit = QLineEdit()
+        self.medical_information_ledit = QPlainTextEdit()
 
         self.submit_button = QPushButton("Submit Medical Information")
 
@@ -102,6 +116,29 @@ class AddMedicalInfo(QWidget):
         self.add_medical_information_widget.setLayout(self.layout)
 
         self.stacked_layout.addWidget(self.add_medical_information_widget)
-        self.stacked_layout.setCurrentIndex(1)
+        self.stacked_layout.setCurrentIndex(2)
+
+    def edit_medical_information(self): 
+        self.title_label = QLabel("""<html>
+                                          <body>
+                                               <p><span style=" font-size:16pt; font-weight:1000; color:green">Search Customer</span></p>
+                                          </body>
+                                     </html>""")
+
+        self.model = self.connection.find_medical_info_by_customer_id(self.customer_details['CustomerID'])
+
+        self.medical_info = QTableView()
+        self.medical_info.setSelectionBehavior(1)
+        self.medical_info.setModel(self.model)
+
+        self.select_medical_information_button = QPushButton('Edit Seletected Medical Information')
+
+        self.select_medical_information_widget = QWidget()
+        self.select_medical_information_layout = QVBoxLayout()
+        self.select_medical_information_layout.addWidget(self.title_label)
+        self.select_medical_information_layout.addWidget(self.medical_info)
+        self.select_medical_information_layout.addWidget(self.select_medical_information_button)
+        self.select_medical_information_widget.setLayout(self.select_medical_information_layout)
         
-        
+        self.stacked_layout.addWidget(self.select_medical_information_widget)
+        self.stacked_layout.setCurrentIndex(2)

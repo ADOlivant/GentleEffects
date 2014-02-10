@@ -370,9 +370,3 @@ class CreateAppointment(QWidget):
                                                                                                                                                                                                                                                                                                      self.date_selector.selectedDate().toString(Qt.TextDate),
                                                                                                                                                                                                                                                                                                      self.time_selector.time().toString(Qt.TextDate))
         send_email(self.to,self.subject,self.body)
-
-
-
-
-
-        

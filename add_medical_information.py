@@ -118,6 +118,19 @@ class AddMedicalInfo(QWidget):
         self.stacked_layout.addWidget(self.add_medical_information_widget)
         self.stacked_layout.setCurrentIndex(2)
 
+        #connections
+        self.submit_button.clicked.connect(self.save_medical_info)
+
+    def get_medical_information(self):
+        details = {'CustomerID':self.customer_details['CustomerID'],
+                    'DateTimeStamp':self.date_time_stamp_save,
+                    'MedicalInfoEntry':self.medical_information_ledit.toPlainText()}
+        return details
+
+    def save_medical_info(self):
+        self.medical_info_details = self.get_medical_information()
+        self.connection.add_medical_information(self.medical_info_details)
+
     def edit_medical_information(self): 
         self.title_label = QLabel("""<html>
                                           <body>
@@ -130,6 +143,7 @@ class AddMedicalInfo(QWidget):
         self.medical_info = QTableView()
         self.medical_info.setSelectionBehavior(1)
         self.medical_info.setModel(self.model)
+        self.medical_info.hideColumn(1)
 
         self.select_medical_information_button = QPushButton('Edit Seletected Medical Information')
 

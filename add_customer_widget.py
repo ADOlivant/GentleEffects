@@ -148,7 +148,6 @@ class AddCustomer(QWidget):
                 else:
                         self.error_label.show()
 
-
         def save_data(self):
                 self.customerAddedSignal.emit()
                 self.save_button.setEnabled(False)

@@ -32,24 +32,24 @@ class SQL:
 
         #ADD CUSTOMER
         def add_new_customer(self,details):   
-                 query = QSqlQuery()
-                 query.prepare("""INSERT INTO Customer(FirstName,LastName,DateOfBirth,
-                                           House,Road,City,County,PostCode,
-                                           MobileNum,HomeNum,Preferred,Email)
-                                  VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""")
-                 query.addBindValue(details['FirstName'])
-                 query.addBindValue(details['LastName'])
-                 query.addBindValue(details['DateOfBirth'])
-                 query.addBindValue(details['House'])
-                 query.addBindValue(details['Road'])
-                 query.addBindValue(details['City'])
-                 query.addBindValue(details['County'])
-                 query.addBindValue(details['PostCode'])
-                 query.addBindValue(details['MobileNum'])
-                 query.addBindValue(details['HomeNum'])
-                 query.addBindValue(details['Preferred'])
-                 query.addBindValue(details['Email'])
-                 query.exec_()
+            query = QSqlQuery()
+            query.prepare("""INSERT INTO Customer(FirstName,LastName,DateOfBirth,
+                                         House,Road,City,County,PostCode,
+                                         MobileNum,HomeNum,Preferred,Email)
+                             VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""")
+            query.addBindValue(details['FirstName'])
+            query.addBindValue(details['LastName'])
+            query.addBindValue(details['DateOfBirth'])
+            query.addBindValue(details['House'])
+            query.addBindValue(details['Road'])
+            query.addBindValue(details['City'])
+            query.addBindValue(details['County'])
+            query.addBindValue(details['PostCode'])
+            query.addBindValue(details['MobileNum'])
+            query.addBindValue(details['HomeNum'])
+            query.addBindValue(details['Preferred'])
+            query.addBindValue(details['Email'])
+            query.exec_()
 
         def add_medical_information(self,details):
             query = QSqlQuery()
@@ -61,13 +61,22 @@ class SQL:
             query.exec_()
 
         def find_medical_info_by_customer_id(self,value):
-                 model = QSqlQueryModel()
-                 query = QSqlQuery()
-                 query.prepare("""SELECT * FROM MedicalInformation WHERE CustomerID =(?) ORDER BY DateTimeStamp DESC""")
-                 query.addBindValue(value)
-                 query.exec_()
-                 model.setQuery(query)
-                 return model 
+            model = QSqlQueryModel()
+            query = QSqlQuery()
+            query.prepare("""SELECT * FROM MedicalInformation WHERE CustomerID =(?) ORDER BY DateTimeStamp DESC""")
+            query.addBindValue(value)
+            query.exec_()
+            model.setQuery(query)
+            return model 
+
+        def amend_medical_information(self,values,medical_id):
+            query = QSqlQuery()
+            query.prepare("""UPDATE MedicalInformation 
+                            SET MedicalInfoEntry = ?
+                            WHERE MedicalInfoID = ?""")
+            query.addBindValue(values)
+            query.addBindValue(medical_id)
+            query.exec_()
 
         #TREATMENT
         def find_treatment_by_id(self,values):

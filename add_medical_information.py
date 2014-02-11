@@ -130,6 +130,9 @@ class AddMedicalInfo(QWidget):
     def save_medical_info(self):
         self.medical_info_details = self.get_medical_information()
         self.connection.add_medical_information(self.medical_info_details)
+        self.submit_button.hide()
+        self.error_label.setText('<Strong>Customers Medical Infomration Added Successfully</Strong>')
+        self.error_label.show()
 
     def edit_medical_information(self): 
         self.title_label = QLabel("""<html>
@@ -231,5 +234,14 @@ class AddMedicalInfo(QWidget):
         self.submit_button.clicked.connect(self.update_medical_information)
 
     def update_medical_information(self):
-        self.medical_information_ledit = self.medical_information_ledit.toPlainText() + "\n Updated on {0}".format(self.date_time_stamp_display)
-        print(self.medical_information_ledit)
+        self.medical_information_ledit_text = self.medical_information_ledit.toPlainText() + """\n   Updated on {0}""".format(self.date_time_stamp_display)
+        self.medical_info.showColumn(0)
+        self.index = self.medical_info.selectedIndexes()
+        self.medical_info_id = self.medical_info.model().data(self.index[0])
+        self.connection.amend_medical_information(self.medical_information_ledit_text,self.medical_info_id)
+
+        self.submit_button.hide()
+        self.medical_information_ledit.setPlainText(self.medical_information_ledit_text)
+        self.medical_information_ledit.setReadOnly(True)
+        self.error_label.setText("<Strong>Customers Medical Infomration Updated Successfully</Strong>")
+        self.error_label.show()

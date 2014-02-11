@@ -114,6 +114,7 @@ class CreateOrder(QWidget):
 
         #connections
         self.add_product_button.clicked.connect(self.add_product)
+        self.remove_product_button.clicked.connect(self.remove_product)
 
         #ALL PRODUCT LAYOUT
         self.search_product_lineedit = QLineEdit()
@@ -138,7 +139,8 @@ class CreateOrder(QWidget):
         self.current_products = QTableView()
         self.current_products_model = self.create_current_product_model(self.order_id)
         self.current_products.setModel(self.current_products_model)
-
+        self.current_products.setSelectionBehavior(1)
+        
         #ORDER SELECTION LAYOUT
         self.order_selection_layout = QHBoxLayout()
         self.order_selection_layout.addWidget(self.product_widget)
@@ -188,7 +190,7 @@ class CreateOrder(QWidget):
     def create_current_product_model(self,value):
         model = QSqlQueryModel()
         query = QSqlQuery()
-        query.prepare("""SELECT Product.Name, Product.Price, Product.Code, OrderLine.Quantity
+        query.prepare("""SELECT OrderLine.OrderLineID, Product.Name, Product.Price, Product.Code, OrderLine.Quantity
                          FROM Product, OrderLine
                          WHERE OrderLine.OrderID = (?)""")
         query.addBindValue(value)
@@ -204,10 +206,11 @@ class CreateOrder(QWidget):
 
         self.current_products_model = self.create_current_product_model(self.order_id)
         self.current_products.setModel(self.current_products_model)
+        #self.current_products.hideColumn(0)
 
     def get_quantity(self):
         self.quantity_box = QInputDialog()
-        self.quantity = self.quantity_box.getInt(self.quantity_box,"Title","Label",1,1,999,1)
+        self.quantity = self.quantity_box.getInt(self.quantity_box,"Quantity","Please enter the quantity:",1,1,999,1)
         self.quantity = self.quantity[0]
         print(self.quantity)
 
@@ -216,12 +219,22 @@ class CreateOrder(QWidget):
 
         self.product_view.showColumn(0)
         self.selected_record = self.product_view.selectedIndexes()
+        print(self.selected_record)
         details = {'ProductID':self.product_view.model().data(self.selected_record[0]),
                    'OrderID':self.order_id,
                    'Quantity':self.quantity}
 
-        self.productSelectedSignal.emit()
+        #self.productSelectedSignal.emit()
         self.connection.add_product_to_order(details)
+        self.refresh()
+
+    def remove_product(self):
+        self.selected_record = self.current_products.selectedIndexes()
+        #self.current_products.showColumn(0)
+        
+        self.selected_record_id = self.current_products.model().data(self.selected_record[0])
+        print(self.selected_record_id)
+        self.connection.delete_products(self.selected_record_id)
         self.refresh()
 
         

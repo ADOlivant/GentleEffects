@@ -133,6 +133,7 @@ class AddMedicalInfo(QWidget):
         self.submit_button.hide()
         self.error_label.setText('<Strong>Customers Medical Infomration Added Successfully</Strong>')
         self.error_label.show()
+        self.medical_information_ledit.setReadOnly(True)
 
     def edit_medical_information(self): 
         self.title_label = QLabel("""<html>

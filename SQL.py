@@ -365,4 +365,10 @@ class SQL:
                 while query.next():
                     order_id = query.value(0)
                     print(order_id)
-                return order_id    
+                return order_id
+
+        def delete_products(self,line_id):
+                query = QSqlQuery()
+                query.prepare("""DELETE FROM OrderLine WHERE OrderLineID = ?""")
+                query.addBindValue(line_id)
+                query.exec_()

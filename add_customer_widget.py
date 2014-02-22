@@ -9,7 +9,7 @@ class AddCustomer(QWidget):
         """Adding Customer data to SQL Database with PyQt4"""
 
         #Customer Signal to fire when Details are Added.
-        customerAddedSignal = pyqtSignal()
+        customerAddedSignal = pyqtSignal() 
 
         def __init__(self):
                 super().__init__()

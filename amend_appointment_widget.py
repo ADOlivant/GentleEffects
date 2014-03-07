@@ -8,7 +8,7 @@ from create_appointment import *
 from search_appointment_widget import *
 
 class AmendAppointment(CreateAppointment):
-    """DOC STRING"""
+    """To be able to find, and then amend appointment details."""
 
     def __init__(self,connection):
         super().__init__(connection)
@@ -94,10 +94,3 @@ class AmendAppointment(CreateAppointment):
                          'CustomerID':self.search_appointment_layout.appointment_view.model.data(self.index[3]),
                          'CustomerID':self.search_appointment_layout.appointment_view.model.data(self.index[4])}
         return previous_data
-                         
-        
-    
-        
-        
-
-        

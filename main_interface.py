@@ -23,6 +23,7 @@ from amend_appointment_widget import *
 from amend_treatment_widget import * 
 from create_order_widget import *
 from welcome_widget import *
+from unordered_products_report import *
 
 class MainWindow(QMainWindow):
     """The Main Window used with the System"""
@@ -77,7 +78,7 @@ class MainWindow(QMainWindow):
         self.amend_order = QAction("Amend Order",self)
         self.cancel_order = QAction("Cancel Order",self)
         #Administration
-        self.create_reports = QAction("Create Reports",self)
+        self.create_reports = QAction("Unordered Products Report",self)
         self.backup = QAction("Backup Database",self)
         self.database = QAction("Set Database File Path",self)
         self.add_user = QAction("Add System User",self)
@@ -119,7 +120,7 @@ class MainWindow(QMainWindow):
         self.order_menu.addAction(self.new_order)
         #self.order_menu.addAction(self.amend_order)
         #self.order_menu.addAction(self.cancel_order)
-        #self.admin_menu.addAction(self.create_reports)
+        self.admin_menu.addAction(self.create_reports)
         self.admin_menu.addSeparator()
         #self.admin_menu.addAction(self.backup)
         #self.admin_menu.addAction(self.database)
@@ -145,6 +146,7 @@ class MainWindow(QMainWindow):
         self.edit_appointment.triggered.connect(self.edit_appointment_details)
         self.edit_treatment.triggered.connect(self.amend_treatment_details)
         self.edit_medical.triggered.connect(self.add_medical_information)
+        self.create_reports.triggered.connect(self.unordered_products_rpt)
 
     def ammend_product_details(self):
         self.ammend_product_widget = AmendProduct(self.connection)
@@ -207,6 +209,10 @@ class MainWindow(QMainWindow):
     def create_order(self):
         OrderWidget = CreateOrder(self.connection)
         self.setCentralWidget(OrderWidget)
+
+    def unordered_products_rpt(self):
+        self.unordered_products_rpt_wgt = OrderReport(self.connection)
+        self.setCentralWidget(self.unordered_products_rpt_wgt)
 
     def reset_screen(self):
         welcome = WelcomeWidget()

@@ -89,10 +89,3 @@ class AddTreatment(QWidget):
                            'Cost':self.cost_dblspinbox.value(),
                           'Duration':self.time_lineedit.time()}
 		return details
-
-if __name__ == "__main__":
-	application = QApplication(sys.argv)
-	window = AddTreatment()
-	window.show()
-	window.raise_()
-	application.exec_()

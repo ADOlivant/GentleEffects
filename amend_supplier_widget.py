@@ -109,4 +109,3 @@ class AmendSupplier(QWidget):
         #connections
         self.amend_supplier_widget.combo_box.currentIndexChanged.connect(self.populate_lineedits)
         self.amend_supplier_widget.save_button.clicked.connect(self.update_supplier)
-        

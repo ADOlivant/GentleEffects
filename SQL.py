@@ -372,3 +372,11 @@ class SQL:
                 query.prepare("""DELETE FROM OrderLine WHERE OrderLineID = ?""")
                 query.addBindValue(line_id)
                 query.exec_()
+
+        def unordered_products_report_model(self):
+                model = QSqlQueryModel()
+                query = QSqlQuery()
+                query.prepare("""SELECT Product.Name, Product.Price, Product.Code, Supplier.Name, OrderLine.Quantity FROM Product, Supplier, OrderLine, Orders WHERE OrderedFromSupplier = "False" AND OrderLine.OrderID = Orders.OrderID AND OrderLine.ProductID = Product.ProductID AND Product.SupplierID = Supplier.SupplierID""")
+                query.exec_()
+                model.setQuery(query)
+                return model

@@ -3,7 +3,6 @@ from PyQt4.QtGui import *
 from PyQt4.QtSql import *
 
 import sys
-import re
 
 class AddSupplier(QWidget):
 	"""Adding Supplier data to SQL Database, Gentle Effects, with Python and PyQt4"""
@@ -129,10 +128,3 @@ class AddSupplier(QWidget):
 			   'Email':self.email_lineedit.text(),
 			   'Website':self.website_lineedit.text()}
 		return details
-
-if __name__ == "__main__":
-    application = QApplication(sys.argv)
-    window = AddCustomer()
-    window.show()
-    window.raise_()
-    application.exec_()
